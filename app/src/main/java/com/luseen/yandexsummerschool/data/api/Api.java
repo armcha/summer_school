@@ -1,8 +1,7 @@
-package com.luseen.yandexsummerschool.data;
+package com.luseen.yandexsummerschool.data.api;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.luseen.yandexsummerschool.model.Translation;
 
 import java.util.concurrent.TimeUnit;
 
@@ -10,9 +9,8 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.Observable;
 
-public class Api implements ApiInterface{
+public class Api {
 
     private static Api instance = new Api();
 
@@ -23,8 +21,7 @@ public class Api implements ApiInterface{
     private ApiInterface apiService;
 
     private Gson getGson() {
-        return new GsonBuilder()
-                .create();
+        return new GsonBuilder().create();
     }
 
     private OkHttpClient getHttpClient() {
@@ -46,9 +43,7 @@ public class Api implements ApiInterface{
         apiService = retrofit.create(ApiInterface.class);
     }
 
-
-    @Override
-    public Observable<Translation> getTranslation(String key, String text, String lang) {
-        return apiService.getTranslation(key,text,lang);
+    public ApiInterface getApiService() {
+        return apiService;
     }
 }

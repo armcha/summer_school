@@ -16,6 +16,7 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
 
     @BindView(R.id.main_view_pager)
     ViewPager mainViewPager;
+
     @BindView(R.id.tab_layout)
     IconicTabLayout tabLayout;
 
