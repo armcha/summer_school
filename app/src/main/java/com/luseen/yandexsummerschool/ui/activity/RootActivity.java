@@ -30,6 +30,7 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
     private void setUpViewPager() {
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
+        mainViewPager.setOffscreenPageLimit(3);
         tabLayout.setupWithViewPager(mainViewPager);
     }
 

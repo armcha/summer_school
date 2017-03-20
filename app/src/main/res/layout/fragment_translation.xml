@@ -2,12 +2,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/root_layout"
     tools:context="com.luseen.yandexsummerschool.ui.fragment.TranslationFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.luseen.yandexsummerschool.ui.widget.TranslationView
+        android:id="@+id/translation_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:layout_height="150dp"
+        android:layout_margin="15dp" />
 </FrameLayout>
