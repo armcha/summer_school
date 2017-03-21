@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
@@ -37,7 +38,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     TranslationView translationView;
 
     @BindView(R.id.root_layout)
-    KeyboardWatcherFrameLayout rootLayout;
+    LinearLayout rootLayout;
 
     private Subscription textChangeSubscription;
     private Unregistrar unregistrar;

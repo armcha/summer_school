@@ -161,6 +161,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     public void onClosePressed(CloseIcon closeIcon) {
         translationEditText.setText(StringUtils.EMPTY);
         closeIcon.hide();
+        if (!isEnable) enable();
     }
 
     public CloseIcon getCloseIcon() {

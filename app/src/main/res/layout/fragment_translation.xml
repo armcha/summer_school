@@ -1,9 +1,10 @@
-<com.luseen.yandexsummerschool.utils.KeyboardWatcherFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    android:id="@+id/root_layout"
+    android:orientation="vertical"
     tools:context="com.luseen.yandexsummerschool.ui.fragment.TranslationFragment">
 
     <com.luseen.yandexsummerschool.ui.widget.TranslationView
@@ -11,4 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="150dp"
         android:layout_margin="15dp" />
-</com.luseen.yandexsummerschool.utils.KeyboardWatcherFrameLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

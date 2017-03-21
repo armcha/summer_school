@@ -7,7 +7,9 @@ package com.luseen.yandexsummerschool.data.api;
 public enum RequestType {
 
     TRANSLATION("Translation"),
-    AVAILABLE_LANGUAGES("AvailableLanguages");
+    AVAILABLE_LANGUAGES("AvailableLanguages"),
+    DETECT_LANGUAGES("DetectLanguage"),
+    LOOKUP("LookUp");
 
     private String requestType;
 
