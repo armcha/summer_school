@@ -6,8 +6,6 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -15,6 +13,7 @@ import android.widget.RelativeLayout;
 
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
 /**
@@ -59,32 +58,15 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         translationEditText.setHint("Type text");
         translationEditText.setBackground(null);
         translationEditText.setOnClickListener(this);
-        translationEditText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
+        translationEditText.addTextChangedListener(new AbstractTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
                 if (count > 0 && !isCloseIconShown) {
                     closeIcon.show();
-                    //isCloseIconShown = true;
-                } else {
+                } else if (s.length() == 0) {
                     closeIcon.hide();
-                   // isCloseIconShown = false;
                 }
-
-//                if (!isCloseIconShown) {
-//                    closeIcon.show();
-//                } else {
-//                    closeIcon.hide();
-//                }
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
             }
         });
     }
@@ -176,8 +158,9 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     }
 
     @Override
-    public void onClosePressed() {
-
+    public void onClosePressed(CloseIcon closeIcon) {
+        translationEditText.setText(StringUtils.EMPTY);
+        closeIcon.hide();
     }
 
     public CloseIcon getCloseIcon() {

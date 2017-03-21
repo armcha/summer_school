@@ -19,7 +19,7 @@ import com.luseen.yandexsummerschool.R;
 
 public class BottomBar extends LinearLayout implements View.OnClickListener {
 
-    private int icons[] = {R.drawable.city, R.drawable.city, R.drawable.city};
+    private int icons[] = {R.drawable.ic_tab_settings, R.drawable.ic_tab_settings, R.drawable.ic_tab_settings};
     private int itemCount = icons.length;
 
     public BottomBar(Context context) {

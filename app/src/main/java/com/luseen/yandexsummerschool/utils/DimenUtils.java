@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.utils;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.DisplayMetrics;
 
 /**
@@ -10,7 +11,7 @@ import android.util.DisplayMetrics;
 public class DimenUtils {
 
     private DimenUtils() {
-        throw new AssertionError("No instances");
+        throw new RuntimeException("Private constructor cannot be accessed");
     }
 
     public static int dpToPx(Context context, int dp) {

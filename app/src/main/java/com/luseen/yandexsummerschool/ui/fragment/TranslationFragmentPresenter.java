@@ -1,5 +1,8 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
+import android.widget.Toast;
+
+import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.ApiInterface;
 import com.luseen.yandexsummerschool.data.api.RequestType;
@@ -16,24 +19,35 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     @Override
     public void onStart(RequestType requestType) {
-
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
     }
 
     @Override
     public <T> void onSuccess(RequestType requestType, T response) {
-        if (requestType == RequestType.TRANSLATION) {
-            Translation translation = ((Translation) response);
-            Logger.log(translation.getText());
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().onResult();
+            if (requestType == RequestType.TRANSLATION) {
+                Translation translation = ((Translation) response);
+                Logger.log(translation.getText());
+                Toast.makeText(App.getInstance(), translation.getText().get(0), Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
     @Override
     public void onError(RequestType requestType, Throwable throwable) {
-
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().showError();
+        }
+        Logger.log(throwable.getMessage());
     }
 
     @Override
     public void handleInputText(String inputText) {
-        makeRequest(dataManager.translation(ApiInterface.KEY, inputText, "ru"), RequestType.TRANSLATION);
+        makeRequest(dataManager.translation(inputText, "ru"), RequestType.TRANSLATION);
     }
 }

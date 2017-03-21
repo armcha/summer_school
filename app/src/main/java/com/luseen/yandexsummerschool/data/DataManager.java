@@ -17,12 +17,12 @@ public class DataManager implements ApiInterface, DbHelper {
     private ApiInterface apiInterface = Api.getInstance().getApiService();
 
     @Override
-    public Observable<Translation> translation(String key, String text, String lang) {
-        return apiInterface.translation(key, text, lang);
+    public Observable<Translation> translation(String text, String lang) {
+        return apiInterface.translation(text, lang);
     }
 
     @Override
-    public Observable<AvailableLanguages> availableLanguages(String key, String lang) {
-        return apiInterface.availableLanguages(key, lang);
+    public Observable<AvailableLanguages> availableLanguages(String lang) {
+        return apiInterface.availableLanguages(lang);
     }
 }

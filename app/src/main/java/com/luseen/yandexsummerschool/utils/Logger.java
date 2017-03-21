@@ -4,11 +4,6 @@ import android.util.Log;
 
 import com.luseen.yandexsummerschool.BuildConfig;
 
-
-/**
- * Created by Chatikyan on 13.11.2016.
- */
-
 public class Logger {
 
     private Logger() {

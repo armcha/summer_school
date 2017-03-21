@@ -50,4 +50,5 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     compile 'com.android.support:support-v4:25.3.0'
+    compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
 }

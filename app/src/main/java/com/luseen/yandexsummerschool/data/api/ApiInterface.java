@@ -13,8 +13,8 @@ public interface ApiInterface {
     String KEY = "trnsl.1.1.20170318T080310Z.dfec0a8f83d7436e.e03d22123ef3dcaecd09e73372c55c90ad18ec12";
 
     @GET("translate")
-    Observable<Translation> translation(@Query("key") String key, @Query("text") String text, @Query("lang") String lang);
+    Observable<Translation> translation(@Query("text") String text, @Query("lang") String lang);
 
     @GET("getLangs")
-    Observable<AvailableLanguages> availableLanguages(@Query("key") String key, @Query("lang") String lang);
+    Observable<AvailableLanguages> availableLanguages(@Query("lang") String lang);
 }

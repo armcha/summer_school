@@ -21,7 +21,7 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
 public class CloseIcon extends AppCompatImageView implements View.OnClickListener {
 
     interface CloseIconClickListener {
-        void onClosePressed();
+        void onClosePressed(CloseIcon closeIcon);
     }
 
     private CloseIconClickListener closeIconClickListener;
@@ -32,13 +32,12 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
     }
 
     private void init(Context context) {
-        setImageResource(R.drawable.close_icon);
-
         int[] attrs = {R.attr.selectableItemBackgroundBorderless};
         TypedArray typedArray = context.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
         Drawable foreground = ContextCompat.getDrawable(context, backgroundResource);
         typedArray.recycle();
+        setVisibility(GONE);
         StateListDrawable stateListDrawable = new StateListDrawable();
         Drawable drawablePressed = ContextCompat.getDrawable(context, R.drawable.close_icon_pressed);
         Drawable drawableNormal = ContextCompat.getDrawable(context, R.drawable.close_icon);
@@ -54,7 +53,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
     @Override
     public void onClick(View v) {
         if (closeIconClickListener != null) {
-            closeIconClickListener.onClosePressed();
+            closeIconClickListener.onClosePressed(this);
         }
     }
 

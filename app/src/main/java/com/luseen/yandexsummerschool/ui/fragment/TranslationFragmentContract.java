@@ -10,6 +10,14 @@ public interface TranslationFragmentContract {
 
     interface View extends ApiContract.View {
 
+        void showLoading();
+
+        void hideLoading();
+
+        void showError();
+
+        // TODO: 20.03.2017 Add response object
+        void onResult();
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
