@@ -21,8 +21,8 @@ public class DataManager implements ApiService, DbHelper {
     private DictionaryService dictionaryService = Api.getInstance().getDictionaryService();
 
     @Override
-    public Observable<Translation> translation(String text, String lang) {
-        return translationService.translation(text, lang);
+    public Observable<Translation> translate(String text, String lang) {
+        return translationService.translate(text, lang);
     }
 
     @Override

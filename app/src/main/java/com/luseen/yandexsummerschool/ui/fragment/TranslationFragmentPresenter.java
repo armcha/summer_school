@@ -1,13 +1,12 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
-import android.widget.Toast;
-
-import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.RequestMode;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -15,7 +14,6 @@ import com.luseen.yandexsummerschool.utils.Logger;
 
 public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragmentContract.View>
         implements TranslationFragmentContract.Presenter {
-
 
     @Override
     public void onStart(RequestType requestType) {
@@ -28,19 +26,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public <T> void onSuccess(RequestType requestType, T response) {
         if (isViewAttached()) {
             getView().hideLoading();
-            getView().onResult();
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
-                Logger.log(translation.getText());
-                Toast.makeText(App.getInstance(), translation.getText().get(0), Toast.LENGTH_SHORT).show();
+                getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
-                for (Dictionary.Definition definition : dictionary.getDefinition()) {
-                    for (Dictionary.Translation translation : definition.getTranslations()) {
-                        Logger.log(translation.getWord());
-                    }
-                }
-
+                getView().onDictionaryResult(dictionary);
             }
         }
     }
@@ -51,12 +42,26 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             getView().showError();
         }
-        Logger.log(throwable.getMessage());
+        Logger.log("ON_ERROR" + throwable.getMessage());
     }
 
     @Override
     public void handleInputText(String inputText) {
-        makeRequest(dataManager.translation(inputText, "ru"), RequestType.TRANSLATION);
-        makeRequest(dataManager.lookup("en-ru", inputText), RequestType.LOOKUP);
+        int requestMode = getRequestMode(inputText);
+        if (requestMode == RequestMode.MODE_TRANSLATION) {
+            makeRequest(dataManager.translate(inputText, "ru"), RequestType.TRANSLATION);
+            Logger.log("Mo0de TYPE_TRANSLATION");
+        } else {
+            Logger.log("Mo0de TYPE_DICTIONARY");
+            makeRequest(dataManager.lookup("en-ru", inputText), RequestType.LOOKUP);
+        }
+    }
+
+    private int getRequestMode(String inputText) {
+        if (inputText.contains(StringUtils.SPACE)) {
+            return RequestMode.MODE_TRANSLATION;
+        } else {
+            return RequestMode.MODE_DICTIONARY;
+        }
     }
 }

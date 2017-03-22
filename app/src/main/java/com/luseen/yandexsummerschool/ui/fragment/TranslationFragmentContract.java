@@ -1,6 +1,9 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
+import com.luseen.yandexsummerschool.model.Dictionary;
+import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.utils.RequestMode;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -16,8 +19,9 @@ public interface TranslationFragmentContract {
 
         void showError();
 
-        // TODO: 20.03.2017 Add response object
-        void onResult();
+        void onTranslationResult(Translation translation);
+
+        void onDictionaryResult(Dictionary dictionary);
     }
 
     interface Presenter extends ApiContract.Presenter<View> {

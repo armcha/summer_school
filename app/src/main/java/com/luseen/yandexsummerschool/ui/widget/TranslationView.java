@@ -21,7 +21,8 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
  */
 
 public class TranslationView extends RelativeLayout implements View.OnClickListener,
-        CloseIcon.CloseIconClickListener {
+        CloseIcon.CloseIconClickListener,
+        Viewable {
 
     private boolean isEnable = false;
     private boolean isCloseIconShown = false;
@@ -42,7 +43,8 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         init(context);
     }
 
-    private void init(Context context) {
+    @Override
+    public void init(Context context) {
         setOnClickListener(this);
         addEditText(context);
         addCloseIcon(context);

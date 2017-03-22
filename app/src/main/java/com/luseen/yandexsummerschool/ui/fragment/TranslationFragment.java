@@ -9,13 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
-import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
+import com.luseen.yandexsummerschool.model.Dictionary;
+import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
-import com.luseen.yandexsummerschool.utils.KeyboardWatcherFrameLayout;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -23,7 +25,9 @@ import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -40,9 +44,13 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.root_layout)
     LinearLayout rootLayout;
 
+    @BindView(R.id.scroll_view)
+    ScrollView scrollView;
+
+    Unbinder unbinder;
+
     private Subscription textChangeSubscription;
     private Unregistrar unregistrar;
-    private CloseIcon closeIcon;
 
     public static TranslationFragment newInstance() {
         Bundle args = new Bundle();
@@ -54,7 +62,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_translation, container, false);
+        View view = inflater.inflate(R.layout.fragment_translation, container, false);
+        unbinder = ButterKnife.bind(this, view);
+        return view;
     }
 
     @Override
@@ -73,7 +83,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        closeIcon = translationView.getCloseIcon();
         textChangeSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
                 .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
@@ -93,6 +102,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             textChangeSubscription.unsubscribe();
         }
         unregistrar.unregister();
+        unbinder.unbind();
     }
 
     @Override
@@ -123,7 +133,14 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void onResult() {
+    public void onTranslationResult(Translation translation) {
 
+    }
+
+    @Override
+    public void onDictionaryResult(Dictionary dictionary) {
+        DictionaryView dictView = new DictionaryView(getActivity(), dictionary);
+        scrollView.removeAllViews();
+        scrollView.addView(dictView);
     }
 }

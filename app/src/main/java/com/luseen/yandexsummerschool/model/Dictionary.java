@@ -1,7 +1,9 @@
 package com.luseen.yandexsummerschool.model;
 
 import com.google.gson.annotations.SerializedName;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +22,9 @@ public class Dictionary {
         @SerializedName("pos")
         private String partOfSpeech;
 
+        @SerializedName("ts")
+        private String transcription;
+
         @SerializedName("tr")
         private List<Translation> translations;
 
@@ -29,6 +34,10 @@ public class Dictionary {
 
         public String getPartOfSpeech() {
             return partOfSpeech;
+        }
+
+        public String getTranscription() {
+            return transcription;
         }
 
         public List<Translation> getTranslations() {
@@ -42,6 +51,9 @@ public class Dictionary {
 
         @SerializedName("pos")
         private String partOfSpeech;
+
+        @SerializedName("gen")
+        private String gen;
 
         @SerializedName("syn")
         private List<Synonym> synonyms;
@@ -60,24 +72,32 @@ public class Dictionary {
             return partOfSpeech;
         }
 
+        public String getGen() {
+            return gen == null ? StringUtils.EMPTY : gen;
+        }
+
         public List<Synonym> getSynonyms() {
-            return synonyms;
+            return synonyms == null ? new ArrayList<>() : synonyms;
         }
 
         public List<TranslatedString> getMeanings() {
-            return meanings;
+            return meanings == null ? new ArrayList<>() : meanings;
         }
 
         public List<Example> getExamples() {
-            return examples;
+            return examples == null ? new ArrayList<>() : examples;
         }
     }
 
     public static class Synonym {
         @SerializedName("text")
         private String word;
+
         @SerializedName("pos")
         private String partOfSpeech;
+
+        @SerializedName("gen")
+        private String gen;
 
         public String getWord() {
             return word;
@@ -86,9 +106,13 @@ public class Dictionary {
         public String getPartOfSpeech() {
             return partOfSpeech;
         }
+
+        public String getGen() {
+            return gen == null ? StringUtils.EMPTY : gen;
+        }
     }
 
-    private static class Example {
+    public static class Example {
         @SerializedName("text")
         private String word;
 
@@ -100,11 +124,11 @@ public class Dictionary {
         }
 
         public List<TranslatedString> getExampleTranslations() {
-            return exampleTranslations;
+            return exampleTranslations == null ? new ArrayList<>() : exampleTranslations;
         }
     }
 
-    private static class TranslatedString {
+    public static class TranslatedString {
         @SerializedName("text")
         private String text;
 

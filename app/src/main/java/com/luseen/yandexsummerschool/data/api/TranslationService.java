@@ -10,12 +10,11 @@ import rx.Observable;
 public interface TranslationService {
 
     @GET("translate")
-    Observable<Translation> translation(@Query("text") String text, @Query("lang") String lang);
+    Observable<Translation> translate(@Query("text") String text, @Query("lang") String lang);
 
     @GET("getLangs")
     Observable<AvailableLanguages> availableLanguages(@Query("lang") String lang);
 
-    // TODO: 21.03.2017
     @GET("detect")
     Observable<Object> detectLanguage(@Query("text") String text);
 }

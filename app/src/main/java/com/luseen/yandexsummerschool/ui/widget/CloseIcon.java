@@ -18,7 +18,7 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
  * Created by Chatikyan on 20.03.2017.
  */
 
-public class CloseIcon extends AppCompatImageView implements View.OnClickListener {
+public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable {
 
     interface CloseIconClickListener {
         void onClosePressed(CloseIcon closeIcon);
@@ -31,7 +31,8 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
         init(context);
     }
 
-    private void init(Context context) {
+    @Override
+    public void init(Context context) {
         int[] attrs = {R.attr.selectableItemBackgroundBorderless};
         TypedArray typedArray = context.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
