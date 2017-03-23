@@ -16,6 +16,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 
@@ -25,9 +26,7 @@ import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -35,8 +34,8 @@ import rx.android.schedulers.AndroidSchedulers;
  * A simple {@link Fragment} subclass.
  */
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
-        implements TranslationFragmentContract.View {
-
+        implements TranslationFragmentContract.View,
+        CloseIcon.CloseIconClickListener {
 
     @BindView(R.id.translation_view)
     TranslationView translationView;
@@ -47,10 +46,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.scroll_view)
     ScrollView scrollView;
 
-    Unbinder unbinder;
-
     private Subscription textChangeSubscription;
     private Unregistrar unregistrar;
+    private DictionaryView dictView;
 
     public static TranslationFragment newInstance() {
         Bundle args = new Bundle();
@@ -62,9 +60,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_translation, container, false);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.fragment_translation, container, false);
     }
 
     @Override
@@ -83,6 +79,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        dictView = new DictionaryView(getActivity());
+        translationView.getCloseIcon().setCloseIconClickListener(this);
         textChangeSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
                 .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
@@ -102,7 +100,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             textChangeSubscription.unsubscribe();
         }
         unregistrar.unregister();
-        unbinder.unbind();
     }
 
     @Override
@@ -139,8 +136,14 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onDictionaryResult(Dictionary dictionary) {
-        DictionaryView dictView = new DictionaryView(getActivity(), dictionary);
+        dictView.updateDictionary(dictionary);
         scrollView.removeAllViews();
         scrollView.addView(dictView);
+    }
+
+    @Override
+    public void onClosePressed(CloseIcon closeIcon) {
+        translationView.reset();
+        dictView.reset();
     }
 }

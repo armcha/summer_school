@@ -20,9 +20,7 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
  * Created by Chatikyan on 20.03.2017.
  */
 
-public class TranslationView extends RelativeLayout implements View.OnClickListener,
-        CloseIcon.CloseIconClickListener,
-        Viewable {
+public class TranslationView extends RelativeLayout implements View.OnClickListener, Viewable {
 
     private boolean isEnable = false;
     private boolean isCloseIconShown = false;
@@ -80,7 +78,6 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(ALIGN_PARENT_BOTTOM);
         ViewUtils.setViewMargins(closeIcon, new int[]{7, 0, 0, 7});
-        closeIcon.setCloseIconClickListener(this);
     }
 
     private void setBackgroundShape(int borderWidth) {
@@ -159,8 +156,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         return translationEditText;
     }
 
-    @Override
-    public void onClosePressed(CloseIcon closeIcon) {
+    public void reset() {
         translationEditText.setText(StringUtils.EMPTY);
         closeIcon.hide();
         if (!isEnable) enable();

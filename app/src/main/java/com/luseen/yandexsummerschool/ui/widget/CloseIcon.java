@@ -20,7 +20,7 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
 
 public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable {
 
-    interface CloseIconClickListener {
+    public interface CloseIconClickListener {
         void onClosePressed(CloseIcon closeIcon);
     }
 
