@@ -1,12 +1,14 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
+import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.utils.Logger;
-import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.utils.StringUtils;
+
+import rx.Observable;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -53,7 +55,13 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             Logger.log("TYPE_TRANSLATION");
         } else {
             Logger.log("TYPE_DICTIONARY");
-            makeRequest(dataManager.lookup("en-ru", inputText), RequestType.LOOKUP);
+            Observable<Dictionary> dictionaryObservable = Observable.zip(dataManager.translate(inputText, "ru"),
+                    dataManager.lookup("en-ru", inputText),
+                    (translation, dictionary) -> {
+                        dictionary.setTranslatedText(translation.getTranslatedText());
+                        return dictionary;
+                    });
+            makeRequest(dictionaryObservable, RequestType.LOOKUP);
         }
     }
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -19,11 +20,13 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.widget.LinearLayout.VERTICAL;
+
 /**
  * Created by Chatikyan on 22.03.2017.
  */
 
-public class DictionaryView extends LinearLayout implements Viewable {
+public class DictionaryView extends NestedScrollView implements Viewable {
 
     private static final float RELATIVE_SPAN_PROPORTION = 0.7f;
     private static final float DEFAULT_TEXT_SIZE_IN_SP = 18f;
@@ -33,6 +36,8 @@ public class DictionaryView extends LinearLayout implements Viewable {
     private int brown = R.color.brown;
     private int gray = R.color.gray;
     private int black = R.color.black;
+
+    private LinearLayout linearLayout;
 
     public DictionaryView(Context context) {
         super(context);
@@ -45,13 +50,23 @@ public class DictionaryView extends LinearLayout implements Viewable {
     }
 
     @Override
+    public void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        int dictSidesPadding = (int) getResources().getDimension(R.dimen.dict_view_sides_padding);
+        int dictBottomPadding = (int) getResources().getDimension(R.dimen.dict_view_bottom_padding);
+        linearLayout.setPadding(dictSidesPadding, 0, dictSidesPadding, dictBottomPadding);
+    }
+
+    @Override
     public void init(Context context) {
-        setOrientation(VERTICAL);
+        linearLayout = new LinearLayout(context);
+        linearLayout.setOrientation(VERTICAL);
+        addView(linearLayout);
     }
 
     private void buildDictionary(Dictionary dictionary) {
         //Removing all views before adding any new view
-        removeAllViews();
+        linearLayout.removeAllViews();
         Context context = getContext();
 
         int definitionSize = dictionary.getDefinition().size();
@@ -75,7 +90,7 @@ public class DictionaryView extends LinearLayout implements Viewable {
             definitionTextView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                     LINE_SPACING, getResources().getDisplayMetrics()), 1.0f);
             definitionTextView.setText(definitionBuilder);
-            addView(definitionTextView);
+            linearLayout.addView(definitionTextView);
 
             //Second part is building word translations
             int translationListSize = definition.getTranslations().size();
@@ -129,7 +144,7 @@ public class DictionaryView extends LinearLayout implements Viewable {
                 //in dp left and top margin
                 ViewUtils.setViewMargins(flowLayout, new int[]{isIndexDoubleDigit ? 24 : 15, 5, 0, 0});
                 spannableStringBuilderList.clear();
-                addView(numberAndFlowContainer);
+                linearLayout.addView(numberAndFlowContainer);
 
                 //Last part is building meanings and examples
                 List<Dictionary.TranslatedString> meaningList = translation.getMeanings();
@@ -153,7 +168,7 @@ public class DictionaryView extends LinearLayout implements Viewable {
                     //Checking if has any meanings, to add ")"
                     meaningBuilder.append(")");
                     meaningTextView.setText(meaningBuilder);
-                    addView(meaningTextView);
+                    linearLayout.addView(meaningTextView);
                     //in dp left margin from parent
                     ViewUtils.setViewMargins(meaningTextView, new int[]{isIndexDoubleDigit ? 24 : 15, 0, 0, 0});
                 }
@@ -178,7 +193,7 @@ public class DictionaryView extends LinearLayout implements Viewable {
                     //Checking if has example, and building text view
                     TextView examplesTextView = baseTextView(blue);
                     examplesTextView.setTypeface(null, Typeface.ITALIC);
-                    addView(examplesTextView);
+                    linearLayout.addView(examplesTextView);
                     //in dp, left margin from parent
                     ViewUtils.setViewMargins(examplesTextView, new int[]{40, 0, 0, 0});
                     examplesTextView.setText(exampleBuilder);
@@ -200,6 +215,6 @@ public class DictionaryView extends LinearLayout implements Viewable {
     }
 
     public void reset() {
-        removeAllViews();
+        linearLayout.removeAllViews();
     }
 }

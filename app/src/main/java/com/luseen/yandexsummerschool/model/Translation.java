@@ -41,6 +41,10 @@ public class Translation {
         return text;
     }
 
+    public String getTranslatedText() {
+        return text.get(0);
+    }
+
     public void setText(List<String> text) {
         this.text = text;
     }

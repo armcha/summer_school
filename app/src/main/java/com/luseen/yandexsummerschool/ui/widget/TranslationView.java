@@ -156,6 +156,10 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         return translationEditText;
     }
 
+    public boolean hasText() {
+        return !translationEditText.getText().toString().isEmpty();
+    }
+
     public void reset() {
         translationEditText.setText(StringUtils.EMPTY);
         closeIcon.hide();

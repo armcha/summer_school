@@ -9,7 +9,8 @@ public enum RequestType {
     TRANSLATION("Translation"),
     AVAILABLE_LANGUAGES("AvailableLanguages"),
     DETECT_LANGUAGES("DetectLanguage"),
-    LOOKUP("LookUp");
+    LOOKUP("LookUp"),
+    LOOKUP_AND_TRANSLATION("LookUp");
 
     private String requestType;
 

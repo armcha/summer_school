@@ -12,6 +12,8 @@ import java.util.List;
 
 public class Dictionary {
 
+    private String translatedText;
+
     @SerializedName("def")
     private List<Definition> definition;
 
@@ -135,6 +137,14 @@ public class Dictionary {
         public String getText() {
             return text;
         }
+    }
+
+    public String getTranslatedText() {
+        return translatedText;
+    }
+
+    public void setTranslatedText(String translatedText) {
+        this.translatedText = translatedText;
     }
 
     public List<Definition> getDefinition() {

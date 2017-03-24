@@ -5,11 +5,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.NestedScrollView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
@@ -18,6 +18,7 @@ import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
+import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -44,9 +45,12 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     LinearLayout rootLayout;
 
     @BindView(R.id.scroll_view)
-    ScrollView scrollView;
+    NestedScrollView nestedScrollView;
 
-    private Subscription textChangeSubscription;
+    @BindView(R.id.translation_text_view)
+    TranslationTextView translationTextView;
+
+    private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
 
@@ -66,8 +70,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onResume() {
         super.onResume();
-        // TODO: 20.03.2017 enable when text is empty
-        translationView.enable();
+        // TODO: 20.03.2017 test
+        if (!translationView.hasText())
+            translationView.enable();
     }
 
     @NonNull
@@ -79,25 +84,34 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        dictView = new DictionaryView(getActivity());
+        setUpDictView();
+        setUpTextWatcher();
         translationView.getCloseIcon().setCloseIconClickListener(this);
-        textChangeSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
-                .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .map(CharSequence::toString)
-                .filter(input -> !input.isEmpty())
-                .map(String::trim)
-                .subscribe(s -> presenter.handleInputText(s));
 
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
     }
 
+    private void setUpDictView() {
+        dictView = new DictionaryView(getActivity());
+        rootLayout.addView(dictView);
+    }
+
+    private void setUpTextWatcher() {
+        textWatcherSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
+                .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .map(CharSequence::toString)
+                .filter(input -> !input.isEmpty())
+                .map(String::trim)
+                .subscribe(s -> presenter.handleInputText(s));
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (textChangeSubscription != null && !textChangeSubscription.isUnsubscribed()) {
-            textChangeSubscription.unsubscribe();
+        if (textWatcherSubscription != null && !textWatcherSubscription.isUnsubscribed()) {
+            textWatcherSubscription.unsubscribe();
         }
         unregistrar.unregister();
     }
@@ -107,7 +121,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         return true;
     }
 
-    @OnClick(R.id.root_layout)
+    @OnClick({R.id.root_layout, R.id.scroll_view})
     public void onClick() {
         if (translationView.isEnable()) {
             translationView.disable();
@@ -131,19 +145,23 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onTranslationResult(Translation translation) {
-
+        if (translationView.hasText()) {
+            translationTextView.setText(translation.getTranslatedText());
+            dictView.reset();
+        }
     }
 
     @Override
     public void onDictionaryResult(Dictionary dictionary) {
-        dictView.setPadding(30, 0, 30, 10);
-        dictView.updateDictionary(dictionary);
-        scrollView.removeAllViews();
-        scrollView.addView(dictView);
+        if (translationView.hasText()) {
+            translationTextView.setText(dictionary.getTranslatedText());
+            dictView.updateDictionary(dictionary);
+        }
     }
 
     @Override
     public void onClosePressed(CloseIcon closeIcon) {
+        translationTextView.reset();
         translationView.reset();
         dictView.reset();
     }
