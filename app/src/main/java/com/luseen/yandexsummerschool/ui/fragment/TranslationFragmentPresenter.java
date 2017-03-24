@@ -5,7 +5,7 @@ import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.utils.Logger;
-import com.luseen.yandexsummerschool.utils.RequestMode;
+import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 /**
@@ -42,7 +42,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             getView().showError();
         }
-        Logger.log("ON_ERROR" + throwable.getMessage());
+        Logger.log("onError" + throwable.getMessage());
     }
 
     @Override
@@ -50,9 +50,9 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         int requestMode = getRequestMode(inputText);
         if (requestMode == RequestMode.MODE_TRANSLATION) {
             makeRequest(dataManager.translate(inputText, "ru"), RequestType.TRANSLATION);
-            Logger.log("Mo0de TYPE_TRANSLATION");
+            Logger.log("TYPE_TRANSLATION");
         } else {
-            Logger.log("Mo0de TYPE_DICTIONARY");
+            Logger.log("TYPE_DICTIONARY");
             makeRequest(dataManager.lookup("en-ru", inputText), RequestType.LOOKUP);
         }
     }

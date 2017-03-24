@@ -136,6 +136,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onDictionaryResult(Dictionary dictionary) {
+        dictView.setPadding(30, 0, 30, 10);
         dictView.updateDictionary(dictionary);
         scrollView.removeAllViews();
         scrollView.addView(dictView);

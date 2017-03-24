@@ -10,19 +10,11 @@
         android:id="@+id/main_view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="?actionBarSize"/>
+        android:layout_marginBottom="@dimen/bottom_navigation_height" />
 
-    <View
+    <com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="?actionBarSize"
-        android:background="@color/cardview_dark_background" />
-
-    <com.luseen.yandexsummerschool.ui.widget.IconicTabLayout
-        android:id="@+id/tab_layout"
-        android:layout_width="match_parent"
-        android:layout_gravity="bottom"
-        android:layout_height="?actionBarSize" />
-
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom" />
 </FrameLayout>

@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.ui.widget;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -93,9 +94,9 @@ public class FlowLayout extends ViewGroup {
             TextView textView = new TextView(context);
             int tagHorizontalPadding = (int) getResources().getDimension(R.dimen.tag_horizontal_padding);
             int tagVerticalPadding = (int) getResources().getDimension(R.dimen.tag_vertical_padding);
-            //textView.setPadding(tagHorizontalPadding, tagVerticalPadding, tagHorizontalPadding, tagVerticalPadding);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
             textView.setText(spannableStringBuilder);
+            textView.setIncludeFontPadding(false);
             addView(textView);
         }
     }

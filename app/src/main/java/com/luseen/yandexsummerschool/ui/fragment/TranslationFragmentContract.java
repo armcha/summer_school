@@ -3,7 +3,6 @@ package com.luseen.yandexsummerschool.ui.fragment;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
-import com.luseen.yandexsummerschool.utils.RequestMode;
 
 /**
  * Created by Chatikyan on 20.03.2017.

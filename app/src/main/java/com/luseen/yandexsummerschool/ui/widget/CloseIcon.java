@@ -40,10 +40,11 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
         typedArray.recycle();
         setVisibility(GONE);
         StateListDrawable stateListDrawable = new StateListDrawable();
-        Drawable drawablePressed = ContextCompat.getDrawable(context, R.drawable.close_icon_pressed);
-        Drawable drawableNormal = ContextCompat.getDrawable(context, R.drawable.close_icon);
-        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, drawablePressed);
-        stateListDrawable.addState(StateSet.WILD_CARD, drawableNormal);
+        // TODO: 24.03.2017 support api > 21
+       // Drawable drawablePressed = ContextCompat.getDrawable(context, R.drawable.close_icon_pressed);
+       // Drawable drawableNormal = ContextCompat.getDrawable(context, R.drawable.close_icon);
+       // stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, drawablePressed);
+       // stateListDrawable.addState(StateSet.WILD_CARD, drawableNormal);
         if (CommonUtils.isMarshmallowOrHigher()) {
             setForeground(foreground);
         }

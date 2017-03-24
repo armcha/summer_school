@@ -1,29 +1,39 @@
 package com.luseen.yandexsummerschool.ui.activity;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 
+import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
+import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
+import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
+import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiActivity;
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
-import com.luseen.yandexsummerschool.ui.widget.IconicTabLayout;
 
 import butterknife.BindView;
+import rx.Subscription;
 
 public class RootActivity extends ApiActivity<RootActivityContract.View, RootActivityContract.Presenter>
-        implements RootActivityContract.View {
+        implements RootActivityContract.View,
+        OnBottomNavigationItemClickListener {
 
     @BindView(R.id.main_view_pager)
     ViewPager mainViewPager;
 
-    @BindView(R.id.tab_layout)
-    IconicTabLayout tabLayout;
+    @BindView(R.id.bottom_navigation)
+    BottomNavigationView bottomNavigationView;
+
+    private Subscription viewPagerSubscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        setUpBottomNavigation();
         setUpViewPager();
     }
 
@@ -31,7 +41,30 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
-        tabLayout.setupWithViewPager(mainViewPager);
+        viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
+                .subscribe(bottomNavigationView::selectTab);
+    }
+
+    private void setUpBottomNavigation() {
+        BottomNavigationItem translationTab = new BottomNavigationItem("Translate", R.color.blue, R.drawable.ic_tab_translate);
+        BottomNavigationItem favTab = new BottomNavigationItem("Favourite", R.color.blue, R.drawable.ic_tab_fav);
+        BottomNavigationItem settingsTab = new BottomNavigationItem("Settings", R.color.blue, R.drawable.ic_tab_settings);
+        bottomNavigationView.addTab(translationTab);
+        bottomNavigationView.addTab(favTab);
+        bottomNavigationView.addTab(settingsTab);
+        bottomNavigationView.isColoredBackground(false);
+        //int activeColor = ContextCompat.getColor(this, R.color.colorPrimary);
+        int activeColor = Color.GREEN;
+        bottomNavigationView.setItemActiveColorWithoutColoredBackground(activeColor);
+        bottomNavigationView.setOnBottomNavigationItemClickListener(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (viewPagerSubscription != null) {
+            viewPagerSubscription.unsubscribe();
+        }
     }
 
     @NonNull
@@ -40,4 +73,8 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         return new RootActivityPresenter();
     }
 
+    @Override
+    public void onNavigationItemClick(int index) {
+        mainViewPager.setCurrentItem(index);
+    }
 }

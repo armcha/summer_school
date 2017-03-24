@@ -25,8 +25,24 @@ public class StringUtils {
         return spannedText;
     }
 
+    public static CharSequence makeColorSpanWithSize(String text, int colorId,float proportion) {
+        SpannableString spannedText = new SpannableString(text);
+        spannedText.setSpan(new RelativeSizeSpan(proportion), 0, spannedText.length(), 0);
+        spannedText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(App.getInstance(), colorId)),
+                0, spannedText.length(), 0);
+        return spannedText;
+    }
+
     public static CharSequence makeColoredItalic(String text, int colorId) {
         SpannableString spannedText = new SpannableString(text);
+        spannedText.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannedText.length(), 0);
+        spannedText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(App.getInstance(), colorId)),
+                0, spannedText.length(), 0);
+        return spannedText;
+    }
+    public static CharSequence makeColoredItalicWitSize(String text, int colorId,float proportion) {
+        SpannableString spannedText = new SpannableString(text);
+        spannedText.setSpan(new RelativeSizeSpan(proportion), 0, spannedText.length(), 0);
         spannedText.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannedText.length(), 0);
         spannedText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(App.getInstance(), colorId)),
                 0, spannedText.length(), 0);
@@ -42,6 +58,15 @@ public class StringUtils {
     public static CharSequence changeSize(String text, float proportion) {
         SpannableString spannedText = new SpannableString(text);
         spannedText.setSpan(new RelativeSizeSpan(proportion), 0, spannedText.length(), 0);
+        return spannedText;
+    }
+
+    public static CharSequence makeColoredItalicWithSize(String text, int colorId, float proportion) {
+        SpannableString spannedText = new SpannableString(text);
+        spannedText.setSpan(new StyleSpan(Typeface.ITALIC), 0, spannedText.length(), 0);
+        spannedText.setSpan(new RelativeSizeSpan(proportion), 0, spannedText.length(), 0);
+        spannedText.setSpan(new ForegroundColorSpan(ContextCompat.getColor(App.getInstance(), colorId)),
+                0, spannedText.length(), 0);
         return spannedText;
     }
 }

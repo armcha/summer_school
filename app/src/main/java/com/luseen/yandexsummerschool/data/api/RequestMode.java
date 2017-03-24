@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.utils;
+package com.luseen.yandexsummerschool.data.api;
 
 import android.support.annotation.IntDef;
 
