@@ -92,9 +92,7 @@ public class FlowLayout extends ViewGroup {
     public void addFlowItems(List<SpannableStringBuilder> spannableStringBuilderList) {
         for (SpannableStringBuilder spannableStringBuilder : spannableStringBuilderList) {
             TextView textView = new TextView(context);
-            int tagHorizontalPadding = (int) getResources().getDimension(R.dimen.tag_horizontal_padding);
-            int tagVerticalPadding = (int) getResources().getDimension(R.dimen.tag_vertical_padding);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             textView.setText(spannableStringBuilder);
             textView.setIncludeFontPadding(false);
             addView(textView);

@@ -1,6 +1,5 @@
 package com.luseen.yandexsummerschool.ui.widget;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
@@ -27,6 +26,7 @@ import java.util.List;
 public class DictionaryView extends LinearLayout implements Viewable {
 
     private static final float RELATIVE_SPAN_PROPORTION = 0.7f;
+    private static final float DEFAULT_TEXT_SIZE_IN_SP = 18f;
     private static final int MAX_ON_DIGIT_NUMBER = 9;
     private static final float LINE_SPACING = 5f;
     private int blue = R.color.blue;
@@ -178,7 +178,6 @@ public class DictionaryView extends LinearLayout implements Viewable {
                     //Checking if has example, and building text view
                     TextView examplesTextView = baseTextView(blue);
                     examplesTextView.setTypeface(null, Typeface.ITALIC);
-                    examplesTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                     addView(examplesTextView);
                     //in dp, left margin from parent
                     ViewUtils.setViewMargins(examplesTextView, new int[]{40, 0, 0, 0});
@@ -191,7 +190,7 @@ public class DictionaryView extends LinearLayout implements Viewable {
     private TextView baseTextView(int textColor) {
         Context context = getContext();
         TextView baseTextView = new TextView(context);
-        baseTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20);
+        baseTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE_IN_SP);
         baseTextView.setTextColor(ContextCompat.getColor(context, textColor));
         return baseTextView;
     }
