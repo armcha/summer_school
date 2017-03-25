@@ -1,11 +1,13 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
@@ -53,6 +56,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
+    private Toolbar toolbar;
 
     public static TranslationFragment newInstance() {
         Bundle args = new Bundle();
@@ -91,6 +95,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
+
+        setUpToolbar();
     }
 
     private void setUpDictView() {
@@ -100,11 +106,28 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     private void setUpTextWatcher() {
         textWatcherSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
-                .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
+                .doOnNext(input -> {
+                    if (input.isEmpty()) {
+                        translationTextView.reset();
+                        dictView.reset();
+                    }
+                })
+                .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(input -> !input.isEmpty())
                 .map(String::trim)
                 .subscribe(s -> presenter.handleInputText(s));
+    }
+
+    private void setUpToolbar() {
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = ChooseLanguageActivity.getStartIntent(getActivity(), "hy");
+                startActivityForResult(startIntent, 45);
+            }
+        });
     }
 
     @Override

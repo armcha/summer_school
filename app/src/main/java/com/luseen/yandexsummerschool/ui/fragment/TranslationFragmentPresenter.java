@@ -18,6 +18,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         implements TranslationFragmentContract.Presenter {
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        makeRequest(dataManager.availableLanguages("hy"), RequestType.AVAILABLE_LANGUAGES);
+    }
+
+    @Override
     public void onStart(RequestType requestType) {
         if (isViewAttached()) {
             getView().showLoading();
@@ -55,12 +61,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             Logger.log("TYPE_TRANSLATION");
         } else {
             Logger.log("TYPE_DICTIONARY");
-            Observable<Dictionary> dictionaryObservable = Observable.zip(dataManager.translate(inputText, "ru"),
-                    dataManager.lookup("en-ru", inputText),
-                    (translation, dictionary) -> {
-                        dictionary.setTranslatedText(translation.getTranslatedText());
-                        return dictionary;
-                    });
+            Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
+                    "ru", "en-ru");
             makeRequest(dictionaryObservable, RequestType.LOOKUP);
         }
     }

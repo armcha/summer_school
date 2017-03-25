@@ -21,13 +21,13 @@ public class DataManager implements ApiService, DbHelper {
     private DictionaryService dictionaryService = Api.getInstance().getDictionaryService();
 
     @Override
-    public Observable<Translation> translate(String text, String lang) {
-        return translationService.translate(text, lang);
+    public Observable<Translation> translate(String text, String translationLang) {
+        return translationService.translate(text, translationLang);
     }
 
     @Override
-    public Observable<AvailableLanguages> availableLanguages(String lang) {
-        return translationService.availableLanguages(lang);
+    public Observable<AvailableLanguages> availableLanguages(String requestLang) {
+        return translationService.availableLanguages(requestLang).cache();
     }
 
     @Override
@@ -38,5 +38,15 @@ public class DataManager implements ApiService, DbHelper {
     @Override
     public Observable<Dictionary> lookup(String lang, String text) {
         return dictionaryService.lookup(lang, text);
+    }
+
+    @Override
+    public Observable<Dictionary> translateAndLookUp(String text, String translationLanguage, String lookUpLanguage) {
+        return Observable.zip(translate(text, translationLanguage),
+                lookup(lookUpLanguage, text),
+                (translation, dictionary) -> {
+                    dictionary.setTranslatedText(translation.getTranslatedText());
+                    return dictionary;
+                });
     }
 }

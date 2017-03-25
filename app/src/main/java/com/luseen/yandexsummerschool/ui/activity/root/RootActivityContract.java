@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.ui.activity;
+package com.luseen.yandexsummerschool.ui.activity.root;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 

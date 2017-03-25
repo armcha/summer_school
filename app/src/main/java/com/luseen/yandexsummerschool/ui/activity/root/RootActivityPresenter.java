@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.ui.activity;
+package com.luseen.yandexsummerschool.ui.activity.root;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
@@ -12,14 +12,6 @@ import com.luseen.yandexsummerschool.utils.Logger;
 
 public class RootActivityPresenter extends ApiPresenter<RootActivityContract.View>
         implements RootActivityContract.Presenter {
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        //makeRequest(dataManager.translation(ApiInterface.KEY, "Hello", "ru"), RequestType.TRANSLATION);
-        //makeRequest(dataManager.availableLanguages(ApiInterface.KEY, "ru"), RequestType.AVAILABLE_LANGUAGES);
-    }
 
     @Override
     public void onStart(RequestType requestType) {

@@ -13,7 +13,7 @@ public interface TranslationService {
     Observable<Translation> translate(@Query("text") String text, @Query("lang") String lang);
 
     @GET("getLangs")
-    Observable<AvailableLanguages> availableLanguages(@Query("lang") String lang);
+    Observable<AvailableLanguages> availableLanguages(@Query("ui") String lang);
 
     @GET("detect")
     Observable<Object> detectLanguage(@Query("text") String text);
