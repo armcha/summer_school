@@ -1,7 +1,7 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
-import com.luseen.yandexsummerschool.model.Dictionary;
+import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
 
 /**

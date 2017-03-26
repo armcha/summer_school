@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
+apply plugin: 'org.greenrobot.greendao'
 
 android {
     compileSdkVersion 25
@@ -52,5 +53,7 @@ dependencies {
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     //My library https://github.com/armcha/LuseenBottomNavigation
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
+    compile 'org.greenrobot:greendao:3.2.0'
+    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

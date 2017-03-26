@@ -2,6 +2,8 @@ package com.luseen.yandexsummerschool;
 
 import android.app.Application;
 
+import org.greenrobot.greendao.database.Database;
+
 /**
  * Created by Chatikyan on 20.03.2017.
  */

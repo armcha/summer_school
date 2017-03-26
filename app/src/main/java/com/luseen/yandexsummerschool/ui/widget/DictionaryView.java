@@ -12,8 +12,15 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
-import com.luseen.yandexsummerschool.model.Dictionary;
+import com.luseen.yandexsummerschool.model.dictionary.Definition;
+import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.dictionary.Example;
+import com.luseen.yandexsummerschool.model.dictionary.Synonym;
+import com.luseen.yandexsummerschool.model.dictionary.TranslatedString;
+import com.luseen.yandexsummerschool.model.dictionary.Translation;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
@@ -71,7 +78,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
 
         int definitionSize = dictionary.getDefinition().size();
         for (int z = 0; z < definitionSize; z++) {
-            Dictionary.Definition definition = dictionary.getDefinition().get(z);
+            Definition definition = dictionary.getDefinition().get(z);
             SpannableStringBuilder definitionBuilder = new SpannableStringBuilder();
             //Making original word and transcription only once
             boolean isFirstItem = z == 0;
@@ -95,7 +102,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
             //Second part is building word translations
             int translationListSize = definition.getTranslations().size();
             for (int i = 0; i < translationListSize; i++) {
-                Dictionary.Translation translation = definition.getTranslations().get(i);
+                Translation translation = definition.getTranslations().get(i);
                 SpannableStringBuilder translationBuilder = new SpannableStringBuilder();
                 FrameLayout numberAndFlowContainer = new FrameLayout(context);
 
@@ -124,7 +131,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
                 List<SpannableStringBuilder> spannableStringBuilderList = new ArrayList<>();
                 spannableStringBuilderList.add(translationBuilder);
                 for (int i1 = 0; i1 < translation.getSynonyms().size(); i1++) {
-                    Dictionary.Synonym synonym = translation.getSynonyms().get(i1);
+                    Synonym synonym = translation.getSynonyms().get(i1);
                     SpannableStringBuilder flowItemBuilder = new SpannableStringBuilder();
                     flowItemBuilder.append(StringUtils.makeColorSpan(synonym.getWord(), blue));
                     flowItemBuilder.append(" ");
@@ -147,7 +154,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
                 linearLayout.addView(numberAndFlowContainer);
 
                 //Last part is building meanings and examples
-                List<Dictionary.TranslatedString> meaningList = translation.getMeanings();
+                List<TranslatedString> meaningList = translation.getMeanings();
                 int meaningListSize = meaningList.size();
                 //Checking if has any meanings
                 boolean hasMeanings = meaningListSize > 0;
@@ -179,10 +186,10 @@ public class DictionaryView extends NestedScrollView implements Viewable {
                 if (hasExamples) {
                     SpannableStringBuilder exampleBuilder = new SpannableStringBuilder();
                     for (int i1 = 0; i1 < translation.getExamples().size(); i1++) {
-                        Dictionary.Example example = translation.getExamples().get(i1);
+                        Example example = translation.getExamples().get(i1);
                         exampleBuilder.append(example.getWord());
                         exampleBuilder.append(" - ");
-                        for (Dictionary.TranslatedString translatedString : example.getExampleTranslations()) {
+                        for (TranslatedString translatedString : example.getExampleTranslations()) {
                             exampleBuilder.append(translatedString.getText());
                         }
                         //If it is't the last one, than adding new line

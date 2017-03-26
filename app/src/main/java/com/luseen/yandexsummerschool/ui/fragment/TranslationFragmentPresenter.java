@@ -3,8 +3,8 @@ package com.luseen.yandexsummerschool.ui.fragment;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.data.api.RequestType;
-import com.luseen.yandexsummerschool.model.Dictionary;
 import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
@@ -50,7 +50,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             getView().showError();
         }
-        Logger.log("onError" + throwable.getMessage());
+        Logger.log("onError " + throwable.getMessage());
     }
 
     @Override
