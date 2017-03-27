@@ -2,16 +2,16 @@ package com.luseen.yandexsummerschool.model.dictionary;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class TranslatedString {
+public class TranslatedString extends RealmObject{
 
+    @PrimaryKey
     @SerializedName("text")
     private String text;
 

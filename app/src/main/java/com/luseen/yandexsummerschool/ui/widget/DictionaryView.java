@@ -16,10 +16,10 @@ import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.model.dictionary.Example;
 import com.luseen.yandexsummerschool.model.dictionary.Synonym;
 import com.luseen.yandexsummerschool.model.dictionary.TranslatedString;
-import com.luseen.yandexsummerschool.model.dictionary.Translation;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
@@ -102,7 +102,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
             //Second part is building word translations
             int translationListSize = definition.getTranslations().size();
             for (int i = 0; i < translationListSize; i++) {
-                Translation translation = definition.getTranslations().get(i);
+                DictionaryTranslation translation = definition.getTranslations().get(i);
                 SpannableStringBuilder translationBuilder = new SpannableStringBuilder();
                 FrameLayout numberAndFlowContainer = new FrameLayout(context);
 

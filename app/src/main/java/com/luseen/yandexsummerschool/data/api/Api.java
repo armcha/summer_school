@@ -1,10 +1,13 @@
 package com.luseen.yandexsummerschool.data.api;
 
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
+import io.realm.RealmObject;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -27,7 +30,19 @@ public class Api {
     private DictionaryService dictionaryService;
 
     private Gson getGson() {
-        return new GsonBuilder().create();
+        return new GsonBuilder()
+                .setExclusionStrategies(new ExclusionStrategy() {
+                    @Override
+                    public boolean shouldSkipField(FieldAttributes f) {
+                        return f.getDeclaringClass().equals(RealmObject.class);
+                    }
+
+                    @Override
+                    public boolean shouldSkipClass(Class<?> clazz) {
+                        return false;
+                    }
+                })
+                .create();
     }
 
     private OkHttpClient getHttpClient(int type) {

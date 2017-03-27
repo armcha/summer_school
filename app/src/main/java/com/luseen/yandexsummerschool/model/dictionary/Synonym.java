@@ -3,12 +3,16 @@ package com.luseen.yandexsummerschool.model.dictionary;
 import com.google.gson.annotations.SerializedName;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class Synonym {
+public class Synonym extends RealmObject{
 
+    @PrimaryKey
     @SerializedName("text")
     private String word;
 

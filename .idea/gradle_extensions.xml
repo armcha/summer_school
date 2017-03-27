@@ -6,6 +6,7 @@
         <project path="$PROJECT_DIR$">
           <extensions>
             <ext name="ext" type="org.gradle.api.internal.plugins.DefaultExtraPropertiesExtension" />
+            <task name="transformClassesWithRealmTransformerForDebugAndroidTest" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="projects" type="org.gradle.api.tasks.diagnostics.ProjectReportTask">Displays the sub-projects of root project 'YandexSummerSchool'.&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
             <task name="resolveDebugDependencies" type="com.android.build.gradle.internal.tasks.ResolveDependenciesTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="validateSigningDebugAndroidTest" type="com.android.build.gradle.internal.tasks.ValidateSigningTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -14,6 +15,7 @@
             <task name="transformClassesWithRetrolambdaForDebug" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="assembleReleaseUnitTest">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="prepareDebugDependencies" type="com.android.build.gradle.internal.tasks.PrepareDependenciesTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
+            <task name="transformClassesWithRealmTransformerForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="processReleaseJavaRes" type="org.gradle.api.tasks.Sync">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="generateReleaseAssets">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="lintDebug" type="com.android.build.gradle.tasks.Lint">Runs lint on the Debug build.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
@@ -110,7 +112,6 @@
             <task name="compileDebugAndroidTestNdk" type="com.android.build.gradle.tasks.NdkCompile">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="compileDebugUnitTestSources">&lt;i&gt;Task group: build&lt;i&gt;</task>
             <task name="transformNativeLibsWithMergeJniLibsForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
-            <task name="greendao">Generates source files for greendao&lt;p&gt;&lt;i&gt;Task group: greendao&lt;i&gt;</task>
             <task name="generateDebugSources">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="mergeDebugAndroidTestJniLibFolders" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="extractProguardFiles" type="com.android.build.gradle.internal.tasks.ExtractProguardFiles">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -131,6 +132,7 @@
             <task name="testDebugUnitTest" type="com.android.build.gradle.tasks.factory.AndroidUnitTest">Run unit tests for the debug build.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
             <task name="connectedAndroidTest">Installs and runs instrumentation tests for all flavors on connected devices.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
             <task name="jarDebugClasses" type="com.android.build.gradle.tasks.AndroidJarTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
+            <task name="transformClassesWithRealmTransformerForDebug" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="installDebug" type="com.android.build.gradle.internal.tasks.InstallVariantTask">Installs the Debug build.&lt;p&gt;&lt;i&gt;Task group: Install&lt;i&gt;</task>
             <task name="preBuild">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="transformClassesWithRetrolambdaForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -152,7 +154,6 @@
             <task name="mergeDebugJniLibFolders" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="sourceSets" type="com.android.build.gradle.internal.tasks.SourceSetsTask">Prints out all the source sets defined in this project.&lt;p&gt;&lt;i&gt;Task group: Android&lt;i&gt;</task>
             <task name="transformResourcesWithMergeJavaResForDebugUnitTest" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
-            <task name="greendaoPrepare" type="org.greenrobot.greendao.gradle.DetectEntityCandidatesTask">Finds entity source files for greendao&lt;p&gt;&lt;i&gt;Task group: greendao&lt;i&gt;</task>
             <task name="mergeReleaseAssets" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="compileDebugRenderscript" type="com.android.build.gradle.tasks.RenderscriptCompile">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="generateReleaseBuildConfig" type="com.android.build.gradle.tasks.GenerateBuildConfig">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -189,9 +190,10 @@
             <ext name="reporting" type="org.gradle.api.reporting.ReportingExtension" />
             <ext name="android" type="com.android.build.gradle.AppExtension" />
             <ext name="retrolambda" type="me.tatarka.RetrolambdaExtension" />
-            <ext name="greendao" type="org.greenrobot.greendao.gradle.GreendaoOptions" />
+            <ext name="realm" type="io.realm.gradle.RealmPluginExtension" />
             <prop name="retrofitVersion">2.2.0</prop>
             <prop name="supportLibVersion">25.3.0</prop>
+            <task name="transformClassesWithRealmTransformerForDebugAndroidTest" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="projects" type="org.gradle.api.tasks.diagnostics.ProjectReportTask">Displays the sub-projects of project ':app'.&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
             <task name="resolveDebugDependencies" type="com.android.build.gradle.internal.tasks.ResolveDependenciesTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="validateSigningDebugAndroidTest" type="com.android.build.gradle.internal.tasks.ValidateSigningTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -200,6 +202,7 @@
             <task name="transformClassesWithRetrolambdaForDebug" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="assembleReleaseUnitTest">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="prepareDebugDependencies" type="com.android.build.gradle.internal.tasks.PrepareDependenciesTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
+            <task name="transformClassesWithRealmTransformerForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="processReleaseJavaRes" type="org.gradle.api.tasks.Sync">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="generateReleaseAssets">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="lintDebug" type="com.android.build.gradle.tasks.Lint">Runs lint on the Debug build.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
@@ -293,7 +296,6 @@
             <task name="compileDebugAndroidTestNdk" type="com.android.build.gradle.tasks.NdkCompile">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="compileDebugUnitTestSources">&lt;i&gt;Task group: build&lt;i&gt;</task>
             <task name="transformNativeLibsWithMergeJniLibsForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
-            <task name="greendao">Generates source files for greendao&lt;p&gt;&lt;i&gt;Task group: greendao&lt;i&gt;</task>
             <task name="generateDebugSources">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="mergeDebugAndroidTestJniLibFolders" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="extractProguardFiles" type="com.android.build.gradle.internal.tasks.ExtractProguardFiles">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -314,6 +316,7 @@
             <task name="testDebugUnitTest" type="com.android.build.gradle.tasks.factory.AndroidUnitTest">Run unit tests for the debug build.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
             <task name="connectedAndroidTest">Installs and runs instrumentation tests for all flavors on connected devices.&lt;p&gt;&lt;i&gt;Task group: verification&lt;i&gt;</task>
             <task name="jarDebugClasses" type="com.android.build.gradle.tasks.AndroidJarTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
+            <task name="transformClassesWithRealmTransformerForDebug" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="installDebug" type="com.android.build.gradle.internal.tasks.InstallVariantTask">Installs the Debug build.&lt;p&gt;&lt;i&gt;Task group: Install&lt;i&gt;</task>
             <task name="preBuild">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="transformClassesWithRetrolambdaForRelease" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
@@ -334,7 +337,6 @@
             <task name="mergeDebugJniLibFolders" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="sourceSets" type="com.android.build.gradle.internal.tasks.SourceSetsTask">Prints out all the source sets defined in this project.&lt;p&gt;&lt;i&gt;Task group: Android&lt;i&gt;</task>
             <task name="transformResourcesWithMergeJavaResForDebugUnitTest" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
-            <task name="greendaoPrepare" type="org.greenrobot.greendao.gradle.DetectEntityCandidatesTask">Finds entity source files for greendao&lt;p&gt;&lt;i&gt;Task group: greendao&lt;i&gt;</task>
             <task name="mergeReleaseAssets" type="com.android.build.gradle.tasks.MergeSourceSetFolders">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="compileDebugRenderscript" type="com.android.build.gradle.tasks.RenderscriptCompile">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="generateReleaseBuildConfig" type="com.android.build.gradle.tasks.GenerateBuildConfig">&lt;i&gt;Task group: other&lt;i&gt;</task>

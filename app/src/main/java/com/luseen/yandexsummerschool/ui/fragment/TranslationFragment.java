@@ -17,12 +17,15 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -31,6 +34,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.realm.Realm;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 

@@ -10,19 +10,18 @@ import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
-import java.util.List;
-
+import io.realm.RealmResults;
 import rx.Observable;
 
 /**
  * Created by Chatikyan on 19.03.2017.
  */
 
-public class DataManager implements ApiService{
+public class DataManager implements ApiService, DbHelper {
 
     private TranslationService translationService = Api.getInstance().getTranslationService();
     private DictionaryService dictionaryService = Api.getInstance().getDictionaryService();
-    private final AppDbHelper mDbHelper = new AppDbHelper();
+    private final AppDbHelper appDbHelper = new AppDbHelper();
 
     @Override
     public Observable<Translation> translate(String text, String translationLang) {
@@ -31,7 +30,7 @@ public class DataManager implements ApiService{
 
     @Override
     public Observable<AvailableLanguages> availableLanguages(String requestLang) {
-        return translationService.availableLanguages(requestLang).cache();
+        return translationService.availableLanguages(requestLang);
     }
 
     @Override
@@ -45,27 +44,30 @@ public class DataManager implements ApiService{
     }
 
     @Override
-    public Observable<Dictionary> translateAndLookUp(String text, String translationLanguage, String lookUpLanguage) {
+    public Observable<Dictionary> translateAndLookUp(String text,
+                                                     String translationLanguage,
+                                                     String lookUpLanguage) {
         return Observable.zip(translate(text, translationLanguage),
                 lookup(lookUpLanguage, text),
                 (translation, dictionary) -> {
+                    dictionary.setOriginalText(text);
                     dictionary.setTranslatedText(translation.getTranslatedText());
                     return dictionary;
                 });
     }
 
-//    @Override
-//    public Observable<Long> saveDictionary(Dictionary dictionary) {
-//        return mDbHelper.saveDictionary(dictionary);
-//    }
-//
-//    @Override
-//    public Observable<List<Dictionary>> getAllDictionary() {
-//        return mDbHelper.getAllDictionary();
-//    }
-//
-//    @Override
-//    public Observable<Boolean> isDictionaryEmpty() {
-//        return mDbHelper.isDictionaryEmpty();
-//    }
+    @Override
+    public void saveDictionary(Dictionary dictionary) {
+        appDbHelper.saveDictionary(dictionary);
+    }
+
+    @Override
+    public Observable<RealmResults<Dictionary>> getDictionaryList() {
+        return appDbHelper.getDictionaryList();
+    }
+
+    @Override
+    public Observable<Dictionary> getDictionaryByWord(String word) {
+        return appDbHelper.getDictionaryByWord(word.toLowerCase());
+    }
 }

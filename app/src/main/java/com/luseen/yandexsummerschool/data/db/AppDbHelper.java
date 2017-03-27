@@ -1,47 +1,31 @@
 package com.luseen.yandexsummerschool.data.db;
 
 
-import java.util.List;
-import java.util.concurrent.Callable;
+import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
+import io.realm.RealmResults;
 import rx.Observable;
 
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class AppDbHelper  {
+public class AppDbHelper implements DbHelper {
 
-//    private final DictionaryDao dictionaryDao = App.getInstance().getDaoSession().getDictionaryDao();
-//
-//    @Override
-//    public Observable<Long> saveDictionary(Dictionary dictionary) {
-//        return Observable.fromCallable(new Callable<Long>() {
-//            @Override
-//            public Long call() throws Exception {
-//                return dictionaryDao.insert(dictionary);
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public Observable<List<Dictionary>> getAllDictionary() {
-//        return Observable.fromCallable(new Callable<List<Dictionary>>() {
-//            @Override
-//            public List<Dictionary> call() throws Exception {
-//                return dictionaryDao.loadAll();
-//            }
-//        });
-//    }
-//
-//    @Override
-//    public Observable<Boolean> isDictionaryEmpty() {
-//        Logger.log(dictionaryDao);
-//        return Observable.fromCallable(new Callable<Boolean>() {
-//            @Override
-//            public Boolean call() throws Exception {
-//                return !(dictionaryDao.count() > 0);
-//            }
-//        });
-//    }
+    private DictionaryDao dao = DictionaryDao.getInstance();
+
+    @Override
+    public void saveDictionary(Dictionary dictionary) {
+        dao.saveObject(dictionary);
+    }
+
+    @Override
+    public Observable<RealmResults<Dictionary>> getDictionaryList() {
+        return Observable.fromCallable(dao::getDictionaryRealmResult);
+    }
+
+    @Override
+    public Observable<Dictionary> getDictionaryByWord(String word) {
+        return Observable.fromCallable(() -> dao.getDictionaryByWord(word));
+    }
 }

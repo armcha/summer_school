@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
-apply plugin: 'org.greenrobot.greendao'
+apply plugin: 'realm-android'
+
 
 android {
     compileSdkVersion 25
@@ -25,6 +26,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+repositories {
+    maven {
+        url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
     }
 }
 
@@ -53,7 +60,5 @@ dependencies {
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
     //My library https://github.com/armcha/LuseenBottomNavigation
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
-    compile 'org.greenrobot:greendao:3.2.0'
-    debugCompile 'com.amitshekhar.android:debug-db:1.0.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
 }

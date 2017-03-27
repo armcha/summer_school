@@ -9,6 +9,7 @@ import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import rx.Observable;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -17,11 +18,7 @@ import rx.Observable;
 public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragmentContract.View>
         implements TranslationFragmentContract.Presenter {
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        makeRequest(dataManager.availableLanguages("hy"), RequestType.AVAILABLE_LANGUAGES);
-    }
+    CompositeSubscription subscriptions = new CompositeSubscription();
 
     @Override
     public void onStart(RequestType requestType) {
@@ -39,9 +36,16 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
+                dataManager.saveDictionary(dictionary);
                 getView().onDictionaryResult(dictionary);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        subscriptions.unsubscribe();
     }
 
     @Override

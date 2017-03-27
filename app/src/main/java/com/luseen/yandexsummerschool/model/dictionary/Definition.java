@@ -2,19 +2,20 @@ package com.luseen.yandexsummerschool.model.dictionary;
 
 import com.google.gson.annotations.SerializedName;
 
-import org.greenrobot.greendao.DaoException;
-import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
-import org.greenrobot.greendao.annotation.Id;
-import org.greenrobot.greendao.annotation.ToMany;
-
 import java.util.List;
+
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class Definition {
+public class Definition extends RealmObject {
+
+    @PrimaryKey
+    private int id;
 
     @SerializedName("text")
     private String word;
@@ -26,7 +27,7 @@ public class Definition {
     private String transcription;
 
     @SerializedName("tr")
-    private List<Translation> translations;
+    private RealmList<DictionaryTranslation> translations;
 
     public String getWord() {
         return word;
@@ -52,11 +53,19 @@ public class Definition {
         this.transcription = transcription;
     }
 
-    public List<Translation> getTranslations() {
+    public RealmList<DictionaryTranslation> getTranslations() {
         return translations;
     }
 
-    public void setTranslations(List<Translation> translations) {
+    public void setTranslations(RealmList<DictionaryTranslation> translations) {
         this.translations = translations;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

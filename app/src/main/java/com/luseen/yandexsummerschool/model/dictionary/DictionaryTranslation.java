@@ -6,11 +6,18 @@ import com.luseen.yandexsummerschool.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.RealmList;
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class Translation {
+public class DictionaryTranslation extends RealmObject {
+
+    @PrimaryKey
+    private int id;
 
     @SerializedName("text")
     private String word;
@@ -22,13 +29,13 @@ public class Translation {
     private String gen;
 
     @SerializedName("syn")
-    private List<Synonym> synonyms;
+    private RealmList<Synonym> synonyms;
 
     @SerializedName("mean")
-    private List<TranslatedString> meanings;
+    private RealmList<TranslatedString> meanings;
 
     @SerializedName("ex")
-    private List<Example> examples;
+    private RealmList<Example> examples;
 
     public String getWord() {
         return word;
@@ -50,15 +57,15 @@ public class Translation {
         this.gen = gen;
     }
 
-    public void setSynonyms(List<Synonym> synonyms) {
+    public void setSynonyms(RealmList<Synonym> synonyms) {
         this.synonyms = synonyms;
     }
 
-    public void setMeanings(List<TranslatedString> meanings) {
+    public void setMeanings(RealmList<TranslatedString> meanings) {
         this.meanings = meanings;
     }
 
-    public void setExamples(List<Example> examples) {
+    public void setExamples(RealmList<Example> examples) {
         this.examples = examples;
     }
 
@@ -76,5 +83,26 @@ public class Translation {
 
     public List<Example> getExamples() {
         return examples == null ? new ArrayList<>() : examples;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "DictionaryTranslation{" +
+                "id=" + id +
+                ", word='" + word + '\'' +
+                ", partOfSpeech='" + partOfSpeech + '\'' +
+                ", gen='" + gen + '\'' +
+                ", synonyms=" + synonyms +
+                ", meanings=" + meanings +
+                ", examples=" + examples +
+                '}';
     }
 }

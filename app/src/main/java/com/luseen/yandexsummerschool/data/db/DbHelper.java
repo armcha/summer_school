@@ -1,10 +1,8 @@
 package com.luseen.yandexsummerschool.data.db;
 
-import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
-import java.util.List;
-
+import io.realm.RealmResults;
 import rx.Observable;
 
 /**
@@ -13,9 +11,9 @@ import rx.Observable;
 
 public interface DbHelper {
 
-    Observable<Long> saveDictionary(Dictionary dictionary);
+    void saveDictionary(Dictionary dictionary);
 
-    Observable<List<Dictionary>> getAllDictionary();
+    Observable<RealmResults<Dictionary>> getDictionaryList();
 
-    Observable<Boolean> isDictionaryEmpty();
+    Observable<Dictionary> getDictionaryByWord(String word);
 }
