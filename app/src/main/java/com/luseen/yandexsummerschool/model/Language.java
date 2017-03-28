@@ -19,10 +19,18 @@ public class Language {
     }
 
     public String getLangCode() {
-        return langCode;
+        return langCode.trim();
     }
 
     public String getFullLanguageName() {
         return fullLanguageName;
+    }
+
+    @Override
+    public String toString() {
+        return "Language{" +
+                "langCode='" + langCode + '\'' +
+                ", fullLanguageName='" + fullLanguageName + '\'' +
+                '}';
     }
 }

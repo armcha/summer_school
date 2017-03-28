@@ -12,8 +12,10 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiActivity;
 import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Language;
+import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageItemSelectListener;
 import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -21,7 +23,8 @@ import butterknife.BindView;
 import butterknife.OnClick;
 
 public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.View, ChooseLanguageContract.Presenter>
-        implements ChooseLanguageContract.View {
+        implements ChooseLanguageContract.View,
+        ChooseLanguageItemSelectListener {
 
     @BindView(R.id.choose_language_recycler_view)
     RecyclerView chooseLanguageRecyclerView;
@@ -86,21 +89,34 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     }
 
     @Override
-    public void onResult(AvailableLanguages availableLanguages) {
-        setUpRecyclerView(availableLanguages);
+    public void onResult(AvailableLanguages availableLanguages, String lastSelectedLanguage) {
+        setUpRecyclerView(availableLanguages, lastSelectedLanguage);
     }
 
-    private void setUpRecyclerView(AvailableLanguages availableLanguages) {
+    @Override
+    public String languageChooseType() {
+        return getIntent().getStringExtra("RRR");
+    }
+
+    private void setUpRecyclerView(AvailableLanguages availableLanguages, String lastSelectedLanguage) {
         List<Language> languageList = availableLanguages.getLanguageList();
         // TODO: 28.03.2017 add real last used list
         List<Language> lastUsedLanguageList = availableLanguages.getLanguageList().subList(0, 3);
-        ChooseLanguageRecyclerAdapter adapter = new ChooseLanguageRecyclerAdapter(languageList, lastUsedLanguageList);
-        chooseLanguageRecyclerView.setAdapter(adapter);
+        ChooseLanguageRecyclerAdapter adapter = new ChooseLanguageRecyclerAdapter(
+                languageList, lastUsedLanguageList, lastSelectedLanguage);
+        adapter.setItemSelectListener(this);
         chooseLanguageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        chooseLanguageRecyclerView.setAdapter(adapter);
     }
 
     @OnClick(R.id.back_arrow)
     public void onViewClicked() {
         onBackPressed();
+    }
+
+    @Override
+    public void onItemSelected(Language language) {
+        presenter.handleLanguageSelection(language);
+        Logger.log(language);
     }
 }

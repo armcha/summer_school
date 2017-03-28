@@ -34,8 +34,8 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<AvailableLanguages> availableLanguages(String requestLang) {
-        return translationService.availableLanguages(requestLang).cache();
+    public Observable<AvailableLanguages> availableLanguages(String uiLanguage) {
+        return translationService.availableLanguages(uiLanguage).cache();
     }
 
     @Override

@@ -7,5 +7,4 @@ package com.luseen.yandexsummerschool.data.db;
 public class AvailableLanguagesDao extends AbstractDao {
 
 
-
 }

@@ -32,6 +32,7 @@ public class AppPreferencesHelper implements PreferencesHelper {
     @Override
     public void setLastTypedText(String lastTypedText) {
         editor.putString(LAST_TYPED_TEXT_KEY, lastTypedText);
+        editor.commit();
     }
 
     @Override
@@ -46,6 +47,7 @@ public class AppPreferencesHelper implements PreferencesHelper {
         Gson gson = new Gson();
         String pairJson = gson.toJson(languagePair);
         editor.putString(LANGUAGE_PAIR_KEY, pairJson);
+        editor.commit();
     }
 
     private String getDefaultLanguagePair() {

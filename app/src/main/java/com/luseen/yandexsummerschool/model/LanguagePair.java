@@ -35,6 +35,14 @@ public class LanguagePair {
         this.languageChooseType = languageChooseType;
     }
 
+    public void setSourceLanguage(Language sourceLanguage) {
+        this.sourceLanguage = sourceLanguage;
+    }
+
+    public void setTargetLanguage(Language targetLanguage) {
+        this.targetLanguage = targetLanguage;
+    }
+
     @Override
     public String toString() {
         return "LanguagePair{" +

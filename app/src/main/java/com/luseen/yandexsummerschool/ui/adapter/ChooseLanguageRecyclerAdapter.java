@@ -9,7 +9,6 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageTextSectionViewHolder;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageViewHolder;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -21,14 +20,21 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
 
     private final int VIEW_TYPE_LANGUAGE = 0;
     private final int VIEW_TYPE_TEXT_SECTION = 1;
+
+    private ChooseLanguageItemSelectListener itemSelectListener;
     private List<Language> languageList;
     private List<Language> lastUsedLanguageList;
+    private String lastSelectedLanguage;
     private boolean hasLastUsedLanguages;
     private int textSectionSize;
+    //private LanguagePair
 
-    public ChooseLanguageRecyclerAdapter(List<Language> languageList, List<Language> lastUsedLanguageList) {
+    public ChooseLanguageRecyclerAdapter(List<Language> languageList,
+                                         List<Language> lastUsedLanguageList,
+                                         String lastSelectedLanguage) {
         this.languageList = languageList;
         this.lastUsedLanguageList = lastUsedLanguageList;
+        this.lastSelectedLanguage = lastSelectedLanguage;
         hasLastUsedLanguages = lastUsedLanguageList.size() > 0;
         textSectionSize = hasLastUsedLanguages ? 2 : 1;
     }
@@ -58,14 +64,9 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof ChooseLanguageViewHolder) {
-            Language language;
-            if (position > 0 && position < lastUsedLanguageList.size() + 1 && hasLastUsedLanguages) {
-                language = lastUsedLanguageList.get(holder.getAdapterPosition() - 1);
-            } else {
-                language = languageList.get(holder.getAdapterPosition() - (lastUsedLanguageList.size() + textSectionSize));
-            }
+            Language language = getCurrentLanguage(holder.getAdapterPosition());
             ChooseLanguageViewHolder viewHolder = (ChooseLanguageViewHolder) holder;
-            viewHolder.bind(language);
+            viewHolder.bind(language,lastSelectedLanguage);
 
         } else if (holder instanceof ChooseLanguageTextSectionViewHolder) {
             ChooseLanguageTextSectionViewHolder sectionHolder = (ChooseLanguageTextSectionViewHolder) holder;
@@ -84,6 +85,16 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         return languageList.size() + textSectionSize + lastUsedLanguageList.size();
     }
 
+    private Language getCurrentLanguage(int position) {
+        Language language;
+        if (position > 0 && position < lastUsedLanguageList.size() + 1 && hasLastUsedLanguages) {
+            language = lastUsedLanguageList.get(position - 1);
+        } else {
+            language = languageList.get(position - (lastUsedLanguageList.size() + textSectionSize));
+        }
+        return language;
+    }
+
     private RecyclerView.ViewHolder createChooseLanguageViewHolder(ViewGroup parent) {
         View inflatedView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.choose_language_item, parent, false);
@@ -92,8 +103,10 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         chooseLanguageViewHolder.itemView.setOnClickListener(view -> {
             int position = chooseLanguageViewHolder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Language language = languageList.get(chooseLanguageViewHolder.getAdapterPosition());
-                Logger.log(language.getLangCode());
+                Language language = getCurrentLanguage(chooseLanguageViewHolder.getAdapterPosition());
+                if (itemSelectListener != null) {
+                    itemSelectListener.onItemSelected(language);
+                }
             }
         });
         return chooseLanguageViewHolder;
@@ -103,5 +116,9 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         View inflatedView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.choose_language_text_section_item, parent, false);
         return new ChooseLanguageTextSectionViewHolder(inflatedView);
+    }
+
+    public void setItemSelectListener(ChooseLanguageItemSelectListener itemSelectListener) {
+        this.itemSelectListener = itemSelectListener;
     }
 }

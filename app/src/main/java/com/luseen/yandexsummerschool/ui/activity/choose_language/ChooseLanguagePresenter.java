@@ -5,6 +5,8 @@ import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Language;
+import com.luseen.yandexsummerschool.model.LanguagePair;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +18,16 @@ import java.util.List;
 
 public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract.View>
         implements ChooseLanguageContract.Presenter {
+
+    private boolean isLanguageChooseTypeSource;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        if (isViewAttached()) {
+            isLanguageChooseTypeSource = getView().languageChooseType().equals(LanguageChooseType.TYPE_SOURCE);
+        }
+    }
 
     @Override
     public void onStart(RequestType requestType) {
@@ -35,7 +47,14 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             LinkedTreeMap languageMap = availableLanguages.getLanguageLinkedMap();
             availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
 
-            getView().onResult(availableLanguages);
+            LanguagePair languagePair = dataManager.getLanguagePair();
+            String lastSelectedLanguage;
+            if (isLanguageChooseTypeSource) {
+                lastSelectedLanguage = languagePair.getSourceLanguage().getLangCode();
+            } else {
+                lastSelectedLanguage = languagePair.getTargetLanguage().getLangCode();
+            }
+            getView().onResult(availableLanguages, lastSelectedLanguage);
         }
     }
 
@@ -71,5 +90,17 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             // TODO: 28.03.2017 get user language
             makeRequest(dataManager.availableLanguages("ru"), RequestType.AVAILABLE_LANGUAGES);
         }
+    }
+
+    @Override
+    public void handleLanguageSelection(Language language) {
+        LanguagePair pair = dataManager.getLanguagePair();
+        if (isLanguageChooseTypeSource) {
+            pair.setSourceLanguage(language);
+        } else {
+            pair.setTargetLanguage(language);
+        }
+        dataManager.setLanguagePair(pair);
+        Logger.log("PAIR " + dataManager.getLanguagePair());
     }
 }
