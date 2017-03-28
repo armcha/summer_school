@@ -92,7 +92,9 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     private void setUpRecyclerView(AvailableLanguages availableLanguages) {
         List<Language> languageList = availableLanguages.getLanguageList();
-        ChooseLanguageRecyclerAdapter adapter = new ChooseLanguageRecyclerAdapter(languageList);
+        // TODO: 28.03.2017 add real last used list
+        List<Language> lastUsedLanguageList = availableLanguages.getLanguageList().subList(0, 3);
+        ChooseLanguageRecyclerAdapter adapter = new ChooseLanguageRecyclerAdapter(languageList, lastUsedLanguageList);
         chooseLanguageRecyclerView.setAdapter(adapter);
         chooseLanguageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
