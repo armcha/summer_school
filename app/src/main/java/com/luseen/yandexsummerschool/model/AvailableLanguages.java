@@ -12,6 +12,7 @@ import java.util.List;
 
 public class AvailableLanguages {
 
+    @Deprecated
     @SerializedName("dirs")
     @Expose
     private List<String> directions;

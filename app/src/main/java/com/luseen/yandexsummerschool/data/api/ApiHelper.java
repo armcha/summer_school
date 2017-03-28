@@ -8,7 +8,7 @@ import rx.Observable;
  * Created by Chatikyan on 21.03.2017.
  */
 
-public interface ApiService extends DictionaryService, TranslationService {
+public interface ApiHelper extends DictionaryService, TranslationService {
 
     String TRANSLATION_URL = "https://translate.yandex.net/api/v1.5/tr.json/";
     String DICTIONARY_URL = "https://dictionary.yandex.net/api/v1/dicservice.json/";

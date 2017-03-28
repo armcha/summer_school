@@ -10,7 +10,6 @@ import com.luseen.yandexsummerschool.model.AvailableLanguages;
 public interface ChooseLanguageContract {
 
     interface View extends ApiContract.View {
-        String requestLanguage();
 
         void showLoading();
 
@@ -23,5 +22,6 @@ public interface ChooseLanguageContract {
 
     interface Presenter extends ApiContract.Presenter<View> {
 
+        void startAvailableLanguagesRequest();
     }
 }

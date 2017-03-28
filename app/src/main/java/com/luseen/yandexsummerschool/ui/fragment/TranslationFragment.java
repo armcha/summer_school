@@ -12,20 +12,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
+import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
-import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
-import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -34,7 +33,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import io.realm.Realm;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 
@@ -43,7 +41,8 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
         implements TranslationFragmentContract.View,
-        CloseIcon.CloseIconClickListener {
+        CloseIcon.CloseIconClickListener,
+        View.OnClickListener {
 
     @BindView(R.id.translation_view)
     TranslationView translationView;
@@ -60,6 +59,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
+    private TextView sourceLangTextView;
+    private TextView targetLangTextView;
     private Toolbar toolbar;
 
     public static TranslationFragment newInstance() {
@@ -99,8 +100,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
-
-        setUpToolbar();
     }
 
     private void setUpDictView() {
@@ -121,17 +120,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .filter(input -> !input.isEmpty())
                 .map(String::trim)
                 .subscribe(s -> presenter.handleInputText(s));
-    }
-
-    private void setUpToolbar() {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        toolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent startIntent = ChooseLanguageActivity.getStartIntent(getActivity(), "hy");
-                startActivityForResult(startIntent, 45);
-            }
-        });
     }
 
     @Override
@@ -187,9 +175,31 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
+    public void setUpToolbar(LanguagePair languagePair) {
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+        sourceLangTextView = (TextView) toolbar.findViewById(R.id.source_language_text_view);
+        targetLangTextView = (TextView) toolbar.findViewById(R.id.target_language_text_view);
+        sourceLangTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
+        targetLangTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
+        sourceLangTextView.setOnClickListener(this);
+        targetLangTextView.setOnClickListener(this);
+    }
+
+    @Override
+    public void openChooseLanguageActivity(String languageChooseType) {
+        Intent startIntent = ChooseLanguageActivity.getStartIntent(getActivity(), languageChooseType);
+        startActivityForResult(startIntent, 45);
+    }
+
+    @Override
     public void onClosePressed(CloseIcon closeIcon) {
         translationTextView.reset();
         translationView.reset();
         dictView.reset();
+    }
+
+    @Override
+    public void onClick(View view) {
+        presenter.handleToolbarClicks(view.getId());
     }
 }

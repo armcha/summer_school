@@ -18,14 +18,6 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         implements ChooseLanguageContract.Presenter {
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        if (isViewAttached()) {
-            makeRequest(dataManager.availableLanguages(getView().requestLanguage()), RequestType.AVAILABLE_LANGUAGES);
-        }
-    }
-
-    @Override
     public void onStart(RequestType requestType) {
         if (isViewAttached()) {
             getView().showLoading();
@@ -42,6 +34,7 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             AvailableLanguages availableLanguages = ((AvailableLanguages) response);
             LinkedTreeMap languageMap = availableLanguages.getLanguageLinkedMap();
             availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
+
             getView().onResult(availableLanguages);
         }
     }
@@ -70,5 +63,13 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             languageList.add(language);
         }
         return languageList;
+    }
+
+    @Override
+    public void startAvailableLanguagesRequest() {
+        if (isViewAttached()) {
+            // TODO: 28.03.2017 get user language
+            makeRequest(dataManager.availableLanguages("ru"), RequestType.AVAILABLE_LANGUAGES);
+        }
     }
 }

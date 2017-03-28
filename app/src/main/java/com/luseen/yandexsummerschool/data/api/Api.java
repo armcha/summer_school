@@ -52,7 +52,7 @@ public class Api {
             HttpUrl originalHttpUrl = original.url();
             HttpUrl url = originalHttpUrl.newBuilder()
                     .addQueryParameter("key", type == TYPE_DICTIONARY ?
-                            ApiService.DICTIONARY_KEY : ApiService.TRANSLATION_KEY)
+                            ApiHelper.DICTIONARY_KEY : ApiHelper.TRANSLATION_KEY)
                     .build();
 
             Request request = original
@@ -76,11 +76,11 @@ public class Api {
     private Api() {
         Retrofit.Builder retrofit = getBaseBuilder();
 
-        retrofit.baseUrl(ApiService.TRANSLATION_URL);
+        retrofit.baseUrl(ApiHelper.TRANSLATION_URL);
         retrofit.client(getHttpClient(TYPE_TRANSLATION));
         translationService = retrofit.build().create(TranslationService.class);
 
-        retrofit.baseUrl(ApiService.DICTIONARY_URL);
+        retrofit.baseUrl(ApiHelper.DICTIONARY_URL);
         retrofit.client(getHttpClient(TYPE_DICTIONARY));
         dictionaryService = retrofit.build().create(DictionaryService.class);
     }

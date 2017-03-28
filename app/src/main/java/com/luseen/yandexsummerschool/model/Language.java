@@ -10,6 +10,9 @@ public class Language {
 
     private String fullLanguageName;
 
+    public Language() {
+    }
+
     public Language(String langCode, String fullLanguageName) {
         this.langCode = langCode;
         this.fullLanguageName = fullLanguageName;

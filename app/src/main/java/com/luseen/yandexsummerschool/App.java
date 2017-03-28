@@ -1,6 +1,8 @@
 package com.luseen.yandexsummerschool;
 
 import android.app.Application;
+import android.content.Context;
+import android.content.SharedPreferences;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
@@ -11,7 +13,9 @@ import io.realm.RealmConfiguration;
 
 public class App extends Application {
 
+    private static final String SHARED_PREFERENCE_KEY = "shared_preference_key";
     private static App instance = new App();
+    private SharedPreferences sharedPreferences;
 
     @Override
     public void onCreate() {
@@ -19,6 +23,7 @@ public class App extends Application {
         instance = this;
 
         initRealm();
+        initSharedPreferences();
     }
 
     private void initRealm() {
@@ -29,7 +34,15 @@ public class App extends Application {
         Realm.setDefaultConfiguration(config);
     }
 
+    private void initSharedPreferences() {
+        sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_KEY, Context.MODE_PRIVATE);
+    }
+
     public static App getInstance() {
         return instance;
+    }
+
+    public SharedPreferences getSharedPreferences() {
+        return sharedPreferences;
     }
 }
