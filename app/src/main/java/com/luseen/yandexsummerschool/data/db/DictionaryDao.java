@@ -12,21 +12,15 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
 
-public class DictionaryDao {
+public class DictionaryDao extends AbstractDao{
 
-    private Realm realm;
-
-    private static DictionaryDao mInstance = null;
+    private static DictionaryDao instance = null;
 
     public static DictionaryDao getInstance() {
-        if (mInstance == null) {
-            mInstance = new DictionaryDao();
+        if (instance == null) {
+            instance = new DictionaryDao();
         }
-        return mInstance;
-    }
-
-    private DictionaryDao() {
-        realm = Realm.getDefaultInstance();
+        return instance;
     }
 
     public void saveObject(Dictionary dictionary) {
@@ -72,13 +66,5 @@ public class DictionaryDao {
         return realm
                 .where(Dictionary.class)
                 .findFirst();
-    }
-
-    public Realm getRealm() {
-        return realm;
-    }
-
-    public void close() {
-        realm.close();
     }
 }

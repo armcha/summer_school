@@ -4,7 +4,6 @@ import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
-import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -24,9 +23,11 @@ public interface TranslationFragmentContract {
 
         void onDictionaryResult(Dictionary dictionary);
 
-        void setUpToolbar(LanguagePair languagePair);
+        void setUpToolbar();
 
         void openChooseLanguageActivity(String languageChooseType);
+
+        void updateToolbarLanguages(LanguagePair languagePair);
 
 //        String getTargetLanguage();
 //
@@ -34,8 +35,11 @@ public interface TranslationFragmentContract {
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
+
         void handleInputText(String inputText);
 
         void handleToolbarClicks(int id);
+
+        void handleActivityResult(int requestCode, int resultCode);
     }
 }

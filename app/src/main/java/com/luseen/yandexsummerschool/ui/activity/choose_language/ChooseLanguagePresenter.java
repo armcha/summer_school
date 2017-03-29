@@ -6,11 +6,17 @@ import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
+import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
 
 /**
  * Created by Chatikyan on 25.03.2017.
@@ -19,6 +25,7 @@ import java.util.List;
 public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract.View>
         implements ChooseLanguageContract.Presenter {
 
+    private Subscription lastUsedLanguageSubscription;
     private boolean isLanguageChooseTypeSource;
 
     @Override
@@ -54,7 +61,23 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             } else {
                 lastSelectedLanguage = languagePair.getTargetLanguage().getLangCode();
             }
-            getView().onResult(availableLanguages, lastSelectedLanguage);
+            Observable<LastUsedLanguages> lastUsedLanguagesObservable = dataManager.getLastUsedLanguages();
+            lastUsedLanguageSubscription = lastUsedLanguagesObservable
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Action1<LastUsedLanguages>() {
+                        @Override
+                        public void call(LastUsedLanguages lastUsedLanguages) {
+                            List<Language> lastUsedLanguageList;
+                            if (isLanguageChooseTypeSource) {
+                                lastUsedLanguageList = lastUsedLanguages.getLastUsedSourceLanguages();
+                            } else {
+                                lastUsedLanguageList = lastUsedLanguages.getLastUsedTargetLanguages();
+                            }
+                            getView().onResult(availableLanguages,
+                                    lastSelectedLanguage,
+                                    lastUsedLanguageList);
+                        }
+                    });
         }
     }
 
@@ -100,7 +123,28 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         } else {
             pair.setTargetLanguage(language);
         }
+        Logger.log(pair);
         dataManager.setLanguagePair(pair);
-        Logger.log("PAIR " + dataManager.getLanguagePair());
+        Logger.log(isViewAttached());
+        if (!isViewAttached())
+            return;
+
+        dataManager.saveLastLanguage(language, getView().languageChooseType());
+        getView().setResultOkAndFinish();
+    }
+
+    @Override
+    public void handleBackPress() {
+        if (isViewAttached()) {
+            getView().setResultCancel();
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (lastUsedLanguageSubscription != null) {
+            lastUsedLanguageSubscription.unsubscribe();
+        }
     }
 }

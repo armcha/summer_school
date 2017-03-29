@@ -15,7 +15,6 @@ import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageItemSelectListener;
 import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -89,8 +88,10 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     }
 
     @Override
-    public void onResult(AvailableLanguages availableLanguages, String lastSelectedLanguage) {
-        setUpRecyclerView(availableLanguages, lastSelectedLanguage);
+    public void onResult(AvailableLanguages availableLanguages,
+                         String lastSelectedLanguage,
+                         List<Language> lastUsedLanguages) {
+        setUpRecyclerView(availableLanguages, lastSelectedLanguage, lastUsedLanguages);
     }
 
     @Override
@@ -98,12 +99,23 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
         return getIntent().getStringExtra("RRR");
     }
 
-    private void setUpRecyclerView(AvailableLanguages availableLanguages, String lastSelectedLanguage) {
+    @Override
+    public void setResultOkAndFinish() {
+        setResult(RESULT_OK);
+        finish();
+    }
+
+    @Override
+    public void setResultCancel() {
+        setResult(RESULT_CANCELED);
+    }
+
+    private void setUpRecyclerView(AvailableLanguages availableLanguages,
+                                   String lastSelectedLanguage,
+                                   List<Language> lastUsedLanguages) {
         List<Language> languageList = availableLanguages.getLanguageList();
-        // TODO: 28.03.2017 add real last used list
-        List<Language> lastUsedLanguageList = availableLanguages.getLanguageList().subList(0, 3);
         ChooseLanguageRecyclerAdapter adapter = new ChooseLanguageRecyclerAdapter(
-                languageList, lastUsedLanguageList, lastSelectedLanguage);
+                languageList, lastUsedLanguages, lastSelectedLanguage);
         adapter.setItemSelectListener(this);
         chooseLanguageRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         chooseLanguageRecyclerView.setAdapter(adapter);
@@ -117,6 +129,11 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     @Override
     public void onItemSelected(Language language) {
         presenter.handleLanguageSelection(language);
-        Logger.log(language);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        presenter.handleBackPress();
     }
 }

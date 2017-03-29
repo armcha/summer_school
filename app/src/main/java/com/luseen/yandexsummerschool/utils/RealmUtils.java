@@ -8,6 +8,7 @@ import io.realm.RealmObject;
  */
 
 public class RealmUtils {
+
     private RealmUtils() {
         throw new RuntimeException("Private constructor cannot be accessed");
     }

@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 /**
@@ -45,7 +46,9 @@ public class AppPreferencesHelper implements PreferencesHelper {
     @Override
     public void setLanguagePair(LanguagePair languagePair) {
         Gson gson = new Gson();
+        // FIXME: 29.03.2017 Strange bug
         String pairJson = gson.toJson(languagePair);
+        Logger.log(pairJson);
         editor.putString(LANGUAGE_PAIR_KEY, pairJson);
         editor.commit();
     }

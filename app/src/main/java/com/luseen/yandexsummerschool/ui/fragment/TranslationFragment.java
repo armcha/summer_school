@@ -44,6 +44,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         CloseIcon.CloseIconClickListener,
         View.OnClickListener {
 
+    public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
+
     @BindView(R.id.translation_view)
     TranslationView translationView;
 
@@ -61,7 +63,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private DictionaryView dictView;
     private TextView sourceLangTextView;
     private TextView targetLangTextView;
-    private Toolbar toolbar;
 
     public static TranslationFragment newInstance() {
         Bundle args = new Bundle();
@@ -175,20 +176,30 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void setUpToolbar(LanguagePair languagePair) {
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
+    public void setUpToolbar() {
+        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
         sourceLangTextView = (TextView) toolbar.findViewById(R.id.source_language_text_view);
         targetLangTextView = (TextView) toolbar.findViewById(R.id.target_language_text_view);
-        sourceLangTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
-        targetLangTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
         sourceLangTextView.setOnClickListener(this);
         targetLangTextView.setOnClickListener(this);
     }
 
     @Override
+    public void updateToolbarLanguages(LanguagePair languagePair) {
+        sourceLangTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
+        targetLangTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
+    }
+
+    @Override
     public void openChooseLanguageActivity(String languageChooseType) {
         Intent startIntent = ChooseLanguageActivity.getStartIntent(getActivity(), languageChooseType);
-        startActivityForResult(startIntent, 45);
+        startActivityForResult(startIntent, CHOOSE_LANGUAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        presenter.handleActivityResult(requestCode, resultCode);
     }
 
     @Override

@@ -46,7 +46,7 @@ public class LanguagePair {
     @Override
     public String toString() {
         return "LanguagePair{" +
-                ", sourceLanguage=" + sourceLanguage +
+                " sourceLanguage=" + sourceLanguage +
                 ", targetLanguage=" + targetLanguage +
                 ", languageChooseType='" + languageChooseType + '\'' +
                 '}';

@@ -4,11 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageTextSectionViewHolder;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageViewHolder;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -27,7 +29,6 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
     private String lastSelectedLanguage;
     private boolean hasLastUsedLanguages;
     private int textSectionSize;
-    //private LanguagePair
 
     public ChooseLanguageRecyclerAdapter(List<Language> languageList,
                                          List<Language> lastUsedLanguageList,
@@ -66,8 +67,14 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         if (holder instanceof ChooseLanguageViewHolder) {
             Language language = getCurrentLanguage(holder.getAdapterPosition());
             ChooseLanguageViewHolder viewHolder = (ChooseLanguageViewHolder) holder;
-            viewHolder.bind(language,lastSelectedLanguage);
-
+            ImageView checkLanguageIcon = viewHolder.getCheckLanguageIcon();
+            boolean needShowCheckIcon = position >= (textSectionSize + lastUsedLanguageList.size());
+            if (lastSelectedLanguage.equalsIgnoreCase(language.getLangCode()) && needShowCheckIcon) {
+                checkLanguageIcon.setVisibility(View.VISIBLE);
+            } else {
+                checkLanguageIcon.setVisibility(View.GONE);
+            }
+            viewHolder.bind(language, lastSelectedLanguage);
         } else if (holder instanceof ChooseLanguageTextSectionViewHolder) {
             ChooseLanguageTextSectionViewHolder sectionHolder = (ChooseLanguageTextSectionViewHolder) holder;
             String sectionText;
@@ -103,7 +110,7 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         chooseLanguageViewHolder.itemView.setOnClickListener(view -> {
             int position = chooseLanguageViewHolder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                Language language = getCurrentLanguage(chooseLanguageViewHolder.getAdapterPosition());
+                Language language = getCurrentLanguage(position);
                 if (itemSelectListener != null) {
                     itemSelectListener.onItemSelected(language);
                 }

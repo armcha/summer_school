@@ -1,5 +1,7 @@
 package com.luseen.yandexsummerschool.ui.fragment;
 
+import android.app.Activity;
+
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestMode;
@@ -24,7 +26,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void onCreate() {
         super.onCreate();
         if (isViewAttached()) {
-            getView().setUpToolbar(dataManager.getLanguagePair());
+            getView().setUpToolbar();
+            getView().updateToolbarLanguages(dataManager.getLanguagePair());
         }
     }
 
@@ -64,14 +67,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         int requestMode = getRequestMode(inputText);
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
-        Logger.log("AAA " + translationLanguage);
         if (requestMode == RequestMode.MODE_TRANSLATION) {
             makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
             Logger.log("TYPE_TRANSLATION");
         } else {
             Logger.log("TYPE_DICTIONARY");
             String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
-            Logger.log("BBB " + lookUpLanguage);
             Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
                     translationLanguage, lookUpLanguage);
             makeRequest(dictionaryObservable, RequestType.LOOKUP);
@@ -94,6 +95,14 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 break;
         }
 
+    }
+
+    @Override
+    public void handleActivityResult(int requestCode, int resultCode) {
+        if (requestCode == TranslationFragment.CHOOSE_LANGUAGE_REQUEST_CODE &&
+                resultCode == Activity.RESULT_OK && isViewAttached()) {
+            getView().updateToolbarLanguages(dataManager.getLanguagePair());
+        }
     }
 
     private int getRequestMode(String inputText) {
