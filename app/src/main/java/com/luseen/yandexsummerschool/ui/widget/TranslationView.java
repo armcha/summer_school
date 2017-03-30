@@ -148,6 +148,22 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         isEnable = true;
     }
 
+    public void forceEnable(){
+        enableEditText();
+        setBackgroundShape(activeBorderWidth);
+        changeBackgroundShapeColor(activeBorderColor);
+        KeyboardUtils.showKeyboard(this);
+        isEnable = true;
+    }
+
+    public void forceDisable(){
+        disableEditText();
+        setBackgroundShape(inActiveBorderWidth);
+        changeBackgroundShapeColor(inActiveBorderColor);
+        KeyboardUtils.hideKeyboard(this);
+        isEnable = false;
+    }
+
     public boolean isEnable() {
         return isEnable;
     }

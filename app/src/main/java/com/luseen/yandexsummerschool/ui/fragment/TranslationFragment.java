@@ -65,9 +65,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private TextView targetLangTextView;
 
     public static TranslationFragment newInstance() {
-        Bundle args = new Bundle();
         TranslationFragment fragment = new TranslationFragment();
-        fragment.setArguments(args);
         return fragment;
     }
 
@@ -80,9 +78,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onResume() {
         super.onResume();
-        // TODO: 20.03.2017 test
-        if (!translationView.hasText())
-            translationView.enable();
+        if (translationView.hasText()) {
+            translationView.forceDisable();
+        } else {
+            translationView.forceEnable();
+        }
     }
 
     @NonNull
@@ -110,9 +110,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     private void setUpTextWatcher() {
         textWatcherSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
+                .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
                     if (input.isEmpty()) {
+                        presenter.clearLastInputWord();
                         translationTextView.reset();
                         dictView.reset();
                     }
@@ -171,6 +173,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onDictionaryResult(Dictionary dictionary) {
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
+            translationTextView.postInvalidate();
             dictView.updateDictionary(dictionary);
         }
     }
@@ -185,9 +188,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void updateToolbarLanguages(LanguagePair languagePair) {
+    public void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair, String lastInput) {
         sourceLangTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
         targetLangTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
+        translationView.getTranslationEditText().setText(lastInput);
+        translationView.disable();
     }
 
     @Override
@@ -204,6 +209,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onClosePressed(CloseIcon closeIcon) {
+        presenter.clearLastInputWord();
         translationTextView.reset();
         translationView.reset();
         dictView.reset();

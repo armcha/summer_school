@@ -27,7 +27,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         super.onCreate();
         if (isViewAttached()) {
             getView().setUpToolbar();
-            getView().updateToolbarLanguages(dataManager.getLanguagePair());
+            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair(),
+                    dataManager.getLastTypedText());
         }
     }
 
@@ -64,6 +65,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     @Override
     public void handleInputText(String inputText) {
+        dataManager.setLastTypedText(inputText);
         int requestMode = getRequestMode(inputText);
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
@@ -101,8 +103,14 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void handleActivityResult(int requestCode, int resultCode) {
         if (requestCode == TranslationFragment.CHOOSE_LANGUAGE_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && isViewAttached()) {
-            getView().updateToolbarLanguages(dataManager.getLanguagePair());
+            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair(),
+                    dataManager.getLastTypedText());
         }
+    }
+
+    @Override
+    public void clearLastInputWord() {
+        dataManager.setLastTypedText(StringUtils.EMPTY);
     }
 
     private int getRequestMode(String inputText) {

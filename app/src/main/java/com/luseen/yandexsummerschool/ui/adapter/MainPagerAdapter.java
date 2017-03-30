@@ -4,9 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.luseen.yandexsummerschool.R;
+import com.luseen.yandexsummerschool.ui.fragment.TestFragment;
 import com.luseen.yandexsummerschool.ui.fragment.TranslationFragment;
-import com.luseen.yandexsummerschool.ui.widget.IconicTabLayout;
 
 /**
  * Created by Chatikyan on 18.03.2017.
@@ -22,7 +21,10 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return TranslationFragment.newInstance();
+        // TODO: 30.03.2017 add real fragments
+        if (position == 0)
+            return TranslationFragment.newInstance();
+        else return new TestFragment();
     }
 
     @Override
