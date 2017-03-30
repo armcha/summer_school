@@ -10,6 +10,7 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import rx.Observable;
@@ -95,11 +96,12 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         List<String> languageAndCodeList = Arrays.asList(languages);
         for (String languageAndCode : languageAndCodeList) {
             String[] languageAndCodes = languageAndCode.split("=");
-            String languageCode = languageAndCodes[0];
-            String fullLanguage = languageAndCodes[1];
+            String languageCode = languageAndCodes[0].trim();
+            String fullLanguage = languageAndCodes[1].trim();
             Language language = new Language(languageCode, fullLanguage);
             languageList.add(language);
         }
+        Collections.sort(languageList, Language.languageComparator);
         return languageList;
     }
 

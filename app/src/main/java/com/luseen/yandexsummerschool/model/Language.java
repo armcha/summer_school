@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.model;
 
 import java.io.Serializable;
+import java.util.Comparator;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -25,7 +26,7 @@ public class Language extends RealmObject implements Serializable {
     }
 
     public String getLangCode() {
-        return langCode.trim();
+        return langCode;
     }
 
     public String getFullLanguageName() {
@@ -54,4 +55,10 @@ public class Language extends RealmObject implements Serializable {
         Language language = ((Language) obj);
         return this.langCode.equals(language.langCode);
     }
+
+    public static Comparator<Language> languageComparator = (o1, o2) -> {
+        String firstLanguage = o1.fullLanguageName;
+        String secondLanguage = o2.fullLanguageName;
+        return firstLanguage.compareToIgnoreCase(secondLanguage);
+    };
 }
