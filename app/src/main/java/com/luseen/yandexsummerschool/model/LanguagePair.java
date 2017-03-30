@@ -1,10 +1,16 @@
 package com.luseen.yandexsummerschool.model;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by Chatikyan on 28.03.2017.
  */
 
-public class LanguagePair {
+public class LanguagePair extends RealmObject {
+
+    @PrimaryKey
+    private int id = 1;
 
     private Language sourceLanguage;
     private Language targetLanguage;

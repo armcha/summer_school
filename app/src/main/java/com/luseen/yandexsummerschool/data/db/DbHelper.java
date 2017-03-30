@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.data.db;
 
 import com.luseen.yandexsummerschool.model.Language;
+import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
@@ -22,4 +23,8 @@ public interface DbHelper {
     void saveLastLanguage(Language language, String languageChooseType);
 
     Observable<LastUsedLanguages> getLastUsedLanguages();
+
+    LanguagePair getLanguagePair();
+
+    void setLanguagePair(LanguagePair languagePair);
 }

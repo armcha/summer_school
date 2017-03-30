@@ -15,8 +15,6 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
-import java.util.List;
-
 import io.realm.RealmResults;
 import rx.Observable;
 
@@ -81,12 +79,22 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
 
     @Override
     public void saveLastLanguage(Language language, String languageChooseType) {
-        appDbHelper.saveLastLanguage(language,languageChooseType);
+        appDbHelper.saveLastLanguage(language, languageChooseType);
     }
 
     @Override
     public Observable<LastUsedLanguages> getLastUsedLanguages() {
         return appDbHelper.getLastUsedLanguages();
+    }
+
+    @Override
+    public LanguagePair getLanguagePair() {
+        return appDbHelper.getLanguagePair();
+    }
+
+    @Override
+    public void setLanguagePair(LanguagePair languagePair) {
+        appDbHelper.setLanguagePair(languagePair);
     }
 
     @Override
@@ -97,15 +105,5 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     @Override
     public void setLastTypedText(String lastTypedText) {
         preferencesHelper.setLastTypedText(lastTypedText);
-    }
-
-    @Override
-    public LanguagePair getLanguagePair() {
-        return preferencesHelper.getLanguagePair();
-    }
-
-    @Override
-    public void setLanguagePair(LanguagePair languagePair) {
-        preferencesHelper.setLanguagePair(languagePair);
     }
 }

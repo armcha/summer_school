@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.data.db;
 
 
 import com.luseen.yandexsummerschool.model.Language;
+import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
@@ -16,6 +17,7 @@ public class AppDbHelper implements DbHelper {
 
     private DictionaryDao dictionaryDao = DictionaryDao.getInstance();
     private LastUsedLanguageDao languageDao = LastUsedLanguageDao.getInstance();
+    private LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
 
     @Override
     public void saveDictionary(Dictionary dictionary) {
@@ -40,5 +42,15 @@ public class AppDbHelper implements DbHelper {
     @Override
     public Observable<LastUsedLanguages> getLastUsedLanguages() {
         return Observable.fromCallable(languageDao::getLastUsedLanguages);
+    }
+
+    @Override
+    public LanguagePair getLanguagePair() {
+        return languagePairDao.getLanguagePair();
+    }
+
+    @Override
+    public void setLanguagePair(LanguagePair languagePair) {
+        languagePairDao.saveLanguagePair(languagePair);
     }
 }

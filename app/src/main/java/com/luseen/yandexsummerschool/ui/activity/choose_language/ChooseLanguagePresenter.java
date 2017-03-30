@@ -7,7 +7,6 @@ import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,7 +15,6 @@ import java.util.List;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 
 /**
  * Created by Chatikyan on 25.03.2017.
@@ -49,36 +47,34 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             return;
         getView().hideLoading();
 
+        AvailableLanguages availableLanguages = (AvailableLanguages) response;
         if (requestType == RequestType.AVAILABLE_LANGUAGES) {
-            AvailableLanguages availableLanguages = ((AvailableLanguages) response);
-            LinkedTreeMap languageMap = availableLanguages.getLanguageLinkedMap();
-            availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
-
-            LanguagePair languagePair = dataManager.getLanguagePair();
-            String lastSelectedLanguage;
-            if (isLanguageChooseTypeSource) {
-                lastSelectedLanguage = languagePair.getSourceLanguage().getLangCode();
-            } else {
-                lastSelectedLanguage = languagePair.getTargetLanguage().getLangCode();
-            }
             Observable<LastUsedLanguages> lastUsedLanguagesObservable = dataManager.getLastUsedLanguages();
             lastUsedLanguageSubscription = lastUsedLanguagesObservable
                     .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Action1<LastUsedLanguages>() {
-                        @Override
-                        public void call(LastUsedLanguages lastUsedLanguages) {
-                            List<Language> lastUsedLanguageList;
-                            if (isLanguageChooseTypeSource) {
-                                lastUsedLanguageList = lastUsedLanguages.getLastUsedSourceLanguages();
-                            } else {
-                                lastUsedLanguageList = lastUsedLanguages.getLastUsedTargetLanguages();
-                            }
-                            getView().onResult(availableLanguages,
-                                    lastSelectedLanguage,
-                                    lastUsedLanguageList);
-                        }
-                    });
+                    .subscribe(lastUsedLanguages -> doOnResult(lastUsedLanguages, availableLanguages));
         }
+    }
+
+    private void doOnResult(LastUsedLanguages lastUsedLanguages, AvailableLanguages availableLanguages) {
+        LinkedTreeMap languageMap = availableLanguages.getLanguageLinkedMap();
+        availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
+        LanguagePair languagePair = dataManager.getLanguagePair();
+        String lastSelectedLanguage;
+        if (isLanguageChooseTypeSource) {
+            lastSelectedLanguage = languagePair.getSourceLanguage().getLangCode();
+        } else {
+            lastSelectedLanguage = languagePair.getTargetLanguage().getLangCode();
+        }
+        List<Language> lastUsedLanguageList;
+        if (isLanguageChooseTypeSource) {
+            lastUsedLanguageList = lastUsedLanguages.getLastUsedSourceLanguages();
+        } else {
+            lastUsedLanguageList = lastUsedLanguages.getLastUsedTargetLanguages();
+        }
+        getView().onResult(availableLanguages,
+                lastSelectedLanguage,
+                lastUsedLanguageList);
     }
 
     @Override
@@ -117,15 +113,17 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
 
     @Override
     public void handleLanguageSelection(Language language) {
-        LanguagePair pair = dataManager.getLanguagePair();
+        LanguagePair dbLanguagePair = dataManager.getLanguagePair();
+        LanguagePair pair = new LanguagePair();
         if (isLanguageChooseTypeSource) {
             pair.setSourceLanguage(language);
+            pair.setTargetLanguage(dbLanguagePair.getTargetLanguage());
         } else {
             pair.setTargetLanguage(language);
+            pair.setSourceLanguage(dbLanguagePair.getSourceLanguage());
         }
-        Logger.log(pair);
+        pair.setLanguageChooseType(dbLanguagePair.getLanguageChooseType());
         dataManager.setLanguagePair(pair);
-        Logger.log(isViewAttached());
         if (!isViewAttached())
             return;
 

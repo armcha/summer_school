@@ -11,8 +11,4 @@ public interface PreferencesHelper {
     String getLastTypedText();
 
     void setLastTypedText(String lastTypedText);
-
-    LanguagePair getLanguagePair();
-
-    void setLanguagePair(LanguagePair languagePair);
 }

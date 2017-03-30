@@ -8,11 +8,10 @@ import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import java.util.List;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 import rx.Observable;
 
-public class DictionaryDao extends AbstractDao{
+public class DictionaryDao extends AbstractDao {
 
     private static DictionaryDao instance = null;
 
@@ -63,8 +62,6 @@ public class DictionaryDao extends AbstractDao{
     }
 
     public Dictionary getDictionary() {
-        return realm
-                .where(Dictionary.class)
-                .findFirst();
+        return restore(Dictionary.class);
     }
 }

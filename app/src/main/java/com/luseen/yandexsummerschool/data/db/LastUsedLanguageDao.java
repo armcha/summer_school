@@ -3,6 +3,7 @@ package com.luseen.yandexsummerschool.data.db;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class LastUsedLanguageDao extends AbstractDao {
             lastUsedLanguageList = lastUsedLanguages.getLastUsedTargetLanguages();
         }
 
-        boolean alreadyHasThisLanguage = alreadyHasThisLanguage(lastUsedLanguageList, language);
+        boolean alreadyHasThisLanguage = lastUsedLanguageList.contains(language);
         if (alreadyHasThisLanguage) {
-            int index = getIndex(lastUsedLanguageList, language);
+            int index = lastUsedLanguageList.indexOf(language);
             if (index != 0) {
                 lastUsedLanguageList.remove(index);
                 lastUsedLanguageList.add(FIRST_INDEX, language);
@@ -52,24 +53,6 @@ public class LastUsedLanguageDao extends AbstractDao {
 
         realm.copyToRealmOrUpdate(lastUsedLanguages);
         realm.commitTransaction();
-    }
-
-    private boolean alreadyHasThisLanguage(List<Language> lastUsedLanguageList, Language targetLanguage) {
-        for (Language language : lastUsedLanguageList) {
-            if (language.getLangCode().equals(targetLanguage.getLangCode())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private int getIndex(List<Language> lastUsedLanguageList, Language targetLanguage) {
-        for (int i = 0; i < lastUsedLanguageList.size(); i++) {
-            if (lastUsedLanguageList.get(i).getLangCode().equals(targetLanguage.getLangCode())) {
-                return i;
-            }
-        }
-        return -1;
     }
 
     public LastUsedLanguages getLastUsedLanguages() {
