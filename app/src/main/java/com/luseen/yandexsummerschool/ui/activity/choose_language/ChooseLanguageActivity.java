@@ -103,6 +103,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     public void setResultOkAndFinish() {
         setResult(RESULT_OK);
         finish();
+        enableExitAnimation();
     }
 
     @Override
@@ -135,5 +136,6 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     public void onBackPressed() {
         super.onBackPressed();
         presenter.handleBackPress();
+        enableExitAnimation();
     }
 }

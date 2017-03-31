@@ -25,6 +25,7 @@ import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
+import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -41,10 +42,12 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
         implements TranslationFragmentContract.View,
-        CloseIcon.CloseIconClickListener,
-        View.OnClickListener {
+        CloseIcon.CloseIconClickListener {
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     @BindView(R.id.translation_view)
     TranslationView translationView;
@@ -58,11 +61,15 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.translation_text_view)
     TranslationTextView translationTextView;
 
+    @BindView(R.id.source_language_text_view)
+    TextView sourceLanguageTextView;
+
+    @BindView(R.id.target_language_text_view)
+    TextView targetLanguageTextView;
+
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
-    private TextView sourceLangTextView;
-    private TextView targetLangTextView;
 
     public static TranslationFragment newInstance() {
         TranslationFragment fragment = new TranslationFragment();
@@ -79,7 +86,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onResume() {
         super.onResume();
         if (translationView.hasText()) {
+
             translationView.forceDisable();
+            // FIXME: 30.03.2017 Hide keyboard
+            KeyboardUtils.hideKeyboard(rootLayout);
         } else {
             translationView.forceEnable();
         }
@@ -179,18 +189,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void setUpToolbar() {
-        Toolbar toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar);
-        sourceLangTextView = (TextView) toolbar.findViewById(R.id.source_language_text_view);
-        targetLangTextView = (TextView) toolbar.findViewById(R.id.target_language_text_view);
-        sourceLangTextView.setOnClickListener(this);
-        targetLangTextView.setOnClickListener(this);
-    }
-
-    @Override
     public void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair, String lastInput) {
-        sourceLangTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
-        targetLangTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
+        sourceLanguageTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
+        targetLanguageTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
         translationView.getTranslationEditText().setText(lastInput);
         translationView.disable();
     }
@@ -199,6 +200,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void openChooseLanguageActivity(String languageChooseType) {
         Intent startIntent = ChooseLanguageActivity.getStartIntent(getActivity(), languageChooseType);
         startActivityForResult(startIntent, CHOOSE_LANGUAGE_REQUEST_CODE);
+        enableEnterAnimation();
     }
 
     @Override
@@ -215,8 +217,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         dictView.reset();
     }
 
-    @Override
-    public void onClick(View view) {
+    @OnClick({R.id.source_language_text_view, R.id.target_language_text_view, R.id.swap_languages})
+    public void onViewClicked(View view) {
         presenter.handleToolbarClicks(view.getId());
     }
 }

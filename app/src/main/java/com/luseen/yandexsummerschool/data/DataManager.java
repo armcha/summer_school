@@ -16,6 +16,7 @@ import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmResults;
+import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -35,8 +36,8 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<AvailableLanguages> availableLanguages(String uiLanguage) {
-        return translationService.availableLanguages(uiLanguage)
+    public Observable<AvailableLanguages> getAvailableTranslationLanguages(String uiLanguage) {
+        return translationService.getAvailableTranslationLanguages(uiLanguage)
                 .cache();
     }
 
@@ -48,6 +49,11 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     @Override
     public Observable<Dictionary> lookup(String lang, String text) {
         return dictionaryService.lookup(lang, text);
+    }
+
+    @Override
+    public Observable<AvailableLanguages> getAvailableDictionaryLanguages() {
+        return dictionaryService.getAvailableDictionaryLanguages();
     }
 
     @Override

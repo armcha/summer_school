@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.LayoutRes;
 
 import com.hannesdorfmann.mosby.mvp.MvpActivity;
+import com.luseen.yandexsummerschool.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -47,16 +48,12 @@ public abstract class BaseActivity<V extends BaseContract.View, P extends BaseCo
             unbinder.unbind();
         }
     }
-//
-//    protected void enableEnterAnimation() {
-//        overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);
-//    }
-//
-//    protected void enableExitAnimation() {
-//        overridePendingTransition(R.anim.slide_out_start, R.anim.slide_out_finish);
-//    }
-//
-//    protected void showError(String message) {
-//        ViewHelper.showToast(message);
-//    }
+
+    protected void enableEnterAnimation() {
+        overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);
+    }
+
+    protected void enableExitAnimation() {
+        overridePendingTransition(R.anim.slide_out_start, R.anim.slide_out_finish);
+    }
 }

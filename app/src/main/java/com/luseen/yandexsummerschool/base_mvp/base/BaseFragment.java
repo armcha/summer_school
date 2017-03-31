@@ -5,6 +5,7 @@ import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
 
 import com.hannesdorfmann.mosby.mvp.MvpFragment;
+import com.luseen.yandexsummerschool.R;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -38,17 +39,13 @@ public abstract class BaseFragment<V extends BaseContract.View, P extends BaseCo
         }
     }
 
-//    protected void enableEnterAnimation() {
-//        getActivity().overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);
-//    }
-//
-//    protected void enableExitAnimation() {
-//        getActivity().overridePendingTransition(R.anim.slide_out_start, R.anim.slide_out_finish);
-//    }
-//
-//    protected void showError(String message){
-//        ViewHelper.showToast(message);
-//    }
+    protected void enableEnterAnimation() {
+        getActivity().overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);
+    }
+
+    protected void enableExitAnimation() {
+        getActivity().overridePendingTransition(R.anim.slide_out_start, R.anim.slide_out_finish);
+    }
 
     protected abstract boolean whitButterKnife();
 }

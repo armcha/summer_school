@@ -23,8 +23,6 @@ public interface TranslationFragmentContract {
 
         void onDictionaryResult(Dictionary dictionary);
 
-        void setUpToolbar();
-
         void openChooseLanguageActivity(String languageChooseType);
 
         void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair,String lastInput);

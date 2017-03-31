@@ -1,8 +1,12 @@
 package com.luseen.yandexsummerschool.data.api;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ResultListener;
+import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.utils.Logger;
 
+import java.io.IOException;
+
+import retrofit2.HttpException;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
@@ -32,7 +36,9 @@ public class ApiCallMaker {
                 .doOnUnsubscribe(() -> Logger.log(requestType.toString().toUpperCase() +
                         " request finished, Unsubscribing"))
                 .subscribe(response -> resultListener.onSuccess(requestType, response),
-                        throwable -> resultListener.onError(requestType, throwable));
+                        throwable -> {
+                            resultListener.onError(requestType, throwable);
+                        });
         subscriptions.add(subscription);
     }
 

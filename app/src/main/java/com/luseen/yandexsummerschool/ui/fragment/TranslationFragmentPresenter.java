@@ -8,8 +8,10 @@ import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
+import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
+import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
@@ -26,7 +28,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void onCreate() {
         super.onCreate();
         if (isViewAttached()) {
-            getView().setUpToolbar();
             getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair(),
                     dataManager.getLastTypedText());
         }
@@ -57,28 +58,44 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void onError(RequestType requestType, Throwable throwable) {
         if (isViewAttached()) {
-            getView().hideLoading();
-            getView().showError();
+            if (HttpUtils.getYaError(throwable) == YaError.LANGUAGE_IS_NOT_SUPPORTED) {
+                makeTranslation();
+            } else {
+                getView().hideLoading();
+                getView().showError();
+            }
         }
-        Logger.log("onError " + throwable.getMessage());
+    }
+
+    private void makeTranslation() {
+        LanguagePair pair = dataManager.getLanguagePair();
+        String translationLanguage = pair.getTargetLanguage().getLangCode();
+        String inputText = dataManager.getLastTypedText();
+        makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
     }
 
     @Override
     public void handleInputText(String inputText) {
         dataManager.setLastTypedText(inputText);
-        int requestMode = getRequestMode(inputText);
+        //int requestMode = getRequestMode(inputText);
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
-        if (requestMode == RequestMode.MODE_TRANSLATION) {
-            makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
-            Logger.log("TYPE_TRANSLATION");
-        } else {
-            Logger.log("TYPE_DICTIONARY");
-            String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
-            Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
-                    translationLanguage, lookUpLanguage);
-            makeRequest(dictionaryObservable, RequestType.LOOKUP);
-        }
+        // TODO: 31.03.2017 need some testing
+//        if (requestMode == RequestMode.MODE_TRANSLATION) {
+//            makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
+//            Logger.log("TYPE_TRANSLATION");
+//        } else {
+//            Logger.log("TYPE_DICTIONARY");
+//            String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
+//            Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
+//                    translationLanguage, lookUpLanguage);
+//            makeRequest(dictionaryObservable, RequestType.LOOKUP);
+//        }
+        Logger.log("TYPE_DICTIONARY");
+        String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
+        Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
+                translationLanguage, lookUpLanguage);
+        makeRequest(dictionaryObservable, RequestType.LOOKUP);
     }
 
     @Override
@@ -92,7 +109,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             case R.id.source_language_text_view:
                 getView().openChooseLanguageActivity(LanguageChooseType.TYPE_SOURCE);
                 break;
-            case 2:
+            case R.id.swap_languages:
+                Logger.log("Language swaped");
                 // TODO: 27.03.2017 to way switch click
                 break;
         }

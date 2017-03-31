@@ -109,7 +109,7 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
     public void startAvailableLanguagesRequest() {
         if (isViewAttached()) {
             // TODO: 28.03.2017 get user language
-            makeRequest(dataManager.availableLanguages("ru"), RequestType.AVAILABLE_LANGUAGES);
+            makeRequest(dataManager.getAvailableTranslationLanguages("ru"), RequestType.AVAILABLE_LANGUAGES);
         }
     }
 

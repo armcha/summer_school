@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.base_mvp.api;
 
 
 import com.luseen.yandexsummerschool.data.api.RequestType;
+import com.luseen.yandexsummerschool.model.YaError;
 
 /**
  * Created by Chatikyan on 20.02.2017.
