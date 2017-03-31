@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -26,8 +27,8 @@ import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
+import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
-import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -72,6 +73,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.swap_languages)
     ImageView swapLanguagesIcon;
 
+    @BindView(R.id.progress_view)
+    YaProgressView progressView;
+
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
@@ -93,7 +97,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
             translationView.forceDisable();
             // FIXME: 30.03.2017 Hide keyboard
-           // KeyboardUtils.hideKeyboard(rootLayout);
+            // KeyboardUtils.hideKeyboard(rootLayout);
         } else {
             translationView.forceEnable();
         }
@@ -115,6 +119,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
+
+        int backgroundColor = ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark);
+        progressView.setProgressColor(backgroundColor);
     }
 
     private void setUpDictView() {
@@ -130,6 +137,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                     if (input.isEmpty()) {
                         presenter.clearLastInputAndTranslate();
                         translationTextView.reset();
+                        progressView.hide();
                         dictView.reset();
                     }
                 })
@@ -162,12 +170,12 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void showLoading() {
-
+        progressView.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressView.hide();
     }
 
     @Override
@@ -233,6 +241,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         presenter.clearLastInputAndTranslate();
         translationTextView.reset();
         translationView.reset();
+        progressView.hide();
         dictView.reset();
     }
 

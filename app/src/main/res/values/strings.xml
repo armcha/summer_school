@@ -5,4 +5,5 @@
     <string name="source_language">Source language</string>
     <string name="target_language">Target language</string>
     <string name="type_text">Type text</string>
+    <string name="swap_languages">Swap languages</string>
 </resources>
