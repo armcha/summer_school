@@ -16,7 +16,6 @@ import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmResults;
-import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -110,7 +109,17 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public void setLastTypedText(String lastTypedText) {
-        preferencesHelper.setLastTypedText(lastTypedText);
+    public void saveLastTypedText(String lastTypedText) {
+        preferencesHelper.saveLastTypedText(lastTypedText);
+    }
+
+    @Override
+    public String getLastTranslatedText() {
+        return preferencesHelper.getLastTranslatedText();
+    }
+
+    @Override
+    public void saveLastTranslatedWord(String lastTranslatedWord) {
+        preferencesHelper.saveLastTranslatedWord(lastTranslatedWord);
     }
 }

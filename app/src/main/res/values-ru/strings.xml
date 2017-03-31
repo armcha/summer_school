@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">YandexSummerSchool</string>
+    <string name="last_used_languages">НЕДАВНО ИСПОЛЬЗОВАННЫЕ</string>
+    <string name="all_languages">ВСЕ ЯЗЫКИ</string>
+    <string name="source_language">Язык текста</string>
+    <string name="target_language">Язык перевода</string>
+    <string name="type_text">Введите текст</string>
+</resources>

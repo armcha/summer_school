@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
+import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
@@ -55,7 +56,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(ALIGN_PARENT_TOP);
         ViewUtils.setViewMargins(translationEditText, new int[]{10, 0, 40, 50});
-        translationEditText.setHint("Type text");
+        translationEditText.setHint(context.getString(R.string.type_text));
         translationEditText.setBackground(null);
         translationEditText.setOnClickListener(this);
         translationEditText.addTextChangedListener(new AbstractTextWatcher() {
@@ -148,7 +149,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         isEnable = true;
     }
 
-    public void forceEnable(){
+    public void forceEnable() {
         enableEditText();
         setBackgroundShape(activeBorderWidth);
         changeBackgroundShapeColor(activeBorderColor);
@@ -156,7 +157,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         isEnable = true;
     }
 
-    public void forceDisable(){
+    public void forceDisable() {
         disableEditText();
         setBackgroundShape(inActiveBorderWidth);
         changeBackgroundShapeColor(inActiveBorderColor);

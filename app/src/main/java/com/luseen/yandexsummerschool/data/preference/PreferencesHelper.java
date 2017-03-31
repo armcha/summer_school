@@ -10,5 +10,9 @@ public interface PreferencesHelper {
 
     String getLastTypedText();
 
-    void setLastTypedText(String lastTypedText);
+    void saveLastTypedText(String lastTypedText);
+
+    String getLastTranslatedText();
+
+    void saveLastTranslatedWord(String lastTranslatedWord);
 }

@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
@@ -21,10 +21,12 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
+import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
+import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -62,18 +64,20 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     TranslationTextView translationTextView;
 
     @BindView(R.id.source_language_text_view)
-    TextView sourceLanguageTextView;
+    AnimatedTextView sourceLanguageTextView;
 
     @BindView(R.id.target_language_text_view)
-    TextView targetLanguageTextView;
+    AnimatedTextView targetLanguageTextView;
+
+    @BindView(R.id.swap_languages)
+    ImageView swapLanguagesIcon;
 
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
 
     public static TranslationFragment newInstance() {
-        TranslationFragment fragment = new TranslationFragment();
-        return fragment;
+        return new TranslationFragment();
     }
 
     @Override
@@ -89,7 +93,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
             translationView.forceDisable();
             // FIXME: 30.03.2017 Hide keyboard
-            KeyboardUtils.hideKeyboard(rootLayout);
+           // KeyboardUtils.hideKeyboard(rootLayout);
         } else {
             translationView.forceEnable();
         }
@@ -124,7 +128,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
                     if (input.isEmpty()) {
-                        presenter.clearLastInputWord();
+                        presenter.clearLastInputAndTranslate();
                         translationTextView.reset();
                         dictView.reset();
                     }
@@ -183,17 +187,32 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onDictionaryResult(Dictionary dictionary) {
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
-            translationTextView.postInvalidate();
             dictView.updateDictionary(dictionary);
         }
     }
 
     @Override
-    public void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair, String lastInput) {
-        sourceLanguageTextView.setText(languagePair.getSourceLanguage().getFullLanguageName());
-        targetLanguageTextView.setText(languagePair.getTargetLanguage().getFullLanguageName());
-        translationView.getTranslationEditText().setText(lastInput);
-        translationView.disable();
+    public void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair) {
+        String sourceLanguage = languagePair.getSourceLanguage().getFullLanguageName();
+        String targetLanguage = languagePair.getTargetLanguage().getFullLanguageName();
+        sourceLanguageTextView.setText(sourceLanguage);
+        targetLanguageTextView.setText(targetLanguage);
+    }
+
+    @Override
+    public void setTranslationViewText(String text) {
+        translationView.getTranslationEditText().setText(text);
+        // TODO: 31.03.2017 need testing
+        //translationView.disable();
+    }
+
+    @Override
+    public void animateLanguageSwap(LanguagePair languagePair) {
+        String sourceLanguage = languagePair.getSourceLanguage().getFullLanguageName();
+        String targetLanguage = languagePair.getTargetLanguage().getFullLanguageName();
+        AnimationUtils.makeRotateAnimation(swapLanguagesIcon);
+        sourceLanguageTextView.setAnimatedText(sourceLanguage);
+        targetLanguageTextView.setAnimatedText(targetLanguage);
     }
 
     @Override
@@ -211,7 +230,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onClosePressed(CloseIcon closeIcon) {
-        presenter.clearLastInputWord();
+        presenter.clearLastInputAndTranslate();
         translationTextView.reset();
         translationView.reset();
         dictView.reset();

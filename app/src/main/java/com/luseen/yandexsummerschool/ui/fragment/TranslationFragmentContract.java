@@ -25,7 +25,11 @@ public interface TranslationFragmentContract {
 
         void openChooseLanguageActivity(String languageChooseType);
 
-        void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair,String lastInput);
+        void setTranslationViewText(String text);
+
+        void animateLanguageSwap(LanguagePair languagePair);
+
+        void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair);
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
@@ -36,6 +40,6 @@ public interface TranslationFragmentContract {
 
         void handleActivityResult(int requestCode, int resultCode);
 
-        void clearLastInputWord();
+        void clearLastInputAndTranslate();
     }
 }

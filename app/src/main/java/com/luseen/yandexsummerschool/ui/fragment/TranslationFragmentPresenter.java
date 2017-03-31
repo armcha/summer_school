@@ -28,8 +28,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void onCreate() {
         super.onCreate();
         if (isViewAttached()) {
-            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair(),
-                    dataManager.getLastTypedText());
+            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair());
+            getView().setTranslationViewText(dataManager.getLastTypedText());
         }
     }
 
@@ -46,10 +46,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
+                dataManager.saveLastTranslatedWord(translation.getTranslatedText());
                 getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
                 dataManager.saveDictionary(dictionary);
+                dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 getView().onDictionaryResult(dictionary);
             }
         }
@@ -76,7 +78,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     @Override
     public void handleInputText(String inputText) {
-        dataManager.setLastTypedText(inputText);
+        dataManager.saveLastTypedText(inputText);
         //int requestMode = getRequestMode(inputText);
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
@@ -110,25 +112,31 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 getView().openChooseLanguageActivity(LanguageChooseType.TYPE_SOURCE);
                 break;
             case R.id.swap_languages:
-                Logger.log("Language swaped");
-                // TODO: 27.03.2017 to way switch click
+                LanguagePair dbLanguagePair = dataManager.getLanguagePair();
+                LanguagePair languagePair = new LanguagePair();
+                languagePair.setSourceLanguage(dbLanguagePair.getTargetLanguage());
+                languagePair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
+                languagePair.setLanguageChooseType(dbLanguagePair.getLanguageChooseType());
+                dataManager.setLanguagePair(languagePair);
+                getView().animateLanguageSwap(languagePair);
+                getView().setTranslationViewText(dataManager.getLastTranslatedText());
                 break;
         }
-
     }
 
     @Override
     public void handleActivityResult(int requestCode, int resultCode) {
         if (requestCode == TranslationFragment.CHOOSE_LANGUAGE_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && isViewAttached()) {
-            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair(),
-                    dataManager.getLastTypedText());
+            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair());
+            getView().setTranslationViewText(dataManager.getLastTypedText());
         }
     }
 
     @Override
-    public void clearLastInputWord() {
-        dataManager.setLastTypedText(StringUtils.EMPTY);
+    public void clearLastInputAndTranslate() {
+        dataManager.saveLastTypedText(StringUtils.EMPTY);
+        dataManager.saveLastTranslatedWord(StringUtils.EMPTY);
     }
 
     private int getRequestMode(String inputText) {

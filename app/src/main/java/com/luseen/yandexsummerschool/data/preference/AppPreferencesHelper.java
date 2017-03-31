@@ -2,11 +2,7 @@ package com.luseen.yandexsummerschool.data.preference;
 
 import android.content.SharedPreferences;
 
-import com.google.gson.Gson;
 import com.luseen.yandexsummerschool.App;
-import com.luseen.yandexsummerschool.model.Language;
-import com.luseen.yandexsummerschool.model.LanguagePair;
-import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 /**
@@ -16,6 +12,7 @@ import com.luseen.yandexsummerschool.utils.StringUtils;
 public class AppPreferencesHelper implements PreferencesHelper {
 
     private static final String LAST_TYPED_TEXT_KEY = "last_typed_text_key";
+    private static final String LAST_TRANSLATED_TEXT_KEY = "last_translated_text_key";
 
     private final SharedPreferences preferences = App.getInstance().getSharedPreferences();
     private final SharedPreferences.Editor editor = preferences.edit();
@@ -26,8 +23,19 @@ public class AppPreferencesHelper implements PreferencesHelper {
     }
 
     @Override
-    public void setLastTypedText(String lastTypedText) {
+    public void saveLastTypedText(String lastTypedText) {
         editor.putString(LAST_TYPED_TEXT_KEY, lastTypedText);
+        editor.commit();
+    }
+
+    @Override
+    public String getLastTranslatedText() {
+        return preferences.getString(LAST_TRANSLATED_TEXT_KEY, StringUtils.EMPTY);
+    }
+
+    @Override
+    public void saveLastTranslatedWord(String lastTranslatedWord) {
+        editor.putString(LAST_TRANSLATED_TEXT_KEY, lastTranslatedWord);
         editor.commit();
     }
 }

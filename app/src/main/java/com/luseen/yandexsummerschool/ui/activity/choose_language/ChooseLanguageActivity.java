@@ -21,6 +21,8 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.OnClick;
 
+import static com.luseen.yandexsummerschool.utils.AppConstants.LANGUAGE_CHOOSE_TYPE_INTENT_KEY;
+
 public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.View, ChooseLanguageContract.Presenter>
         implements ChooseLanguageContract.View,
         ChooseLanguageItemSelectListener {
@@ -39,7 +41,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     public static Intent getStartIntent(Context context,
                                         String languageChooseType) {
         Intent intent = new Intent(context, ChooseLanguageActivity.class);
-        intent.putExtra("RRR", languageChooseType);
+        intent.putExtra(LANGUAGE_CHOOSE_TYPE_INTENT_KEY, languageChooseType);
         return intent;
     }
 
@@ -47,7 +49,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_choose_language);
-        languageChooseType = getIntent().getStringExtra("RRR");
+        languageChooseType = getIntent().getStringExtra(LANGUAGE_CHOOSE_TYPE_INTENT_KEY);
         presenter.startAvailableLanguagesRequest();
         setUpToolbar();
     }
@@ -57,10 +59,10 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
         String toolbarTitle = "NULL";
         switch (languageChooseType) {
             case LanguageChooseType.TYPE_SOURCE:
-                toolbarTitle = "SOURCE";
+                toolbarTitle = getString(R.string.source_language);
                 break;
             case LanguageChooseType.TYPE_TARGET:
-                toolbarTitle = "TARGET";
+                toolbarTitle =  getString(R.string.target_language);
                 break;
         }
         toolbarTitleTextView.setAnimatedText(toolbarTitle);
@@ -96,7 +98,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     @Override
     public String languageChooseType() {
-        return getIntent().getStringExtra("RRR");
+        return getIntent().getStringExtra(LANGUAGE_CHOOSE_TYPE_INTENT_KEY);
     }
 
     @Override

@@ -40,7 +40,7 @@
                     android:paddingRight="10dp"
                     app:srcCompat="@drawable/switch_twoway" />
 
-                <TextView
+                <com.luseen.yandexsummerschool.ui.widget.AnimatedTextView
                     android:id="@+id/source_language_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
@@ -55,7 +55,7 @@
                     android:textColor="@color/black"
                     android:textSize="18sp" />
 
-                <TextView
+                <com.luseen.yandexsummerschool.ui.widget.AnimatedTextView
                     android:id="@+id/target_language_text_view"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"

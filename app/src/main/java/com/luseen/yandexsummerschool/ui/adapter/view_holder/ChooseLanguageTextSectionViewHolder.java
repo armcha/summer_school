@@ -1,5 +1,6 @@
 package com.luseen.yandexsummerschool.ui.adapter.view_holder;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;

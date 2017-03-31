@@ -1,11 +1,13 @@
 package com.luseen.yandexsummerschool.ui.adapter;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageTextSectionViewHolder;
@@ -78,10 +80,11 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
         } else if (holder instanceof ChooseLanguageTextSectionViewHolder) {
             ChooseLanguageTextSectionViewHolder sectionHolder = (ChooseLanguageTextSectionViewHolder) holder;
             String sectionText;
+            Context context = App.getInstance();
             if (position == 0 && hasLastUsedLanguages) {
-                sectionText = "Last used";
+                sectionText = context.getString(R.string.last_used_languages);
             } else {
-                sectionText = "All languages";
+                sectionText = context.getString(R.string.all_languages);
             }
             sectionHolder.bind(sectionText);
         }
