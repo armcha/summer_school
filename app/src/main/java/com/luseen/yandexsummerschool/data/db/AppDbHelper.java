@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.data.db;
 
 
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
@@ -15,23 +16,23 @@ import rx.Observable;
 
 public class AppDbHelper implements DbHelper {
 
-    private DictionaryDao dictionaryDao = DictionaryDao.getInstance();
+    private HistoryDao historyDao = HistoryDao.getInstance();
     private LastUsedLanguageDao languageDao = LastUsedLanguageDao.getInstance();
     private LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
 
     @Override
-    public void saveDictionary(Dictionary dictionary) {
-        dictionaryDao.saveObject(dictionary);
+    public void saveHistory(History history) {
+        historyDao.saveObject(history);
     }
 
     @Override
-    public Observable<RealmResults<Dictionary>> getDictionaryList() {
-        return Observable.fromCallable(dictionaryDao::getDictionaryRealmResult);
+    public Observable<RealmResults<History>> getHistoryList() {
+        return Observable.fromCallable(historyDao::getHistoryList);
     }
 
     @Override
     public Observable<Dictionary> getDictionaryByWord(String word) {
-        return Observable.fromCallable(() -> dictionaryDao.getDictionaryByWord(word));
+        return Observable.fromCallable(() -> historyDao.getDictionaryByWord(word));
     }
 
     @Override

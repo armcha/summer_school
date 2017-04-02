@@ -29,13 +29,13 @@ public class DictionaryTranslation extends RealmObject {
     private String gen;
 
     @SerializedName("syn")
-    private RealmList<Synonym> synonyms;
+    private RealmList<Synonym> synonyms = new RealmList<>();
 
     @SerializedName("mean")
-    private RealmList<TranslatedString> meanings;
+    private RealmList<TranslatedString> meanings = new RealmList<>();
 
     @SerializedName("ex")
-    private RealmList<Example> examples;
+    private RealmList<Example> examples = new RealmList<>();
 
     public String getWord() {
         return word;

@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.ui.fragment;
+package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 import android.app.Activity;
 
@@ -6,6 +6,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.data.api.RequestType;
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.YaError;
@@ -47,11 +48,18 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
+                Dictionary dictionary = new Dictionary();
+                //dictionary.setOriginalText();
+               // History history = new History(translation, dataManager.getLanguagePair());
+               // history.setRequestMode(RequestMode.MODE_TRANSLATION);
+              //  dataManager.saveHistory(history);
                 getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
-                dataManager.saveDictionary(dictionary);
+                History history = new History(dictionary, dataManager.getLanguagePair());
+                history.setRequestMode(RequestMode.MODE_DICTIONARY);
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
+                dataManager.saveHistory(history);
                 getView().onDictionaryResult(dictionary);
             }
         }

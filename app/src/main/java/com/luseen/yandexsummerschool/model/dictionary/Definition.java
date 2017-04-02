@@ -2,8 +2,6 @@ package com.luseen.yandexsummerschool.model.dictionary;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -27,7 +25,7 @@ public class Definition extends RealmObject {
     private String transcription;
 
     @SerializedName("tr")
-    private RealmList<DictionaryTranslation> translations;
+    private RealmList<DictionaryTranslation> translations = new RealmList<>();
 
     public String getWord() {
         return word;

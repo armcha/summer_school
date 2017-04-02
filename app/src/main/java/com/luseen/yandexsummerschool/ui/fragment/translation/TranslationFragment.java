@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.ui.fragment;
+package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 
 import android.content.Intent;

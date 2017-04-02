@@ -1,4 +1,4 @@
-package com.luseen.yandexsummerschool.ui.fragment;
+package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 import com.luseen.yandexsummerschool.model.LanguagePair;

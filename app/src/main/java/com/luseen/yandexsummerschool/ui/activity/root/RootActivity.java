@@ -3,7 +3,6 @@ package com.luseen.yandexsummerschool.ui.activity.root;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.view.ViewPager;
 
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
@@ -12,6 +11,7 @@ import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItem
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiActivity;
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
+import com.luseen.yandexsummerschool.ui.widget.NonSwappableViewPager;
 
 import butterknife.BindView;
 import rx.Subscription;
@@ -21,7 +21,7 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         OnBottomNavigationItemClickListener {
 
     @BindView(R.id.main_view_pager)
-    ViewPager mainViewPager;
+    NonSwappableViewPager mainViewPager;
 
     @BindView(R.id.bottom_navigation)
     BottomNavigationView bottomNavigationView;
@@ -40,6 +40,9 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
+        // TODO: 31.03.2017 remove after finishing second tab
+        mainViewPager.setCurrentItem(1);
+        mainViewPager.setPagingEnabled(false);
         viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
                 .subscribe(bottomNavigationView::selectTab);
     }

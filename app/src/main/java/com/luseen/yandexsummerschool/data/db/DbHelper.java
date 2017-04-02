@@ -1,5 +1,6 @@
 package com.luseen.yandexsummerschool.data.db;
 
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
@@ -14,9 +15,9 @@ import rx.Observable;
 
 public interface DbHelper {
 
-    void saveDictionary(Dictionary dictionary);
+    void saveHistory(History history);
 
-    Observable<RealmResults<Dictionary>> getDictionaryList();
+    Observable<RealmResults<History>> getHistoryList();
 
     Observable<Dictionary> getDictionaryByWord(String word);
 

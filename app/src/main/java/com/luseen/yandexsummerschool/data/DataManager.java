@@ -9,6 +9,7 @@ import com.luseen.yandexsummerschool.data.db.DbHelper;
 import com.luseen.yandexsummerschool.data.preference.AppPreferencesHelper;
 import com.luseen.yandexsummerschool.data.preference.PreferencesHelper;
 import com.luseen.yandexsummerschool.model.AvailableLanguages;
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
@@ -69,13 +70,13 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public void saveDictionary(Dictionary dictionary) {
-        appDbHelper.saveDictionary(dictionary);
+    public void saveHistory(History History) {
+        appDbHelper.saveHistory(History);
     }
 
     @Override
-    public Observable<RealmResults<Dictionary>> getDictionaryList() {
-        return appDbHelper.getDictionaryList();
+    public Observable<RealmResults<History>> getHistoryList() {
+        return appDbHelper.getHistoryList();
     }
 
     @Override

@@ -1,44 +1,43 @@
 package com.luseen.yandexsummerschool.data.db;
 
 
+import com.luseen.yandexsummerschool.model.History;
+import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
-import java.util.List;
-
 import io.realm.RealmResults;
-import rx.Observable;
 
-public class DictionaryDao extends AbstractDao {
+public class HistoryDao extends AbstractDao {
 
-    private static DictionaryDao instance = null;
+    private static HistoryDao instance = null;
 
-    public static DictionaryDao getInstance() {
+    public static HistoryDao getInstance() {
         if (instance == null) {
-            instance = new DictionaryDao();
+            instance = new HistoryDao();
         }
         return instance;
     }
 
-    public void saveObject(Dictionary dictionary) {
+    public void saveObject(History history) {
         realm.beginTransaction();
         int definitionId = RealmUtils.generateId(realm, Definition.class);
         int dictionaryTranslationId = RealmUtils.generateId(realm, DictionaryTranslation.class);
+        Dictionary dictionary = history.getDictionary();
+        LanguagePair pair = history.getLanguagePair();
+        String historyIdentifier = dictionary.getOriginalText() +
+                pair.getSourceLanguage().getLangCode() +
+                pair.getSourceLanguage().getLangCode();
+        history.setIdentifier(historyIdentifier);
         for (Definition definition : dictionary.getDefinition()) {
-            definition.setId(++definitionId);
+            definition.setId(definitionId);
             for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
-                dictionaryTranslation.setId(++dictionaryTranslationId);
+                dictionaryTranslation.setId(dictionaryTranslationId);
             }
         }
-        realm.copyToRealmOrUpdate(dictionary);
-        realm.commitTransaction();
-    }
-
-    public void saveList(List<Dictionary> dictionaries) {
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(dictionaries);
+        realm.copyToRealmOrUpdate(history);
         realm.commitTransaction();
     }
 
@@ -49,15 +48,15 @@ public class DictionaryDao extends AbstractDao {
                 .findFirst();
     }
 
-    public Observable<RealmResults<Dictionary>> getDictionaryList() {
-        return realm
-                .where(Dictionary.class)
-                .findAllAsync().asObservable();
-    }
+//    public Observable<RealmResults<History>> getHistoryList() {
+//        return realm
+//                .where(History.class)
+//                .findAllAsync().asObservable();
+//    }
 
-    public RealmResults<Dictionary> getDictionaryRealmResult() {
+    public RealmResults<History> getHistoryList() {
         return realm
-                .where(Dictionary.class)
+                .where(History.class)
                 .findAll();
     }
 

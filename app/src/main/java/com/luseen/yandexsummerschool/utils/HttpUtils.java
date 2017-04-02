@@ -16,6 +16,10 @@ import retrofit2.HttpException;
 
 public class HttpUtils {
 
+    private HttpUtils() {
+        throw new RuntimeException("Private constructor cannot be accessed");
+    }
+
     public static YaError getYaError(Throwable throwable) {
         if (throwable instanceof HttpException) {
             HttpException exception = ((HttpException) throwable);

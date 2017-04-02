@@ -21,7 +21,7 @@ public class Dictionary extends RealmObject {
     private String originalText;
 
     @SerializedName("def")
-    private RealmList<Definition> definition;
+    private RealmList<Definition> definition = new RealmList<>();
 
     public String getTranslatedText() {
         return translatedText;
@@ -45,5 +45,14 @@ public class Dictionary extends RealmObject {
 
     public void setOriginalText(String originalText) {
         this.originalText = originalText;
+    }
+
+    @Override
+    public String toString() {
+        return "Dictionary{" +
+                "translatedText='" + translatedText + '\'' +
+                ", originalText='" + originalText + '\'' +
+                ", definition=" + definition +
+                '}';
     }
 }
