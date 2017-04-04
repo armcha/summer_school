@@ -100,8 +100,8 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public void setLanguagePair(LanguagePair languagePair) {
-        appDbHelper.setLanguagePair(languagePair);
+    public void saveLanguagePair(LanguagePair languagePair) {
+        appDbHelper.saveLanguagePair(languagePair);
     }
 
     @Override

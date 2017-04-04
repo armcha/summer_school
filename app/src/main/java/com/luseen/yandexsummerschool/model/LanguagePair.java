@@ -14,7 +14,6 @@ public class LanguagePair extends RealmObject {
 
     private Language sourceLanguage;
     private Language targetLanguage;
-    private String languageChooseType;
 
     public LanguagePair() {
     }
@@ -31,14 +30,6 @@ public class LanguagePair extends RealmObject {
 
     public Language getTargetLanguage() {
         return targetLanguage;
-    }
-
-    public String getLanguageChooseType() {
-        return languageChooseType;
-    }
-
-    public void setLanguageChooseType(String languageChooseType) {
-        this.languageChooseType = languageChooseType;
     }
 
     public void setSourceLanguage(Language sourceLanguage) {
@@ -67,7 +58,6 @@ public class LanguagePair extends RealmObject {
                 "id='" + id + '\'' +
                 ", sourceLanguage=" + sourceLanguage +
                 ", targetLanguage=" + targetLanguage +
-                ", languageChooseType='" + languageChooseType + '\'' +
                 '}';
     }
 }

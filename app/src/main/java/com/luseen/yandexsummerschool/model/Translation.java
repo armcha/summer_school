@@ -22,6 +22,7 @@ public class Translation {
     private List<String> text = null;
 
     private String originalText;
+    private boolean isFavourite;
 
     public Integer getCode() {
         return code;
@@ -57,5 +58,13 @@ public class Translation {
 
     public void setOriginalText(String originalText) {
         this.originalText = originalText;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 }

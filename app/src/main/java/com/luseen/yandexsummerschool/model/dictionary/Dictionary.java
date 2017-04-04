@@ -12,13 +12,11 @@ import io.realm.annotations.PrimaryKey;
 
 public class Dictionary extends RealmObject {
 
-    public static final String TRANSLATED_WORD = "translatedText";
-    public static final String ORIGINAL_TEXT = "originalText";
-
     @PrimaryKey
     private String identifier;
     private String translatedText;
     private String originalText;
+    private boolean isFavourite;
 
     @SerializedName("def")
     private RealmList<Definition> definition = new RealmList<>();
@@ -45,6 +43,14 @@ public class Dictionary extends RealmObject {
 
     public void setOriginalText(String originalText) {
         this.originalText = originalText;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public void setFavourite(boolean favourite) {
+        isFavourite = favourite;
     }
 
     @Override

@@ -4,7 +4,6 @@ import android.app.Activity;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
-import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
@@ -19,6 +18,7 @@ import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
+import io.realm.Realm;
 import rx.Observable;
 
 /**
@@ -50,16 +50,33 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
+                boolean isFavourite = isResponseFavourite(translation.getOriginalText());
+                translation.setFavourite(isFavourite);
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
                 createHistoryFromTranslationAndSave(translation);
                 getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
+                boolean isFavourite = isResponseFavourite(dictionary.getOriginalText());
+                dictionary.setFavourite(isFavourite);
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 createHistoryFromDictionaryAndSave(dictionary);
                 getView().onDictionaryResult(dictionary);
             }
         }
+    }
+
+    private boolean isResponseFavourite(String originalText) {
+        Realm realm = Realm.getDefaultInstance();
+        LanguagePair pair = dataManager.getLanguagePair();
+        String pairId = pair.getSourceLanguage().getLangCode() +
+                pair.getTargetLanguage().getLangCode();
+        String historyIdentifier = originalText + pairId;
+        History historyFromDb = realm.where(History.class)
+                .equalTo(History.IDENTIFIER, historyIdentifier)
+                .findFirst();
+        realm.close();
+        return historyFromDb != null && historyFromDb.isFavourite();
     }
 
     //Create history object from Translation and save
@@ -68,13 +85,14 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         dictionary.setOriginalText(translation.getOriginalText());
         dictionary.setTranslatedText(translation.getTranslatedText());
         History history = new History(dictionary, dataManager.getLanguagePair());
+        history.setFavourite(translation.isFavourite());
         saveHistory(history);
     }
 
     //Create history object from Dictionary and save
     private void createHistoryFromDictionaryAndSave(Dictionary dictionary) {
         History history = new History(dictionary, dataManager.getLanguagePair());
-        history.setRequestMode(RequestMode.MODE_DICTIONARY);
+        history.setFavourite(dictionary.isFavourite());
         saveHistory(history);
     }
 
@@ -133,8 +151,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 LanguagePair languagePair = new LanguagePair();
                 languagePair.setSourceLanguage(dbLanguagePair.getTargetLanguage());
                 languagePair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
-                languagePair.setLanguageChooseType(dbLanguagePair.getLanguageChooseType());
-                dataManager.setLanguagePair(languagePair);
+                Logger.log("Created  " + languagePair);
+                dataManager.saveLanguagePair(languagePair);
                 getView().animateLanguageSwap(languagePair);
                 getView().setTranslationViewText(dataManager.getLastTranslatedText());
                 break;

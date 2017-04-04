@@ -8,9 +8,9 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.HistoryAndFavouriteViewHolder;
+import com.luseen.yandexsummerschool.utils.Logger;
 
-import java.util.List;
-
+import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -19,6 +19,11 @@ import io.realm.RealmResults;
 
 public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
 
+    public interface HistoryItemClickListener {
+        void onHistoryItemClick(History history);
+    }
+
+    private HistoryItemClickListener historyItemClickListener;
     private RealmResults<History> historyList;
 
     public HistoryAndFavouriteRecyclerAdapter(RealmResults<History> historyList) {
@@ -29,14 +34,26 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View inflatedView = LayoutInflater.from(parent.getContext()).inflate(
                 R.layout.history_and_favourite_item, parent, false);
-        RecyclerView.ViewHolder holder = new HistoryAndFavouriteViewHolder(inflatedView);
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int position = holder.getAdapterPosition();
-                if (position != RecyclerView.NO_POSITION) {
-                    // TODO: 02.04.2017 Item click
+        HistoryAndFavouriteViewHolder holder = new HistoryAndFavouriteViewHolder(inflatedView);
+
+        holder.itemView.setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                History history = historyList.get(position);
+                if (historyItemClickListener != null) {
+                    historyItemClickListener.onHistoryItemClick(history);
                 }
+            }
+        });
+
+        holder.getFavouriteIcon().setOnClickListener(v -> {
+            int position = holder.getAdapterPosition();
+            if (position != RecyclerView.NO_POSITION) {
+                History history = historyList.get(position);
+                Realm realm = Realm.getDefaultInstance();
+                realm.beginTransaction();
+                history.setFavourite(!history.isFavourite());
+                realm.commitTransaction();
             }
         });
 
@@ -56,8 +73,11 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
     }
 
     public void updateHistoryList(RealmResults<History> historyList) {
-        //this.historyList.d
         this.historyList = historyList;
         notifyDataSetChanged();
+    }
+
+    public void setHistoryItemClickListener(HistoryItemClickListener historyItemClickListener) {
+        this.historyItemClickListener = historyItemClickListener;
     }
 }

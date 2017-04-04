@@ -1,15 +1,17 @@
 package com.luseen.yandexsummerschool.ui.adapter.view_holder;
 
+import android.graphics.PorterDuff;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,11 +44,18 @@ public class HistoryAndFavouriteViewHolder extends RecyclerView.ViewHolder {
         LanguagePair pair = history.getLanguagePair();
         originalTextView.setText(dictionary.getOriginalText());
         translatedTextView.setText(dictionary.getTranslatedText());
-        String language = pair.getSourceLanguage().getLangCode().toUpperCase() +
-                "-" + pair.getTargetLanguage().getLangCode().toUpperCase();
+        String language = pair.getLookupLanguage().toUpperCase();
         translationLanguageTextView.setText(language);
         if (history.isFavourite()) {
-            // TODO: 02.04.2017
+            int favouriteColor = ContextCompat.getColor(App.getInstance(), R.color.colorPrimary);
+            favouriteIcon.setColorFilter(favouriteColor, PorterDuff.Mode.SRC_IN);
+        } else {
+            int defaultColor = ContextCompat.getColor(App.getInstance(), R.color.light_gray);
+            favouriteIcon.setColorFilter(defaultColor, PorterDuff.Mode.SRC_IN);
         }
+    }
+
+    public ImageView getFavouriteIcon() {
+        return favouriteIcon;
     }
 }

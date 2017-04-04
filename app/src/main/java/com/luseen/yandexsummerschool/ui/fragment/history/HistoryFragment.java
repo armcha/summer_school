@@ -16,6 +16,7 @@ import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -28,7 +29,9 @@ import io.realm.RealmResults;
  * A simple {@link Fragment} subclass.
  */
 public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryContract.Presenter>
-        implements HistoryContract.View, RealmChangeListener<RealmResults<History>> {
+        implements HistoryContract.View,
+        RealmChangeListener<RealmResults<History>>,
+        HistoryAndFavouriteRecyclerAdapter.HistoryItemClickListener {
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -84,6 +87,7 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     public void onHistoryResult(RealmResults<History> historyList) {
         this.historyRealmResults = historyList;
         adapter = new HistoryAndFavouriteRecyclerAdapter(historyRealmResults);
+        adapter.setHistoryItemClickListener(this);
         historyRecyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         historyRecyclerView.setLayoutManager(manager);
@@ -123,5 +127,10 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
         if (adapter != null) {
             adapter.updateHistoryList(historyList);
         }
+    }
+
+    @Override
+    public void onHistoryItemClick(History history) {
+        Logger.log("onHistoryItemClick " + history);
     }
 }

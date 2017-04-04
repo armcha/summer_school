@@ -6,6 +6,7 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.IdRes;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
@@ -33,6 +34,8 @@ public class SearchView extends RelativeLayout implements Viewable,
     @IdRes
     public static final int RESET_ICON = 3;
 
+    int activeBorderColor;
+    int inActiveBorderColor;
     private ImageView searchIcon;
     private EditText searchEditText;
     private CloseIcon resetIcon;
@@ -51,6 +54,8 @@ public class SearchView extends RelativeLayout implements Viewable,
 
     @Override
     public void init(Context context) {
+        activeBorderColor = ContextCompat.getColor(getContext(), R.color.colorPrimary);
+        inActiveBorderColor = ContextCompat.getColor(getContext(), R.color.light_gray);
         addSearchIcon(context);
         addSearchEditText(context);
         addResetIcon(context);
@@ -63,9 +68,11 @@ public class SearchView extends RelativeLayout implements Viewable,
 
     private void addBottomDivider(Context context) {
         divider = new View(context);
-        divider.setBackgroundColor(Color.GRAY);
+        divider.setBackgroundColor(inActiveBorderColor);
         addView(divider);
-        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, 3);
+        //some hack 0.5 dp
+        int dividerHeight = DimenUtils.dpToPx(context, 1) / 2;
+        LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, dividerHeight);
         params.addRule(ALIGN_PARENT_BOTTOM);
         divider.setLayoutParams(params);
     }
@@ -159,14 +166,14 @@ public class SearchView extends RelativeLayout implements Viewable,
     public void enable() {
         enableEditText();
         //setDividerEnabled(true);
-        divider.setBackgroundColor(Color.BLUE);
+        divider.setBackgroundColor(activeBorderColor);
         isEnable = true;
     }
 
     public void disable() {
         disableEditText();
         //setDividerEnabled(false);
-        divider.setBackgroundColor(Color.GRAY);
+        divider.setBackgroundColor(inActiveBorderColor);
         isEnable = false;
     }
 

@@ -36,7 +36,6 @@ public class LanguagePairDao {
 
     public LanguagePair getLanguagePair() {
         Realm realm = Realm.getDefaultInstance();
-        Logger.log(realm.where(LanguagePair.class).findFirst());
         LanguagePair languagePair = realm.where(LanguagePair.class).findFirst();
         if (languagePair != null) {
             return languagePair;

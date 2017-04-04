@@ -188,6 +188,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onTranslationResult(Translation translation) {
         if (translationView.hasText()) {
+            Logger.log(translation.isFavourite());
             translationTextView.setText(translation.getTranslatedText());
             dictView.reset();
         }
@@ -196,6 +197,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onDictionaryResult(Dictionary dictionary) {
         if (translationView.hasText()) {
+            Logger.log(dictionary.isFavourite());
             translationTextView.setText(dictionary.getTranslatedText());
             dictView.updateDictionary(dictionary);
         }

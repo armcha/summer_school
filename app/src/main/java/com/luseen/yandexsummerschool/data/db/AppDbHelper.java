@@ -51,7 +51,7 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
-    public void setLanguagePair(LanguagePair languagePair) {
+    public void saveLanguagePair(LanguagePair languagePair) {
         languagePairDao.saveLanguagePair(languagePair);
     }
 

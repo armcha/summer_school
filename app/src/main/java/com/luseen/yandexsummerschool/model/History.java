@@ -1,6 +1,5 @@
 package com.luseen.yandexsummerschool.model;
 
-import com.luseen.yandexsummerschool.data.api.RequestMode;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmObject;
@@ -12,6 +11,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class History extends RealmObject {
 
+    public static final String IDENTIFIER = "identifier";
     public static final String ID = "id";
 
     @PrimaryKey
@@ -21,8 +21,8 @@ public class History extends RealmObject {
     private Dictionary dictionary;
     private boolean isFavourite = false;
 
-    @RequestMode
-    private int requestMode;
+    // TODO: 04.04.2017 change id->orderId
+    //need for ordering
     private int id;
 
     public History() {
@@ -63,14 +63,6 @@ public class History extends RealmObject {
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getRequestMode() {
-        return requestMode;
-    }
-
-    public void setRequestMode(int requestMode) {
-        this.requestMode = requestMode;
     }
 
     @Override

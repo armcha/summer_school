@@ -63,6 +63,7 @@ public class HistoryDao {
     }
 
     public Dictionary getDictionaryByWord(String word) {
+        // TODO: 04.04.2017
         return null;
     }
 
@@ -72,7 +73,6 @@ public class HistoryDao {
                 .where(History.class)
                 .findAllSorted(History.ID, Sort.DESCENDING);
         realm.close();
-        Logger.log("getHistoryList " + histories);
         return histories;
     }
 

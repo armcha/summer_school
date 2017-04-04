@@ -27,7 +27,7 @@ public interface DbHelper {
 
     LanguagePair getLanguagePair();
 
-    void setLanguagePair(LanguagePair languagePair);
+    void saveLanguagePair(LanguagePair languagePair);
 
     int getHistoryListSize();
 }
