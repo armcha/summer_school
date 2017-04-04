@@ -21,6 +21,8 @@ public class Translation {
     @Expose
     private List<String> text = null;
 
+    private String originalText;
+
     public Integer getCode() {
         return code;
     }
@@ -47,5 +49,13 @@ public class Translation {
 
     public void setText(List<String> text) {
         this.text = text;
+    }
+
+    public String getOriginalText() {
+        return originalText;
+    }
+
+    public void setOriginalText(String originalText) {
+        this.originalText = originalText;
     }
 }

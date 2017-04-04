@@ -32,13 +32,13 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
 
     @Override
     public Observable<Translation> translate(String text, String translationLang) {
-        return translationService.translate(text, translationLang);
+        return translationService.translate(text, translationLang)
+                .doOnNext(translation -> translation.setOriginalText(text));
     }
 
     @Override
     public Observable<AvailableLanguages> getAvailableTranslationLanguages(String uiLanguage) {
-        return translationService.getAvailableTranslationLanguages(uiLanguage)
-                .cache();
+        return translationService.getAvailableTranslationLanguages(uiLanguage).cache();
     }
 
     @Override
@@ -102,6 +102,11 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     @Override
     public void setLanguagePair(LanguagePair languagePair) {
         appDbHelper.setLanguagePair(languagePair);
+    }
+
+    @Override
+    public int getHistoryListSize() {
+        return appDbHelper.getHistoryListSize();
     }
 
     @Override

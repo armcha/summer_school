@@ -54,4 +54,9 @@ public class AppDbHelper implements DbHelper {
     public void setLanguagePair(LanguagePair languagePair) {
         languagePairDao.saveLanguagePair(languagePair);
     }
+
+    @Override
+    public int getHistoryListSize() {
+        return historyDao.getHistoryListSize();
+    }
 }

@@ -3,6 +3,7 @@ package com.luseen.yandexsummerschool.ui.activity.root;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
@@ -55,8 +56,8 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         bottomNavigationView.addTab(favTab);
         bottomNavigationView.addTab(settingsTab);
         bottomNavigationView.isColoredBackground(false);
-        //int activeColor = ContextCompat.getColor(this, R.color.colorPrimary);
-        int activeColor = Color.GREEN;
+        int activeColor = ContextCompat.getColor(this, R.color.colorPrimary);
+       // int activeColor = Color.BLACK;
         bottomNavigationView.setItemActiveColorWithoutColoredBackground(activeColor);
         bottomNavigationView.setOnBottomNavigationItemClickListener(this);
     }

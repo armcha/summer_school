@@ -59,7 +59,6 @@ public class SearchView extends RelativeLayout implements Viewable,
             if (!isEnable) enable();
         });
         disable();
-        resetIcon.show();
     }
 
     private void addBottomDivider(Context context) {
@@ -87,6 +86,7 @@ public class SearchView extends RelativeLayout implements Viewable,
     private void addSearchEditText(Context context) {
         searchEditText = new EditText(context);
         searchEditText.setId(SEARCH_EDIT_TEXT);
+        // TODO: 04.04.2017 change hint
         searchEditText.setHint("Search");
         searchEditText.setBackground(null);
         searchEditText.setSingleLine(true);
@@ -100,6 +100,17 @@ public class SearchView extends RelativeLayout implements Viewable,
         params.addRule(CENTER_VERTICAL);
         searchEditText.setLayoutParams(params);
         ViewUtils.setViewMargins(searchEditText, new int[]{0, 0, 40, 0});
+        searchEditText.addTextChangedListener(new AbstractTextWatcher() {
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                super.onTextChanged(s, start, before, count);
+                if (count > 0) {
+                    resetIcon.show();
+                } else if (s.length() == 0) {
+                    resetIcon.hide();
+                }
+            }
+        });
     }
 
     private void addResetIcon(Context context) {
@@ -181,5 +192,9 @@ public class SearchView extends RelativeLayout implements Viewable,
         if (!isEnable) {
             enable();
         }
+    }
+
+    public EditText getSearchEditText() {
+        return searchEditText;
     }
 }

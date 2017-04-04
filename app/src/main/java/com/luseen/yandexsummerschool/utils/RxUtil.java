@@ -12,6 +12,7 @@ public class RxUtil {
         throw new RuntimeException("Private constructor cannot be accessed");
     }
 
+    //Helper method to unsubscribe Subscription
     public static void unsubscribe(Subscription subscription) {
         if (subscription != null && !subscription.isUnsubscribed()) {
             subscription.unsubscribe();

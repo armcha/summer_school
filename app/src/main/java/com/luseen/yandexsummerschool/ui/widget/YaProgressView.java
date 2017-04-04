@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.util.AttributeSet;
@@ -15,6 +16,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 
+import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 
 /**
@@ -29,7 +31,7 @@ public class YaProgressView extends View implements Viewable {
     private static final float SWEEP_ANGLE = 180;
     private static final float START_ANGLE = 0;
 
-    private int progressColor = Color.GREEN;
+    private int progressColor;
     private RotateAnimation rotateAnimation;
     private Paint progressPaint;
     private RectF rectF;
@@ -48,6 +50,7 @@ public class YaProgressView extends View implements Viewable {
     public void init(Context context) {
         setBackgroundColor(Color.TRANSPARENT);
         setVisibility(GONE);
+        progressColor = ContextCompat.getColor(context, R.color.colorPrimaryDark);
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setColor(progressColor);
         progressPaint.setStyle(Paint.Style.STROKE);

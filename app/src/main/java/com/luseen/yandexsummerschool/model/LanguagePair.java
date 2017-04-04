@@ -10,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
 public class LanguagePair extends RealmObject {
 
     @PrimaryKey
-    private int id = 1;
+    private String id = "Single";
 
     private Language sourceLanguage;
     private Language targetLanguage;
@@ -49,10 +49,23 @@ public class LanguagePair extends RealmObject {
         this.targetLanguage = targetLanguage;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getLookupLanguage() {
+        return sourceLanguage.getLangCode() + "-" + targetLanguage.getLangCode();
+    }
+
     @Override
     public String toString() {
         return "LanguagePair{" +
-                " sourceLanguage=" + sourceLanguage +
+                "id='" + id + '\'' +
+                ", sourceLanguage=" + sourceLanguage +
                 ", targetLanguage=" + targetLanguage +
                 ", languageChooseType='" + languageChooseType + '\'' +
                 '}';

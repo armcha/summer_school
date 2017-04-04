@@ -29,6 +29,7 @@ import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -119,9 +120,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
-
-        int backgroundColor = ContextCompat.getColor(getActivity(), R.color.colorPrimaryDark);
-        progressView.setProgressColor(backgroundColor);
     }
 
     private void setUpDictView() {
@@ -135,16 +133,20 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
                     if (input.isEmpty()) {
-                        presenter.clearLastInputAndTranslate();
-                        translationTextView.reset();
-                        progressView.hide();
-                        dictView.reset();
+                        reset();
                     }
                 })
                 .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .filter(input -> !input.isEmpty())
                 .map(String::trim)
                 .subscribe(s -> presenter.handleInputText(s));
+    }
+
+    private void reset() {
+        presenter.clearLastInputAndTranslate();
+        translationTextView.reset();
+        progressView.hide();
+        dictView.reset();
     }
 
     @Override
@@ -238,11 +240,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onClosePressed(CloseIcon closeIcon) {
-        presenter.clearLastInputAndTranslate();
-        translationTextView.reset();
         translationView.reset();
-        progressView.hide();
-        dictView.reset();
+        reset();
     }
 
     @OnClick({R.id.source_language_text_view, R.id.target_language_text_view, R.id.swap_languages})

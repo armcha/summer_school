@@ -5,6 +5,8 @@ import com.luseen.yandexsummerschool.model.History;
 
 import java.util.List;
 
+import io.realm.RealmResults;
+
 /**
  * Created by Chatikyan on 02.04.2017.
  */
@@ -13,7 +15,7 @@ public interface HistoryContract {
 
     interface View extends ApiContract.View {
 
-        void onHistoryResult(List<History> historyList);
+        void onHistoryResult(RealmResults<History> historyList);
 
         void showLoading();
 
@@ -22,14 +24,10 @@ public interface HistoryContract {
         void onError();
 
         void onEmptyResult();
-
-        void onHistoryUpdate(List<History> historyList);
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
 
         void fetchHistory();
-
-        void updateHistory();
     }
 }

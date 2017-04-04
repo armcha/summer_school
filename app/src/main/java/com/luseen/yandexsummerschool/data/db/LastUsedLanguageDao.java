@@ -3,17 +3,15 @@ package com.luseen.yandexsummerschool.data.db;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
-import com.luseen.yandexsummerschool.utils.Logger;
 
-import java.util.List;
-
+import io.realm.Realm;
 import io.realm.RealmList;
 
 /**
  * Created by Chatikyan on 29.03.2017.
  */
 
-public class LastUsedLanguageDao extends AbstractDao {
+public class LastUsedLanguageDao {
 
     private static final int MAX_LAST_USED_SIZE = 3;
     private static final int FIRST_INDEX = 0;
@@ -28,6 +26,7 @@ public class LastUsedLanguageDao extends AbstractDao {
     }
 
     public void saveLastLanguage(Language language, String languageChooseType) {
+        Realm realm = Realm.getDefaultInstance();
         LastUsedLanguages lastUsedLanguages = getLastUsedLanguages();
         realm.beginTransaction();
         RealmList<Language> lastUsedLanguageList;
@@ -53,13 +52,16 @@ public class LastUsedLanguageDao extends AbstractDao {
 
         realm.copyToRealmOrUpdate(lastUsedLanguages);
         realm.commitTransaction();
+        realm.close();
     }
 
     public LastUsedLanguages getLastUsedLanguages() {
+        Realm realm = Realm.getDefaultInstance();
         LastUsedLanguages lastUsedLanguages = realm.where(LastUsedLanguages.class).findFirst();
         if (lastUsedLanguages == null) {
             lastUsedLanguages = new LastUsedLanguages();
         }
+        realm.close();
         return lastUsedLanguages;
     }
 }

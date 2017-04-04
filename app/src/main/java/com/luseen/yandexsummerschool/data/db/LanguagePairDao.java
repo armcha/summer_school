@@ -2,12 +2,15 @@ package com.luseen.yandexsummerschool.data.db;
 
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
+import com.luseen.yandexsummerschool.utils.Logger;
+
+import io.realm.Realm;
 
 /**
  * Created by Chatikyan on 30.03.2017.
  */
 
-public class LanguagePairDao extends AbstractDao {
+public class LanguagePairDao {
 
     private static final String DEFAULT_TARGET_LANGUAGE = "en";
     private static final String DEFAULT_TARGET_LANGUAGE_FULL = "English";
@@ -24,15 +27,22 @@ public class LanguagePairDao extends AbstractDao {
     }
 
     public void saveLanguagePair(LanguagePair languagePair) {
-        save(languagePair);
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        realm.copyToRealmOrUpdate(languagePair);
+        realm.commitTransaction();
+        // realm.close();
     }
 
     public LanguagePair getLanguagePair() {
-        LanguagePair languagePair = restore(LanguagePair.class);
-        if (languagePair == null) {
+        Realm realm = Realm.getDefaultInstance();
+        Logger.log(realm.where(LanguagePair.class).findFirst());
+        LanguagePair languagePair = realm.where(LanguagePair.class).findFirst();
+        if (languagePair != null) {
+            return languagePair;
+        } else {
             return getDefaultLanguagePair();
         }
-        return languagePair;
     }
 
     private LanguagePair getDefaultLanguagePair() {

@@ -24,7 +24,6 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
 public class TranslationView extends RelativeLayout implements View.OnClickListener, Viewable {
 
     private boolean isEnable = false;
-    private boolean isCloseIconShown = false;
     private int activeBorderColor = Color.BLUE;
     private int inActiveBorderColor = Color.GRAY;
     private int activeBorderWidth = 10;
@@ -63,7 +62,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (count > 0 && !isCloseIconShown) {
+                if (count > 0 ) {
                     closeIcon.show();
                 } else if (s.length() == 0) {
                     closeIcon.hide();

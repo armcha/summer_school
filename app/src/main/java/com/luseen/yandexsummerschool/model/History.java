@@ -12,6 +12,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class History extends RealmObject {
 
+    public static final String ID = "id";
+
     @PrimaryKey
     private String identifier;
 
@@ -21,6 +23,7 @@ public class History extends RealmObject {
 
     @RequestMode
     private int requestMode;
+    private int id;
 
     public History() {
     }
@@ -32,6 +35,10 @@ public class History extends RealmObject {
 
     public LanguagePair getLanguagePair() {
         return languagePair;
+    }
+
+    public void setLanguagePair(LanguagePair languagePair) {
+        this.languagePair = languagePair;
     }
 
     public Dictionary getDictionary() {
@@ -50,11 +57,30 @@ public class History extends RealmObject {
         this.identifier = identifier;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public int getRequestMode() {
         return requestMode;
     }
 
     public void setRequestMode(int requestMode) {
         this.requestMode = requestMode;
+    }
+
+    @Override
+    public String toString() {
+        return "History{" +
+                "identifier='" + identifier + '\'' +
+                ", languagePair=" + languagePair +
+                ", dictionary=" + dictionary +
+                ", isFavourite=" + isFavourite +
+                ", id=" + id +
+                '}';
     }
 }

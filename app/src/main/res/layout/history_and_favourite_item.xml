@@ -44,4 +44,15 @@
         android:layout_marginLeft="10dp"
         app:srcCompat="@drawable/ic_tab_fav" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:textColor="@color/gray"
+        android:text="AM-RU"
+        android:id="@+id/translation_language_text"
+        android:textSize="13sp"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_centerVertical="true"
+        android:layout_height="wrap_content" />
+
 </RelativeLayout>

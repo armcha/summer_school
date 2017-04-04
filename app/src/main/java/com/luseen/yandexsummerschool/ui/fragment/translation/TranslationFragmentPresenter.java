@@ -11,10 +11,13 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
+
+import org.greenrobot.eventbus.EventBus;
 
 import rx.Observable;
 
@@ -48,20 +51,38 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
-                Dictionary dictionary = new Dictionary();
-                //dictionary.setOriginalText();
-               // History history = new History(translation, dataManager.getLanguagePair());
-               // history.setRequestMode(RequestMode.MODE_TRANSLATION);
-              //  dataManager.saveHistory(history);
+                createHistoryFromTranslationAndSave(translation);
                 getView().onTranslationResult(translation);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
-                History history = new History(dictionary, dataManager.getLanguagePair());
-                history.setRequestMode(RequestMode.MODE_DICTIONARY);
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
-                dataManager.saveHistory(history);
+                createHistoryFromDictionaryAndSave(dictionary);
                 getView().onDictionaryResult(dictionary);
             }
+        }
+    }
+
+    //Create history object from Translation and save
+    private void createHistoryFromTranslationAndSave(Translation translation) {
+        Dictionary dictionary = new Dictionary();
+        dictionary.setOriginalText(translation.getOriginalText());
+        dictionary.setTranslatedText(translation.getTranslatedText());
+        History history = new History(dictionary, dataManager.getLanguagePair());
+        saveHistory(history);
+    }
+
+    //Create history object from Dictionary and save
+    private void createHistoryFromDictionaryAndSave(Dictionary dictionary) {
+        History history = new History(dictionary, dataManager.getLanguagePair());
+        history.setRequestMode(RequestMode.MODE_DICTIONARY);
+        saveHistory(history);
+    }
+
+    private void saveHistory(History history) {
+        dataManager.saveHistory(history);
+        //Notify for first time, then realm result will be notified self
+        if (dataManager.getHistoryListSize() == 1) {
+            EventBus.getDefault().post(new HistoryEvent());
         }
     }
 
@@ -69,7 +90,11 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void onError(RequestType requestType, Throwable throwable) {
         if (isViewAttached()) {
             if (HttpUtils.getYaError(throwable) == YaError.LANGUAGE_IS_NOT_SUPPORTED) {
-                makeTranslation();
+                //Making translation request, if dictionary request returns LANGUAGE_IS_NOT_SUPPORTED
+                LanguagePair pair = dataManager.getLanguagePair();
+                String translationLanguage = pair.getTargetLanguage().getLangCode();
+                String inputText = dataManager.getLastTypedText();
+                makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
             } else {
                 getView().hideLoading();
                 getView().showError();
@@ -77,34 +102,17 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
-    private void makeTranslation() {
-        LanguagePair pair = dataManager.getLanguagePair();
-        String translationLanguage = pair.getTargetLanguage().getLangCode();
-        String inputText = dataManager.getLastTypedText();
-        makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
-    }
-
     @Override
     public void handleInputText(String inputText) {
         dataManager.saveLastTypedText(inputText);
-        //int requestMode = getRequestMode(inputText);
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
         // TODO: 31.03.2017 need some testing
-//        if (requestMode == RequestMode.MODE_TRANSLATION) {
-//            makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
-//            Logger.log("TYPE_TRANSLATION");
-//        } else {
-//            Logger.log("TYPE_DICTIONARY");
-//            String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
-//            Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
-//                    translationLanguage, lookUpLanguage);
-//            makeRequest(dictionaryObservable, RequestType.LOOKUP);
-//        }
-        Logger.log("TYPE_DICTIONARY");
-        String lookUpLanguage = pair.getSourceLanguage().getLangCode() + "-" + translationLanguage;
-        Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(inputText,
-                translationLanguage, lookUpLanguage);
+        String lookUpLanguage = pair.getLookupLanguage();
+        Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(
+                inputText,
+                translationLanguage,
+                lookUpLanguage);
         makeRequest(dictionaryObservable, RequestType.LOOKUP);
     }
 
@@ -121,6 +129,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 break;
             case R.id.swap_languages:
                 LanguagePair dbLanguagePair = dataManager.getLanguagePair();
+                Logger.log("dbLanguagePair " + dbLanguagePair);
                 LanguagePair languagePair = new LanguagePair();
                 languagePair.setSourceLanguage(dbLanguagePair.getTargetLanguage());
                 languagePair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
@@ -145,13 +154,5 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void clearLastInputAndTranslate() {
         dataManager.saveLastTypedText(StringUtils.EMPTY);
         dataManager.saveLastTranslatedWord(StringUtils.EMPTY);
-    }
-
-    private int getRequestMode(String inputText) {
-        if (inputText.contains(StringUtils.SPACE)) {
-            return RequestMode.MODE_TRANSLATION;
-        } else {
-            return RequestMode.MODE_DICTIONARY;
-        }
     }
 }

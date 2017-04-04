@@ -15,9 +15,9 @@ public class Dictionary extends RealmObject {
     public static final String TRANSLATED_WORD = "translatedText";
     public static final String ORIGINAL_TEXT = "originalText";
 
-    private String translatedText;
-
     @PrimaryKey
+    private String identifier;
+    private String translatedText;
     private String originalText;
 
     @SerializedName("def")
@@ -54,5 +54,13 @@ public class Dictionary extends RealmObject {
                 ", originalText='" + originalText + '\'' +
                 ", definition=" + definition +
                 '}';
+    }
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 }

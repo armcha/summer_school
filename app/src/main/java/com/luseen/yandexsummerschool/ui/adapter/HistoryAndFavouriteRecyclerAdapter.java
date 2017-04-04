@@ -11,15 +11,17 @@ import com.luseen.yandexsummerschool.ui.adapter.view_holder.HistoryAndFavouriteV
 
 import java.util.List;
 
+import io.realm.RealmResults;
+
 /**
  * Created by Chatikyan on 25.03.2017.
  */
 
 public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
 
-    private List<History> historyList;
+    private RealmResults<History> historyList;
 
-    public HistoryAndFavouriteRecyclerAdapter(List<History> historyList) {
+    public HistoryAndFavouriteRecyclerAdapter(RealmResults<History> historyList) {
         this.historyList = historyList;
     }
 
@@ -53,8 +55,8 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
         return historyList.size();
     }
 
-    public void updateHistoryList(List<History> historyList) {
-        this.historyList.clear();
+    public void updateHistoryList(RealmResults<History> historyList) {
+        //this.historyList.d
         this.historyList = historyList;
         notifyDataSetChanged();
     }

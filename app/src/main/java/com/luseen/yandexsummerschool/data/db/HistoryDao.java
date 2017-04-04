@@ -6,11 +6,14 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
+import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
-public class HistoryDao extends AbstractDao {
+public class HistoryDao {
 
     private static HistoryDao instance = null;
 
@@ -22,45 +25,70 @@ public class HistoryDao extends AbstractDao {
     }
 
     public void saveObject(History history) {
-        realm.beginTransaction();
-        int definitionId = RealmUtils.generateId(realm, Definition.class);
-        int dictionaryTranslationId = RealmUtils.generateId(realm, DictionaryTranslation.class);
-        Dictionary dictionary = history.getDictionary();
-        LanguagePair pair = history.getLanguagePair();
-        String historyIdentifier = dictionary.getOriginalText() +
-                pair.getSourceLanguage().getLangCode() +
-                pair.getSourceLanguage().getLangCode();
-        history.setIdentifier(historyIdentifier);
-        for (Definition definition : dictionary.getDefinition()) {
-            definition.setId(definitionId);
-            for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
-                dictionaryTranslation.setId(dictionaryTranslationId);
-            }
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(r -> {
+                int historyId = RealmUtils.generateId(r, History.class);
+                //int dictionaryId = RealmUtils.generateId(realm,Dictionary.class);
+                int definitionId = RealmUtils.generateId(r, Definition.class);
+                int dictionaryTranslationId = RealmUtils.generateId(r, DictionaryTranslation.class);
+                Dictionary dictionary = history.getDictionary();
+                dictionary.setIdentifier(dictionary.getOriginalText() + dictionary.getTranslatedText());
+                LanguagePair pair = history.getLanguagePair();
+                String pairId = pair.getSourceLanguage().getLangCode() +
+                        pair.getTargetLanguage().getLangCode();
+                //pair.setId(pairId);
+                LanguagePair pp = new LanguagePair();
+                pp.setId(pairId);
+                pp.setSourceLanguage(pair.getSourceLanguage());
+                pp.setTargetLanguage(pair.getTargetLanguage());
+                history.setLanguagePair(pp);
+                String historyIdentifier = dictionary.getOriginalText() + pairId;
+                history.setIdentifier(historyIdentifier);
+                history.setId(historyId);
+                for (Definition definition : dictionary.getDefinition()) {
+                    definition.setId(definitionId);
+                    for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
+                        dictionaryTranslation.setId(dictionaryTranslationId);
+                    }
+                }
+                r.copyToRealmOrUpdate(history);
+            });
+
+            realm.close();
+        } catch (Throwable throwable) {
+            Logger.log(throwable.getMessage());
         }
-        realm.copyToRealmOrUpdate(history);
-        realm.commitTransaction();
+
     }
 
     public Dictionary getDictionaryByWord(String word) {
-        return realm
-                .where(Dictionary.class)
-                .equalTo(Dictionary.ORIGINAL_TEXT, word.toLowerCase())
-                .findFirst();
+        return null;
     }
 
-//    public Observable<RealmResults<History>> getHistoryList() {
-//        return realm
-//                .where(History.class)
-//                .findAllAsync().asObservable();
-//    }
-
     public RealmResults<History> getHistoryList() {
-        return realm
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<History> histories = realm
                 .where(History.class)
-                .findAll();
+                .findAllSorted(History.ID, Sort.DESCENDING);
+        realm.close();
+        Logger.log("getHistoryList " + histories);
+        return histories;
+    }
+
+    public int getHistoryListSize() {
+        Realm realm = Realm.getDefaultInstance();
+        long count = realm
+                .where(History.class)
+                .count();
+        realm.close();
+        return (int) count;
     }
 
     public Dictionary getDictionary() {
-        return restore(Dictionary.class);
+        Realm realm = Realm.getDefaultInstance();
+        Dictionary dictionary = realm.where(Dictionary.class).findFirst();
+        realm.close();
+        return dictionary;
     }
 }

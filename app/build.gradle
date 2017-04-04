@@ -58,6 +58,7 @@ dependencies {
     compile 'com.jakewharton.rxbinding:rxbinding-support-v4:1.0.0'
     compile 'com.android.support:support-v4:25.3.0'
     compile 'net.yslibrary.keyboardvisibilityevent:keyboardvisibilityevent:2.1.0'
+    compile 'org.greenrobot:eventbus:3.0.0'
     //My library https://github.com/armcha/LuseenBottomNavigation
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
