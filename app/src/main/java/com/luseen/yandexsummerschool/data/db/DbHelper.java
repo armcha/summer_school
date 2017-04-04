@@ -19,6 +19,8 @@ public interface DbHelper {
 
     Observable<RealmResults<History>> getHistoryList();
 
+    Observable<RealmResults<History>> getFavouriteList();
+
     Observable<Dictionary> getDictionaryByWord(String word);
 
     void saveLastLanguage(Language language, String languageChooseType);

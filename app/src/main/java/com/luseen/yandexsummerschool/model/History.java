@@ -11,6 +11,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class History extends RealmObject {
 
+    public static final String IS_FAVOURITE = "isFavourite";
     public static final String IDENTIFIER = "identifier";
     public static final String ID = "id";
 

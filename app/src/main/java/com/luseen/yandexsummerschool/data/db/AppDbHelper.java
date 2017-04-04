@@ -31,6 +31,11 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
+    public Observable<RealmResults<History>> getFavouriteList() {
+        return Observable.fromCallable(historyDao::getFavouriteList);
+    }
+
+    @Override
     public Observable<Dictionary> getDictionaryByWord(String word) {
         return Observable.fromCallable(() -> historyDao.getDictionaryByWord(word));
     }

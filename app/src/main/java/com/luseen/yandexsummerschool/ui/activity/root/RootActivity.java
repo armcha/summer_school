@@ -41,8 +41,8 @@ public class RootActivity extends ApiActivity<RootActivityContract.View, RootAct
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
-        // TODO: 31.03.2017 remove after finishing second tab
-        mainViewPager.setCurrentItem(1);
+//        // TODO: 31.03.2017 remove after finishing second tab
+//        mainViewPager.setCurrentItem(1);
         mainViewPager.setPagingEnabled(false);
         viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
                 .subscribe(bottomNavigationView::selectTab);

@@ -76,6 +76,16 @@ public class HistoryDao {
         return histories;
     }
 
+    public RealmResults<History> getFavouriteList() {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<History> favourites = realm
+                .where(History.class)
+                .equalTo(History.IS_FAVOURITE, true)
+                .findAllSorted(History.ID, Sort.DESCENDING);
+        realm.close();
+        return favourites;
+    }
+
     public int getHistoryListSize() {
         Realm realm = Realm.getDefaultInstance();
         long count = realm
