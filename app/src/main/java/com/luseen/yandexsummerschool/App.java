@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmMigration;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -30,6 +32,7 @@ public class App extends Application {
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .name("yandexSummerSchool.realm")
+                .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);
     }

@@ -101,10 +101,10 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     private void saveHistory(History history) {
         dataManager.saveHistory(history);
-        //Notify for first time, then realm result will be notified self
-        if (dataManager.getHistoryListSize() == 1) {
-            EventBus.getDefault().post(new HistoryEvent());
-        }
+//        //Notify for first time, then realm result will be notified self
+//        if (dataManager.getHistoryListSize() == 1) {
+//            EventBus.getDefault().post(new HistoryEvent());
+//        }
     }
 
     @Override

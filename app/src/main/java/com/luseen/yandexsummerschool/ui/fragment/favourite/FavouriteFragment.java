@@ -15,12 +15,16 @@ import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
+import io.realm.RealmChangeListener;
 import io.realm.RealmResults;
 
 public class FavouriteFragment extends ApiFragment<FavouriteContract.View, FavouriteContract.Presenter>
-        implements FavouriteContract.View {
+        implements FavouriteContract.View,
+        RealmChangeListener<RealmResults<History>>,
+        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener {
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -28,6 +32,7 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     @BindView(R.id.favourite_recycler_view)
     RecyclerView favouriteRecyclerView;
 
+    private RealmResults<History> favouriteRealmResults;
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
     public static FavouriteFragment newInstance() {
@@ -74,16 +79,39 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     }
 
     @Override
-    public void onFavouriteResult(RealmResults<History> favouriteList) {
-        adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteList);
-        //adapter.setHistoryItemClickListener(this);
+    public void onFavouriteResult(RealmResults<History> favouriteRealmResults) {
+        this.favouriteRealmResults = favouriteRealmResults;
+        adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteRealmResults);
+        adapter.setAdapterItemClickListener(this);
         favouriteRecyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         favouriteRecyclerView.setLayoutManager(manager);
+        this.favouriteRealmResults.removeAllChangeListeners();
+        this.favouriteRealmResults.addChangeListener(this);
     }
 
     @Override
     public void onEmptyResult() {
+        Logger.log("EMPTY ");
+    }
 
+    @Override
+    public void onChange(RealmResults<History> favouriteList) {
+        if (adapter != null) {
+            adapter.updateAdapterList(favouriteList);
+        }
+    }
+
+    @Override
+    public void onAdapterItemClick(History history) {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (favouriteRealmResults != null) {
+            favouriteRealmResults.removeAllChangeListeners();
+        }
     }
 }

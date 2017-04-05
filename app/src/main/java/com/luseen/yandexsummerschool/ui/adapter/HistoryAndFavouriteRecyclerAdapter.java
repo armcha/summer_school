@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.HistoryAndFavouriteViewHolder;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -19,11 +18,11 @@ import io.realm.RealmResults;
 
 public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
 
-    public interface HistoryItemClickListener {
-        void onHistoryItemClick(History history);
+    public interface AdapterItemClickListener {
+        void onAdapterItemClick(History history);
     }
 
-    private HistoryItemClickListener historyItemClickListener;
+    private AdapterItemClickListener adapterItemClickListener;
     private RealmResults<History> historyList;
 
     public HistoryAndFavouriteRecyclerAdapter(RealmResults<History> historyList) {
@@ -40,8 +39,8 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
             int position = holder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 History history = historyList.get(position);
-                if (historyItemClickListener != null) {
-                    historyItemClickListener.onHistoryItemClick(history);
+                if (adapterItemClickListener != null) {
+                    adapterItemClickListener.onAdapterItemClick(history);
                 }
             }
         });
@@ -72,12 +71,17 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
         return historyList.size();
     }
 
-    public void updateHistoryList(RealmResults<History> historyList) {
+    public void updateAdapterList(RealmResults<History> historyList) {
         this.historyList = historyList;
         notifyDataSetChanged();
+
+        //It is not work as i expected, so comment it ...
+//        DiffCallback diffCallback = new DiffCallback(this.historyList, historyList);
+//        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
+//        diffResult.dispatchUpdatesTo(this);
     }
 
-    public void setHistoryItemClickListener(HistoryItemClickListener historyItemClickListener) {
-        this.historyItemClickListener = historyItemClickListener;
+    public void setAdapterItemClickListener(AdapterItemClickListener adapterItemClickListener) {
+        this.adapterItemClickListener = adapterItemClickListener;
     }
 }

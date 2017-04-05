@@ -22,7 +22,7 @@ public class History extends RealmObject {
     private Dictionary dictionary;
     private boolean isFavourite = false;
 
-    // TODO: 04.04.2017 change id->orderId
+    // TODO: 04.04.2017 change id -> orderId
     //need for ordering
     private int id;
 
@@ -60,6 +60,10 @@ public class History extends RealmObject {
 
     public int getId() {
         return id;
+    }
+
+    public String getIdentifier() {
+        return identifier;
     }
 
     public void setId(int id) {

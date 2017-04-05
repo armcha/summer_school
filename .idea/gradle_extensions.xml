@@ -193,7 +193,7 @@
             <ext name="retrolambda" type="me.tatarka.RetrolambdaExtension" />
             <ext name="realm" type="io.realm.gradle.RealmPluginExtension" />
             <prop name="retrofitVersion">2.2.0</prop>
-            <prop name="supportLibVersion">25.3.0</prop>
+            <prop name="supportLibVersion">25.3.1</prop>
             <task name="transformClassesWithRealmTransformerForDebugAndroidTest" type="com.android.build.gradle.internal.pipeline.TransformTask">&lt;i&gt;Task group: other&lt;i&gt;</task>
             <task name="projects" type="org.gradle.api.tasks.diagnostics.ProjectReportTask">Displays the sub-projects of project ':app'.&lt;p&gt;&lt;i&gt;Task group: help&lt;i&gt;</task>
             <task name="resolveDebugDependencies" type="com.android.build.gradle.internal.tasks.ResolveDependenciesTask">&lt;i&gt;Task group: other&lt;i&gt;</task>

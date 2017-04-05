@@ -32,7 +32,7 @@ import io.realm.RealmResults;
 public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryContract.Presenter>
         implements HistoryContract.View,
         RealmChangeListener<RealmResults<History>>,
-        HistoryAndFavouriteRecyclerAdapter.HistoryItemClickListener {
+        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener {
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -74,30 +74,14 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
-    }
-
-    @Subscribe
-    public void onHistoryEvent(HistoryEvent historyEvent) {
-        presenter.fetchHistory();
-    }
-
-    @Override
     public void onHistoryResult(RealmResults<History> historyList) {
         this.historyRealmResults = historyList;
         adapter = new HistoryAndFavouriteRecyclerAdapter(historyRealmResults);
-        adapter.setHistoryItemClickListener(this);
+        adapter.setAdapterItemClickListener(this);
         historyRecyclerView.setAdapter(adapter);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         historyRecyclerView.setLayoutManager(manager);
+        historyRealmResults.removeAllChangeListeners();
         historyRealmResults.addChangeListener(this);
     }
 
@@ -132,12 +116,12 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     @Override
     public void onChange(RealmResults<History> historyList) {
         if (adapter != null) {
-            adapter.updateHistoryList(historyList);
+            adapter.updateAdapterList(historyList);
         }
     }
 
     @Override
-    public void onHistoryItemClick(History history) {
+    public void onAdapterItemClick(History history) {
         Logger.log("onHistoryItemClick " + history);
     }
 }

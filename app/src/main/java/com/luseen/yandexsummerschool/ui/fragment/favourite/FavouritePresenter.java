@@ -11,7 +11,8 @@ import rx.Subscription;
  * Created by Chatikyan on 04.04.2017.
  */
 
-public class FavouritePresenter extends ApiPresenter<FavouriteContract.View> implements FavouriteContract.Presenter {
+public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
+        implements FavouriteContract.Presenter {
 
     private Subscription favouriteSubscription;
 
@@ -45,11 +46,10 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View> imp
         favouriteSubscription = dataManager.getFavouriteList()
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(favouriteList -> {
-                    if (favouriteList.size() > 0) {
-                        getView().onFavouriteResult(favouriteList);
-                    } else {
+                    if (favouriteList.size() == 0) {
                         getView().onEmptyResult();
                     }
+                    getView().onFavouriteResult(favouriteList);
                 }, throwable -> {
                     Logger.log(throwable.getMessage());
                     getView().showError();
