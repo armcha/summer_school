@@ -11,6 +11,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class History extends RealmObject {
 
+    public static final String TRANSLATED_TEXT = "dictionary.translatedText";
+    public static final String ORIGINAL_TEXT = "dictionary.originalText";
     public static final String IS_FAVOURITE = "isFavourite";
     public static final String IDENTIFIER = "identifier";
     public static final String ID = "id";
@@ -69,6 +71,7 @@ public class History extends RealmObject {
     public void setId(int id) {
         this.id = id;
     }
+
 
     @Override
     public String toString() {

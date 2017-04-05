@@ -2,10 +2,14 @@ package com.luseen.yandexsummerschool.ui.fragment.favourite;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtil;
 
-import rx.Subscription;
+import io.realm.RealmResults;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Chatikyan on 04.04.2017.
@@ -14,7 +18,7 @@ import rx.Subscription;
 public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
         implements FavouriteContract.Presenter {
 
-    private Subscription favouriteSubscription;
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onCreate() {
@@ -43,7 +47,7 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
 
         getView().showLoading();
 
-        favouriteSubscription = dataManager.getFavouriteList()
+        compositeSubscription.add(dataManager.getFavouriteList()
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(favouriteList -> {
                     if (favouriteList.size() == 0) {
@@ -53,12 +57,32 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
                 }, throwable -> {
                     Logger.log(throwable.getMessage());
                     getView().showError();
-                });
+                }));
+    }
+
+    @Override
+    public void doSearch(String input) {
+        if (!isViewAttached())
+            return;
+        compositeSubscription.add(dataManager.getFavouritesByKeyWord(input)
+                .observeOn(AndroidSchedulers.mainThread())
+                .doOnNext(new Action1<RealmResults<History>>() {
+                    @Override
+                    public void call(RealmResults<History> histories) {
+                        Logger.log("SRESULT " + histories);
+                    }
+                })
+                .subscribe(getView()::onFavouriteResult));
+    }
+
+    @Override
+    public void resetFavourite() {
+        fetchFavourite();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(favouriteSubscription);
+        RxUtil.unsubscribe(compositeSubscription);
     }
 }

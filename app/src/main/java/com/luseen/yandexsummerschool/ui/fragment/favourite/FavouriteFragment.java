@@ -24,7 +24,8 @@ import io.realm.RealmResults;
 public class FavouriteFragment extends ApiFragment<FavouriteContract.View, FavouriteContract.Presenter>
         implements FavouriteContract.View,
         RealmChangeListener<RealmResults<History>>,
-        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener {
+        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
+        SearchView.SearchListener {
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -56,6 +57,7 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.favourite_search_hint));
+        searchView.setSearchListener(this);
     }
 
     @Override
@@ -81,13 +83,22 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     @Override
     public void onFavouriteResult(RealmResults<History> favouriteRealmResults) {
         this.favouriteRealmResults = favouriteRealmResults;
-        adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteRealmResults);
-        adapter.setAdapterItemClickListener(this);
-        favouriteRecyclerView.setAdapter(adapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        favouriteRecyclerView.setLayoutManager(manager);
-        this.favouriteRealmResults.removeAllChangeListeners();
-        this.favouriteRealmResults.addChangeListener(this);
+        setUpOrUpdateRecyclerView(favouriteRealmResults);
+    }
+
+    private void setUpOrUpdateRecyclerView(RealmResults<History> favouriteRealmResults) {
+        if (adapter == null) {
+            adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteRealmResults);
+            adapter.setAdapterItemClickListener(this);
+            favouriteRecyclerView.setAdapter(adapter);
+            LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+            favouriteRecyclerView.setLayoutManager(manager);
+            this.favouriteRealmResults.removeAllChangeListeners();
+            this.favouriteRealmResults.addChangeListener(this);
+        } else {
+            adapter.updateAdapterList(favouriteRealmResults);
+        }
+
     }
 
     @Override
@@ -113,5 +124,20 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
         if (favouriteRealmResults != null) {
             favouriteRealmResults.removeAllChangeListeners();
         }
+    }
+
+    @Override
+    public void onTextChange(String input) {
+        presenter.doSearch(input);
+    }
+
+    @Override
+    public void onResetClicked() {
+        presenter.resetFavourite();
+    }
+
+    @Override
+    public void onEmptyInput() {
+        presenter.resetFavourite();
     }
 }

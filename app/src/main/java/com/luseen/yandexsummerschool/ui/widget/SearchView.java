@@ -14,10 +14,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.DimenUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
+
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Chatikyan on 31.03.2017.
@@ -27,6 +31,14 @@ public class SearchView extends RelativeLayout implements Viewable,
         View.OnClickListener,
         CloseIcon.CloseIconClickListener {
 
+    public interface SearchListener {
+        void onTextChange(String input);
+
+        void onResetClicked();
+
+        void onEmptyInput();
+    }
+
     @IdRes
     public static final int SEARCH_ICON_ID = 1;
     @IdRes
@@ -34,12 +46,15 @@ public class SearchView extends RelativeLayout implements Viewable,
     @IdRes
     public static final int RESET_ICON = 3;
 
-    int activeBorderColor;
-    int inActiveBorderColor;
-    private ImageView searchIcon;
+    private Subscription textChangeSubscription;
+    private SearchListener searchListener;
     private EditText searchEditText;
+    private ImageView searchIcon;
     private CloseIcon resetIcon;
     private View divider;
+
+    private int inActiveBorderColor;
+    private int activeBorderColor;
     private boolean isEnable;
 
     public SearchView(Context context) {
@@ -50,6 +65,39 @@ public class SearchView extends RelativeLayout implements Viewable,
     public SearchView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context);
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        textChangeSubscription = RxTextView.textChanges(searchEditText)
+                .observeOn(AndroidSchedulers.mainThread())
+                .map(CharSequence::toString)
+                .map(String::trim)
+                .doOnNext(s -> {
+                    if (s.length() > 0) {
+                        resetIcon.show();
+                    } else {
+                        resetIcon.hide();
+                        if (searchListener != null) {
+                            searchListener.onEmptyInput();
+                        }
+                    }
+                })
+                .filter(input -> !input.isEmpty())
+                .subscribe(input -> {
+                    if (searchListener != null) {
+                        searchListener.onTextChange(input);
+                    }
+                });
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (textChangeSubscription != null) {
+            textChangeSubscription.unsubscribe();
+        }
     }
 
     @Override
@@ -105,17 +153,6 @@ public class SearchView extends RelativeLayout implements Viewable,
         params.addRule(CENTER_VERTICAL);
         searchEditText.setLayoutParams(params);
         ViewUtils.setViewMargins(searchEditText, new int[]{0, 0, 50, 0});
-        searchEditText.addTextChangedListener(new AbstractTextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                super.onTextChanged(s, start, before, count);
-                if (count > 0) {
-                    resetIcon.show();
-                } else if (s.length() == 0) {
-                    resetIcon.hide();
-                }
-            }
-        });
     }
 
     private void addResetIcon(Context context) {
@@ -197,13 +234,16 @@ public class SearchView extends RelativeLayout implements Viewable,
         if (!isEnable) {
             enable();
         }
-    }
-
-    public EditText getSearchEditText() {
-        return searchEditText;
+        if (searchListener != null) {
+            searchListener.onResetClicked();
+        }
     }
 
     public void setHint(String hint) {
         searchEditText.setHint(hint);
+    }
+
+    public void setSearchListener(SearchListener searchListener) {
+        this.searchListener = searchListener;
     }
 }

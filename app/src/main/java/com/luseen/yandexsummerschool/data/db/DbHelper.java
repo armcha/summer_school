@@ -4,7 +4,6 @@ import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
-import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmResults;
 import rx.Observable;
@@ -21,7 +20,9 @@ public interface DbHelper {
 
     Observable<RealmResults<History>> getFavouriteList();
 
-    Observable<Dictionary> getDictionaryByWord(String word);
+    Observable<RealmResults<History>> getHistoriesByKeyWord(String word);
+
+    Observable<RealmResults<History>> getFavouritesByKeyWord(String word);
 
     void saveLastLanguage(Language language, String languageChooseType);
 

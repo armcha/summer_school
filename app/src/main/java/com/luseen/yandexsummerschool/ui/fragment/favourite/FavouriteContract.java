@@ -27,5 +27,9 @@ public interface FavouriteContract {
     interface Presenter extends ApiContract.Presenter<View> {
 
         void fetchFavourite();
+
+        void doSearch(String input);
+
+        void resetFavourite();
     }
 }

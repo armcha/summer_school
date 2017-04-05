@@ -14,13 +14,9 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
-import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
 import com.luseen.yandexsummerschool.utils.Logger;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import io.realm.RealmChangeListener;
@@ -32,7 +28,8 @@ import io.realm.RealmResults;
 public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryContract.Presenter>
         implements HistoryContract.View,
         RealmChangeListener<RealmResults<History>>,
-        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener {
+        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
+        SearchView.SearchListener {
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -60,6 +57,7 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.history_search_hint));
+        searchView.setSearchListener(this);
     }
 
     @NonNull
@@ -76,13 +74,21 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     @Override
     public void onHistoryResult(RealmResults<History> historyList) {
         this.historyRealmResults = historyList;
-        adapter = new HistoryAndFavouriteRecyclerAdapter(historyRealmResults);
-        adapter.setAdapterItemClickListener(this);
-        historyRecyclerView.setAdapter(adapter);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        historyRecyclerView.setLayoutManager(manager);
-        historyRealmResults.removeAllChangeListeners();
-        historyRealmResults.addChangeListener(this);
+        setUpOrUpdateRecyclerView(historyList);
+    }
+
+    private void setUpOrUpdateRecyclerView(RealmResults<History> historyList) {
+        if (adapter == null) {
+            adapter = new HistoryAndFavouriteRecyclerAdapter(historyRealmResults);
+            adapter.setAdapterItemClickListener(this);
+            historyRecyclerView.setAdapter(adapter);
+            LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+            historyRecyclerView.setLayoutManager(manager);
+            historyRealmResults.removeAllChangeListeners();
+            historyRealmResults.addChangeListener(this);
+        } else {
+            adapter.updateAdapterList(historyList);
+        }
     }
 
     @Override
@@ -123,5 +129,20 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     @Override
     public void onAdapterItemClick(History history) {
         Logger.log("onHistoryItemClick " + history);
+    }
+
+    @Override
+    public void onTextChange(String input) {
+        presenter.doSearch(input);
+    }
+
+    @Override
+    public void onResetClicked() {
+        presenter.resetHistory();
+    }
+
+    @Override
+    public void onEmptyInput() {
+        presenter.resetHistory();
     }
 }

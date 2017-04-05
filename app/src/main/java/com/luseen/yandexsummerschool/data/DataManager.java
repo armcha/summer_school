@@ -85,8 +85,13 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<Dictionary> getDictionaryByWord(String word) {
-        return appDbHelper.getDictionaryByWord(word.toLowerCase());
+    public Observable<RealmResults<History>> getHistoriesByKeyWord(String word) {
+        return appDbHelper.getHistoriesByKeyWord(word);
+    }
+
+    @Override
+    public Observable<RealmResults<History>> getFavouritesByKeyWord(String word) {
+        return appDbHelper.getFavouritesByKeyWord(word);
     }
 
     @Override

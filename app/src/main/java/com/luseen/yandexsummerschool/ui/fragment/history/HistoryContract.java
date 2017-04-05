@@ -29,5 +29,9 @@ public interface HistoryContract {
     interface Presenter extends ApiContract.Presenter<View> {
 
         void fetchHistory();
+
+        void doSearch(String input);
+
+        void resetHistory();
     }
 }

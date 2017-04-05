@@ -6,10 +6,11 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
-import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Realm;
+import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
@@ -55,14 +56,37 @@ public class HistoryDao {
 
             realm.close();
         } catch (Throwable throwable) {
-            Logger.log(throwable.getMessage());
+            ExceptionTracker.trackException(throwable);
         }
-
     }
 
-    public Dictionary getDictionaryByWord(String word) {
-        // TODO: 04.04.2017
-        return null;
+    public RealmResults<History> getFavouritesByKeyWord(String keyWord) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<History> realmQuery = getBaseQuery(keyWord)
+                .equalTo(History.IS_FAVOURITE, true);
+        RealmResults<History> favourites = realmQuery.findAllSorted(History.ID, Sort.DESCENDING);
+        realm.close();
+        return favourites;
+    }
+
+    public RealmResults<History> getHistoriesByKeyWord(String keyWord) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<History> realmQuery = getBaseQuery(keyWord);
+        RealmResults<History> histories = realmQuery.findAllSorted(History.ID, Sort.DESCENDING);
+        realm.close();
+        return histories;
+    }
+
+    private RealmQuery<History> getBaseQuery(String keyWord) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<History> realmQuery = realm.where(History.class)
+                .beginGroup()
+                .contains(History.ORIGINAL_TEXT, keyWord)
+                .or()
+                .contains(History.TRANSLATED_TEXT, keyWord)
+                .endGroup();
+        realm.close();
+        return realmQuery;
     }
 
     public RealmResults<History> getHistoryList() {
@@ -93,10 +117,7 @@ public class HistoryDao {
         return (int) count;
     }
 
-    public Dictionary getDictionary() {
-        Realm realm = Realm.getDefaultInstance();
-        Dictionary dictionary = realm.where(Dictionary.class).findFirst();
-        realm.close();
-        return dictionary;
+    public void clearHistoryAndFavouriteData() {
+
     }
 }

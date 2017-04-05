@@ -7,6 +7,8 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
+import java.util.concurrent.Callable;
+
 import io.realm.RealmResults;
 import rx.Observable;
 
@@ -36,8 +38,13 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
-    public Observable<Dictionary> getDictionaryByWord(String word) {
-        return Observable.fromCallable(() -> historyDao.getDictionaryByWord(word));
+    public Observable<RealmResults<History>> getHistoriesByKeyWord(String word) {
+        return Observable.fromCallable(() -> historyDao.getHistoriesByKeyWord(word));
+    }
+
+    @Override
+    public Observable<RealmResults<History>> getFavouritesByKeyWord(String word) {
+        return Observable.fromCallable(() -> historyDao.getFavouritesByKeyWord(word));
     }
 
     @Override

@@ -8,8 +8,8 @@ import com.luseen.yandexsummerschool.utils.RxUtil;
 
 import io.realm.RealmResults;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Chatikyan on 02.04.2017.
@@ -18,7 +18,7 @@ import rx.android.schedulers.AndroidSchedulers;
 public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
         implements HistoryContract.Presenter {
 
-    private Subscription historySubscription;
+    private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onCreate() {
@@ -47,24 +47,37 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
 
         getView().showLoading();
 
-        historySubscription = getHistory()
+        compositeSubscription.add(getHistory()
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(histories -> {
                     if (histories.size() == 0) {
                         getView().onEmptyResult();
                     }
                     getView().onHistoryResult(histories);
-
                 }, throwable -> {
                     Logger.log(throwable.getMessage());
                     getView().onError();
-                });
+                }));
+    }
+
+    @Override
+    public void doSearch(String input) {
+        if (!isViewAttached())
+            return;
+        compositeSubscription.add(dataManager.getHistoriesByKeyWord(input)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(getView()::onHistoryResult));
+    }
+
+    @Override
+    public void resetHistory() {
+        fetchHistory();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(historySubscription);
+        RxUtil.unsubscribe(compositeSubscription);
     }
 
     private Observable<RealmResults<History>> getHistory() {
