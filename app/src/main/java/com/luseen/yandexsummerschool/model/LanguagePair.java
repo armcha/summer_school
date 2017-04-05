@@ -9,8 +9,11 @@ import io.realm.annotations.PrimaryKey;
 
 public class LanguagePair extends RealmObject {
 
+    public static final String SINGLE_ID = "single";
+    public static final String ID = "id";
+
     @PrimaryKey
-    private String id = "Single";
+    private String id = SINGLE_ID;
 
     private Language sourceLanguage;
     private Language targetLanguage;

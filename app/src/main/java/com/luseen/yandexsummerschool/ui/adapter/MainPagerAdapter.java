@@ -14,6 +14,9 @@ import com.luseen.yandexsummerschool.ui.fragment.translation.TranslationFragment
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
+    public static final int TRANSLATION_POSITION = 0;
+    public static final int HISTORY_POSITION = 1;
+    public static final int SETTINGS_POSITION = 2;
     private static final int PAGE_COUNT = 3;
 
     public MainPagerAdapter(FragmentManager fm) {
@@ -23,9 +26,9 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         // TODO: 30.03.2017 add real fragments
-        if (position == 0)
+        if (position == TRANSLATION_POSITION)
             return TranslationFragment.newInstance();
-        else if (position == 1)
+        else if (position == HISTORY_POSITION)
             return HistoryAndFavouriteRootFragment.newInstance();
         else return new TestFragment();
     }

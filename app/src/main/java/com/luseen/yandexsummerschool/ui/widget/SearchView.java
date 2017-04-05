@@ -71,7 +71,7 @@ public class SearchView extends RelativeLayout implements Viewable,
         divider.setBackgroundColor(inActiveBorderColor);
         addView(divider);
         //some hack 0.5 dp
-        int dividerHeight = DimenUtils.dpToPx(context, 1) / 2;
+        int dividerHeight = DimenUtils.dpToPx(context, 1);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, dividerHeight);
         params.addRule(ALIGN_PARENT_BOTTOM);
         divider.setLayoutParams(params);
@@ -93,20 +93,18 @@ public class SearchView extends RelativeLayout implements Viewable,
     private void addSearchEditText(Context context) {
         searchEditText = new EditText(context);
         searchEditText.setId(SEARCH_EDIT_TEXT);
-        // TODO: 04.04.2017 change hint
-        searchEditText.setHint("Search");
         searchEditText.setBackground(null);
         searchEditText.setSingleLine(true);
         searchEditText.setOnClickListener(this);
         //underline thickness
         searchEditText.setPadding(0, 2, 0, 0);
-        searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 14);
+        searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
         addView(searchEditText);
         LayoutParams params = ((LayoutParams) searchEditText.getLayoutParams());
         params.addRule(RIGHT_OF, searchIcon.getId());
         params.addRule(CENTER_VERTICAL);
         searchEditText.setLayoutParams(params);
-        ViewUtils.setViewMargins(searchEditText, new int[]{0, 0, 40, 0});
+        ViewUtils.setViewMargins(searchEditText, new int[]{0, 0, 50, 0});
         searchEditText.addTextChangedListener(new AbstractTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -125,9 +123,9 @@ public class SearchView extends RelativeLayout implements Viewable,
         resetIcon.setId(RESET_ICON);
         resetIcon.setCloseIconClickListener(this);
         addView(resetIcon);
-        int iconSize = DimenUtils.dpToPx(context, 40);
+        int iconSize = DimenUtils.dpToPx(context, 50);
         LayoutParams params = new LayoutParams(iconSize, iconSize);
-        int padding = DimenUtils.dpToPx(context, 7);
+        int padding = DimenUtils.dpToPx(context, 10);
         resetIcon.setPadding(padding, padding, padding, padding);
         params.addRule(ALIGN_PARENT_RIGHT);
         params.addRule(CENTER_VERTICAL);
@@ -203,5 +201,9 @@ public class SearchView extends RelativeLayout implements Viewable,
 
     public EditText getSearchEditText() {
         return searchEditText;
+    }
+
+    public void setHint(String hint) {
+        searchEditText.setHint(hint);
     }
 }

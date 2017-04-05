@@ -29,7 +29,6 @@ public class HistoryDao {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(r -> {
                 int historyId = RealmUtils.generateId(r, History.class);
-                //int dictionaryId = RealmUtils.generateId(realm,Dictionary.class);
                 int definitionId = RealmUtils.generateId(r, Definition.class);
                 int dictionaryTranslationId = RealmUtils.generateId(r, DictionaryTranslation.class);
                 Dictionary dictionary = history.getDictionary();
@@ -37,12 +36,11 @@ public class HistoryDao {
                 LanguagePair pair = history.getLanguagePair();
                 String pairId = pair.getSourceLanguage().getLangCode() +
                         pair.getTargetLanguage().getLangCode();
-                //pair.setId(pairId);
-                LanguagePair pp = new LanguagePair();
-                pp.setId(pairId);
-                pp.setSourceLanguage(pair.getSourceLanguage());
-                pp.setTargetLanguage(pair.getTargetLanguage());
-                history.setLanguagePair(pp);
+                LanguagePair historyLanguagePair = new LanguagePair();
+                historyLanguagePair.setId(pairId);
+                historyLanguagePair.setSourceLanguage(pair.getSourceLanguage());
+                historyLanguagePair.setTargetLanguage(pair.getTargetLanguage());
+                history.setLanguagePair(historyLanguagePair);
                 String historyIdentifier = dictionary.getOriginalText() + pairId;
                 history.setIdentifier(historyIdentifier);
                 history.setId(historyId);

@@ -31,17 +31,24 @@ public class LanguagePairDao {
         realm.beginTransaction();
         realm.copyToRealmOrUpdate(languagePair);
         realm.commitTransaction();
-        // realm.close();
+        realm.close();
     }
 
     public LanguagePair getLanguagePair() {
-        Realm realm = Realm.getDefaultInstance();
-        LanguagePair languagePair = realm.where(LanguagePair.class).findFirst();
-        if (languagePair != null) {
-            return languagePair;
-        } else {
-            return getDefaultLanguagePair();
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            LanguagePair languagePair = realm.where(LanguagePair.class)
+                    .equalTo(LanguagePair.ID, LanguagePair.SINGLE_ID)
+                    .findFirst();
+            if (languagePair != null) {
+                return languagePair;
+            } else {
+                return getDefaultLanguagePair();
+            }
+        } catch (Throwable throwable) {
+            Logger.log("Failed to save pair " + throwable.getMessage());
         }
+        return getDefaultLanguagePair();
     }
 
     private LanguagePair getDefaultLanguagePair() {

@@ -31,8 +31,10 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void onCreate() {
         super.onCreate();
+        //Updating toolbar  language views
+        //and set translation view text to be translated from language pair
         if (isViewAttached()) {
-            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair());
+            getView().updateToolbarLanguages(dataManager.getLanguagePair());
             getView().setTranslationViewText(dataManager.getLastTypedText());
         }
     }
@@ -66,6 +68,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    //Checking if our response is in favourite list
     private boolean isResponseFavourite(String originalText) {
         Realm realm = Realm.getDefaultInstance();
         LanguagePair pair = dataManager.getLanguagePair();
@@ -122,10 +125,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     @Override
     public void handleInputText(String inputText) {
+        //Saving last typed text
         dataManager.saveLastTypedText(inputText);
+
+        //Making both translate and dictionary request
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
-        // TODO: 31.03.2017 need some testing
         String lookUpLanguage = pair.getLookupLanguage();
         Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(
                 inputText,
@@ -140,12 +145,15 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
         switch (id) {
             case R.id.target_language_text_view:
+                //Opening choose language activity in TARGET mode
                 getView().openChooseLanguageActivity(LanguageChooseType.TYPE_TARGET);
                 break;
             case R.id.source_language_text_view:
+                //Opening choose language activity in SOURCE mode
                 getView().openChooseLanguageActivity(LanguageChooseType.TYPE_SOURCE);
                 break;
             case R.id.swap_languages:
+                //Swap current languages, save it and make request
                 LanguagePair dbLanguagePair = dataManager.getLanguagePair();
                 Logger.log("dbLanguagePair " + dbLanguagePair);
                 LanguagePair languagePair = new LanguagePair();
@@ -153,6 +161,8 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 languagePair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
                 Logger.log("Created  " + languagePair);
                 dataManager.saveLanguagePair(languagePair);
+                Logger.log("After save " + dataManager.getLanguagePair());
+
                 getView().animateLanguageSwap(languagePair);
                 getView().setTranslationViewText(dataManager.getLastTranslatedText());
                 break;
@@ -163,7 +173,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void handleActivityResult(int requestCode, int resultCode) {
         if (requestCode == TranslationFragment.CHOOSE_LANGUAGE_REQUEST_CODE &&
                 resultCode == Activity.RESULT_OK && isViewAttached()) {
-            getView().updateToolbarAndTranslationViewLanguages(dataManager.getLanguagePair());
+            getView().updateToolbarLanguages(dataManager.getLanguagePair());
             getView().setTranslationViewText(dataManager.getLastTypedText());
         }
     }

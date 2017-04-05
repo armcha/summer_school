@@ -20,6 +20,8 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
 
 public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable {
 
+    public static final long ANIMATION_DURATION = 150L;
+
     public interface CloseIconClickListener {
         void onClosePressed(CloseIcon closeIcon);
     }
@@ -68,7 +70,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
         setScaleY(0);
 
         ViewCompat.animate(this)
-                .setDuration(250)
+                .setDuration(ANIMATION_DURATION)
                 .scaleX(1)
                 .scaleY(1)
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
@@ -82,7 +84,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
 
     public void hide() {
         ViewCompat.animate(this)
-                .setDuration(250)
+                .setDuration(ANIMATION_DURATION)
                 .scaleX(0)
                 .scaleY(0)
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {

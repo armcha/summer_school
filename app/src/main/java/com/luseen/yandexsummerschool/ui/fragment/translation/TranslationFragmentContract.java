@@ -29,7 +29,7 @@ public interface TranslationFragmentContract {
 
         void animateLanguageSwap(LanguagePair languagePair);
 
-        void updateToolbarAndTranslationViewLanguages(LanguagePair languagePair);
+        void updateToolbarLanguages(LanguagePair languagePair);
     }
 
     interface Presenter extends ApiContract.Presenter<View> {

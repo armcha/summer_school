@@ -6,4 +6,8 @@
     <string name="target_language">Язык перевода</string>
     <string name="type_text">Введите текст</string>
     <string name="swap_languages">Swap languages</string>
+    <string name="history_search_hint">Найти в истории</string>
+    <string name="favourite_search_hint">Найти в избранном</string>
+    <string name="history">История</string>
+    <string name="favourite">Избранное</string>
 </resources>

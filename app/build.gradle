@@ -33,6 +33,9 @@ repositories {
     maven {
         url 'https://github.com/uPhyca/stetho-realm/raw/master/maven-repo'
     }
+    maven {
+        url "http://dl.bintray.com/ghedeon/maven"
+    }
 }
 
 ext.supportLibVersion = '25.3.0'
@@ -62,4 +65,5 @@ dependencies {
     //My library https://github.com/armcha/LuseenBottomNavigation
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    debugCompile 'com.ghedeon:rebro-client:0.1'
 }

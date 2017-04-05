@@ -15,6 +15,7 @@ import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageItemSelectListener;
 import com.luseen.yandexsummerschool.ui.adapter.ChooseLanguageRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
+import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 
 import java.util.List;
 
@@ -35,6 +36,9 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+
+    @BindView(R.id.progress_view)
+    YaProgressView progressView;
 
     private String languageChooseType;
 
@@ -62,7 +66,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
                 toolbarTitle = getString(R.string.source_language);
                 break;
             case LanguageChooseType.TYPE_TARGET:
-                toolbarTitle =  getString(R.string.target_language);
+                toolbarTitle = getString(R.string.target_language);
                 break;
         }
         toolbarTitleTextView.setAnimatedText(toolbarTitle);
@@ -76,17 +80,17 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     @Override
     public void showLoading() {
-
+        progressView.show();
     }
 
     @Override
     public void hideLoading() {
-
+        progressView.hide();
     }
 
     @Override
     public void showError() {
-
+        // TODO: 05.04.2017
     }
 
     @Override
