@@ -28,6 +28,9 @@ public class HistoryAndFavouritePresenter extends ApiPresenter<HistoryAndFavouri
 
     @Override
     public void clearHistoryAndFavouriteData() {
-
+        dataManager.clearHistoryAndFavouriteData();
+        if(isViewAttached()){
+            getView().onHistoryAndFavouriteCleared();
+        }
     }
 }

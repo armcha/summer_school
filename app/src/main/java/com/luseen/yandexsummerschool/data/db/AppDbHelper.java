@@ -71,4 +71,9 @@ public class AppDbHelper implements DbHelper {
     public int getHistoryListSize() {
         return historyDao.getHistoryListSize();
     }
+
+    @Override
+    public void clearHistoryAndFavouriteData() {
+        historyDao.clearHistoryAndFavouriteData();
+    }
 }

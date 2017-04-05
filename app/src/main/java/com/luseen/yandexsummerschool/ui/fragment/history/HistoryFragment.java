@@ -116,7 +116,7 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
 
     @Override
     public void onEmptyResult() {
-
+        searchView.setVisibility(View.GONE);
     }
 
     @Override

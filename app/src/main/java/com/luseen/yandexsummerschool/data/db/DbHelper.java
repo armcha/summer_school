@@ -33,4 +33,6 @@ public interface DbHelper {
     void saveLanguagePair(LanguagePair languagePair);
 
     int getHistoryListSize();
+
+    void clearHistoryAndFavouriteData();
 }

@@ -118,6 +118,10 @@ public class HistoryDao {
     }
 
     public void clearHistoryAndFavouriteData() {
-
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<History> historyRealmResults = realm
+                .where(History.class).findAll();
+        realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
+        realm.close();
     }
 }

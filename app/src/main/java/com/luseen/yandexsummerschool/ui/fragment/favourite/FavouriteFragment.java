@@ -103,6 +103,7 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
 
     @Override
     public void onEmptyResult() {
+        searchView.setVisibility(View.GONE);
         Logger.log("EMPTY ");
     }
 

@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouritePagerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.FontTabLayout;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -64,11 +66,23 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
 
     @OnClick(R.id.delete_history_icon)
     public void onViewClicked() {
-        presenter.clearHistoryAndFavouriteData();
+        showDeleteDialog();
+    }
+
+    private void showDeleteDialog() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setTitle("Delete");
+        builder.setMessage("Really delete ?")
+                .setPositiveButton("Yes", (dialog, id) -> {
+                    presenter.clearHistoryAndFavouriteData();
+                })
+                .setNegativeButton("No", (dialog, id) ->
+                        dialog.cancel());
+        builder.create().show();
     }
 
     @Override
     public void onHistoryAndFavouriteCleared() {
-
+        Logger.log("HistoryAndFavouriteCleared");
     }
 }

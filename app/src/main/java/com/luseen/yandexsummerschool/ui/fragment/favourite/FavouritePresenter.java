@@ -66,12 +66,6 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
             return;
         compositeSubscription.add(dataManager.getFavouritesByKeyWord(input)
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnNext(new Action1<RealmResults<History>>() {
-                    @Override
-                    public void call(RealmResults<History> histories) {
-                        Logger.log("SRESULT " + histories);
-                    }
-                })
                 .subscribe(getView()::onFavouriteResult));
     }
 

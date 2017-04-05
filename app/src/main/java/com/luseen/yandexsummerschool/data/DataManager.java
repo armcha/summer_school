@@ -120,6 +120,11 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
+    public void clearHistoryAndFavouriteData() {
+        appDbHelper.clearHistoryAndFavouriteData();
+    }
+
+    @Override
     public String getLastTypedText() {
         return preferencesHelper.getLastTypedText();
     }
