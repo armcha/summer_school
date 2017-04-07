@@ -18,6 +18,7 @@ import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmResults;
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Chatikyan on 19.03.2017.
@@ -70,8 +71,8 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public void saveHistory(History History) {
-        appDbHelper.saveHistory(History);
+    public Observable<History> saveHistory(History History) {
+        return appDbHelper.saveHistory(History);
     }
 
     @Override

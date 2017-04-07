@@ -7,6 +7,7 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import io.realm.RealmResults;
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Chatikyan on 19.03.2017.
@@ -14,7 +15,7 @@ import rx.Observable;
 
 public interface DbHelper {
 
-    void saveHistory(History history);
+    Observable<History> saveHistory(History history);
 
     Observable<History> getHistoryByIdentifier(String identifier);
 

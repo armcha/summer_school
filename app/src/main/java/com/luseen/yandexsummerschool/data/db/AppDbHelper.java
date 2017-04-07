@@ -8,6 +8,7 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import io.realm.RealmResults;
 import rx.Observable;
+import rx.Single;
 
 /**
  * Created by Chatikyan on 25.03.2017.
@@ -20,8 +21,8 @@ public class AppDbHelper implements DbHelper {
     private LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
 
     @Override
-    public void saveHistory(History history) {
-        historyDao.saveObject(history);
+    public Observable<History> saveHistory(History history) {
+        return historyDao.saveHistory(history);
     }
 
     @Override

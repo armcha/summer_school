@@ -214,7 +214,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (translationView.hasText()) {
             translationTextView.setText(translation.getTranslatedText());
             dictView.reset();
-            Logger.log("onTranslationResult " + identifier);
             currentIdentifier = identifier;
             setUpFavouriteIcon(translation.isFavourite(), identifier);
         }
@@ -225,13 +224,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
             dictView.updateDictionary(dictionary);
-            Logger.log("onDictionaryResult " + identifier);
             currentIdentifier = identifier;
             setUpFavouriteIcon(dictionary.isFavourite(), identifier);
         }
     }
-
-
 
     private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
         if (currentIdentifier.equals(identifier)) {
@@ -261,7 +257,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void changeFavouriteIconState(boolean isFavourite, String identifier) {
-        setUpFavouriteIcon(isFavourite,identifier);
+        setUpFavouriteIcon(isFavourite, identifier);
     }
 
     @Override

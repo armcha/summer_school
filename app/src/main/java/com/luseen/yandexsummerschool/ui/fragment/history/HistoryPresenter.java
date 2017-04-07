@@ -48,8 +48,10 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
         getView().showLoading();
 
         compositeSubscription.add(getHistory()
+                .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(histories -> {
+                    Logger.log(" " + histories);
                     if (histories.size() == 0) {
                         getView().onEmptyResult();
                     } else {

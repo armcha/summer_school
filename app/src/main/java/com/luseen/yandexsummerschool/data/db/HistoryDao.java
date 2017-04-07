@@ -6,13 +6,14 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
-import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
+import rx.Emitter;
+import rx.Observable;
 
 public class HistoryDao {
 
@@ -25,8 +26,8 @@ public class HistoryDao {
         return instance;
     }
 
-    public void saveObject(History history) {
-        try {
+    public Observable<History> saveHistory(History history) {
+        return Observable.fromEmitter(emitter -> {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(r -> {
                 int historyId = RealmUtils.generateId(r, History.class);
@@ -52,12 +53,12 @@ public class HistoryDao {
                     }
                 }
                 r.copyToRealmOrUpdate(history);
+                emitter.onNext(history);
+                emitter.onCompleted();
             });
 
             realm.close();
-        } catch (Throwable throwable) {
-            ExceptionTracker.trackException(throwable);
-        }
+        }, Emitter.BackpressureMode.BUFFER);
     }
 
     public RealmResults<History> getFavouritesByKeyWord(String keyWord) {
@@ -128,8 +129,7 @@ public class HistoryDao {
 
     public void clearHistoryAndFavouriteData() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<History> historyRealmResults = realm
-                .where(History.class).findAll();
+        RealmResults<History> historyRealmResults = realm.where(History.class).findAll();
         realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
         realm.close();
     }

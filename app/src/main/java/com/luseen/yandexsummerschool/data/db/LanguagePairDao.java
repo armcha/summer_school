@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.data.db;
 
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
+import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.Logger;
 
 import io.realm.Realm;
@@ -40,12 +41,16 @@ public class LanguagePairDao {
             LanguagePair languagePair = realm.where(LanguagePair.class)
                     .equalTo(LanguagePair.ID, LanguagePair.SINGLE_ID)
                     .findFirst();
+            // FIXME: 07.04.2017
             if (languagePair != null) {
+                //realm.close();
                 return languagePair;
             } else {
+                //realm.close();
                 return getDefaultLanguagePair();
             }
         } catch (Throwable throwable) {
+            ExceptionTracker.trackException(throwable);
             Logger.log("Failed to save pair " + throwable.getMessage());
         }
         return getDefaultLanguagePair();

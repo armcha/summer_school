@@ -22,8 +22,9 @@ import org.greenrobot.eventbus.EventBus;
 
 import io.realm.Realm;
 import rx.Observable;
-import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -32,7 +33,7 @@ import rx.android.schedulers.AndroidSchedulers;
 public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragmentContract.View>
         implements TranslationFragmentContract.Presenter {
 
-    private Subscription historySubscription;
+    private CompositeSubscription historySubscriptions = new CompositeSubscription();
 
     @Override
     public void onCreate() {
@@ -114,8 +115,17 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     }
 
     private void saveHistory(History history) {
-        dataManager.saveHistory(history);
-        EventBus.getDefault().post(new HistoryEvent());
+        historySubscriptions.add(dataManager.saveHistory(history)
+                // FIXME: 07.04.2017 
+                //.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<History>() {
+                    @Override
+                    public void call(History history) {
+                        Logger.log(" ONCOMPLATE");
+                        EventBus.getDefault().post(new HistoryEvent());
+                    }
+                }));
     }
 
     @Override
@@ -139,7 +149,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
-        //Making both translate and dictionary request
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
         String lookUpLanguage = pair.getLookupLanguage();
@@ -148,6 +157,29 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 translationLanguage,
                 lookUpLanguage);
         makeRequest(dictionaryObservable, RequestType.LOOKUP);
+        String identifier = getIdentifier(inputText);
+        /*historySubscriptions.add(dataManager.getHistoryByIdentifier(identifier)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Action1<History>() {
+                    @Override
+                    public void call(History history) {
+                        boolean hasResultInDb = history != null;
+                        Logger.log(" " + hasResultInDb);
+                        if (hasResultInDb) {
+                            Logger.log(" " + history.getDictionary());
+                            //onSuccess(RequestType.LOOKUP, history.getDictionary());
+                        } else {
+                            //Making both translate and dictionary request
+                            // makeRequest(dictionaryObservable, RequestType.LOOKUP);
+                        }
+                    }
+                }, new Action1<Throwable>() {
+                    @Override
+                    public void call(Throwable throwable) {
+                        Logger.log(" " + throwable.getMessage());
+                    }
+                }));*/
     }
 
     @Override
@@ -198,7 +230,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void setFavourite(String identifier) {
         boolean isFavourite = isResponseFavourite(identifier);
-        historySubscription = dataManager.getHistoryByIdentifier(identifier)
+        historySubscriptions.add(dataManager.getHistoryByIdentifier(identifier)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(history -> {
                     Realm realm = Realm.getDefaultInstance();
@@ -210,12 +242,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                     if (isViewAttached()) {
                         getView().changeFavouriteIconState(history.isFavourite(), identifier);
                     }
-                });
+                }));
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(historySubscription);
+        RxUtil.unsubscribe(historySubscriptions);
     }
 }
