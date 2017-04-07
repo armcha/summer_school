@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.model.dictionary;
 
 import com.google.gson.annotations.SerializedName;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import io.realm.RealmList;
 import io.realm.RealmObject;
@@ -44,7 +45,7 @@ public class Definition extends RealmObject {
     }
 
     public String getTranscription() {
-        return transcription;
+        return transcription != null ? transcription : StringUtils.EMPTY;
     }
 
     public void setTranscription(String transcription) {

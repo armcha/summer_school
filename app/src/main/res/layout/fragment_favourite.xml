@@ -1,7 +1,8 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/info_shower_coordinator_layout"
     android:background="@color/white">
 
     <android.support.design.widget.AppBarLayout
@@ -25,4 +26,4 @@
         android:layout_height="wrap_content"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.design.widget.CoordinatorLayout>
+</com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout>

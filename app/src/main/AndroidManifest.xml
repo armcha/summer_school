@@ -15,7 +15,7 @@
         <activity
             android:name=".ui.activity.root.RootActivity"
             android:theme="@style/NoActionBar"
-            android:windowSoftInputMode="stateVisible">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

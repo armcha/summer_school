@@ -3,6 +3,8 @@ package com.luseen.yandexsummerschool.ui.fragment.favourite;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 import com.luseen.yandexsummerschool.model.History;
 
+import java.util.List;
+
 import io.realm.RealmResults;
 
 /**
@@ -19,7 +21,7 @@ public interface FavouriteContract {
 
         void hideLoading();
 
-        void onFavouriteResult(RealmResults<History> favouriteList);
+        void onFavouriteResult(List<History> favouriteList);
 
         void onEmptyResult();
     }

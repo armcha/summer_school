@@ -31,11 +31,7 @@ public class ChooseLanguageViewHolder extends RecyclerView.ViewHolder {
 
     public void bind(Language language, String lastSelectedLanguage) {
         languageNameTextView.setText(language.getFullLanguageName());
-//        if (lastSelectedLanguage.equalsIgnoreCase(language.getLangCode())) {
-//            checkLanguageIcon.setVisibility(View.VISIBLE);
-//        } else {
-//            checkLanguageIcon.setVisibility(View.GONE);
-//        }
+
     }
 
     public TextView getLanguageNameTextView() {

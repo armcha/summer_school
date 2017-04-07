@@ -9,8 +9,9 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.HistoryAndFavouriteViewHolder;
 
+import java.util.List;
+
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 /**
  * Created by Chatikyan on 25.03.2017.
@@ -20,12 +21,14 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
 
     public interface AdapterItemClickListener {
         void onAdapterItemClick(History history);
+
+        void onFavouriteClicked(boolean isFavourite, String identifier);
     }
 
     private AdapterItemClickListener adapterItemClickListener;
-    private RealmResults<History> historyList;
+    private List<History> historyList;
 
-    public HistoryAndFavouriteRecyclerAdapter(RealmResults<History> historyList) {
+    public HistoryAndFavouriteRecyclerAdapter(List<History> historyList) {
         this.historyList = historyList;
     }
 
@@ -53,6 +56,11 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
                 realm.beginTransaction();
                 history.setFavourite(!history.isFavourite());
                 realm.commitTransaction();
+                if (adapterItemClickListener != null) {
+                    adapterItemClickListener.onFavouriteClicked(history.isFavourite(),
+                            history.getIdentifier());
+                }
+                holder.onFavourite(history);
             }
         });
 
@@ -71,7 +79,7 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
         return historyList.size();
     }
 
-    public void updateAdapterList(RealmResults<History> historyList) {
+    public void updateAdapterList(List<History> historyList) {
         this.historyList = historyList;
         notifyDataSetChanged();
 

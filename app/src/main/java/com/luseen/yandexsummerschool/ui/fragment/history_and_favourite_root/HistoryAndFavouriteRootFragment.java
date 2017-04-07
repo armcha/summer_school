@@ -3,6 +3,7 @@ package com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_root;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
@@ -12,13 +13,17 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouritePagerAdapter;
+import com.luseen.yandexsummerschool.ui.fragment.favourite.FavouriteFragment;
+import com.luseen.yandexsummerschool.ui.fragment.history.HistoryFragment;
+import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.FontTabLayout;
 import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
 
-public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavouriteContract.View, HistoryAndFavouriteContract.Presenter>
+public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavouriteContract.View,
+        HistoryAndFavouriteContract.Presenter>
         implements HistoryAndFavouriteContract.View {
 
     @BindView(R.id.tab_layout)
@@ -26,6 +31,8 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
 
     @BindView(R.id.view_pager)
     ViewPager viewPager;
+
+    private HistoryAndFavouritePagerAdapter adapter;
 
     public static HistoryAndFavouriteRootFragment newInstance() {
         Bundle args = new Bundle();
@@ -49,16 +56,10 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        HistoryAndFavouritePagerAdapter adapter = new HistoryAndFavouritePagerAdapter(getChildFragmentManager());
+        adapter = new HistoryAndFavouritePagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
     @Override
     protected boolean whitButterKnife() {
         return true;
@@ -83,6 +84,19 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
 
     @Override
     public void onHistoryAndFavouriteCleared() {
-        Logger.log("HistoryAndFavouriteCleared");
+        Logger.log("onHistoryAndFavouriteCleared ");
+        Fragment fragmentByIndex = adapter.getFragmentByIndex(viewPager.getCurrentItem());
+//        if (fragmentByIndex instanceof HistoryFragment) {
+//            HistoryFragment historyFragment = ((HistoryFragment) fragmentByIndex);
+//            historyFragment.onEmptyResult();
+//        } else if (fragmentByIndex instanceof FavouriteFragment) {
+//            FavouriteFragment favouriteFragment = ((FavouriteFragment) fragmentByIndex);
+//            favouriteFragment.onEmptyResult();
+//        }
+
+        if (fragmentByIndex instanceof HistoryAndFavouriteBaseFragment) {
+            HistoryAndFavouriteBaseFragment historyFragment = ((HistoryAndFavouriteBaseFragment) fragmentByIndex);
+            historyFragment.onEmptyResult();
+        }
     }
 }

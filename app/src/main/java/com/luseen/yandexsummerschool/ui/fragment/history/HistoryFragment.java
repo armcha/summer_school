@@ -4,7 +4,6 @@ package com.luseen.yandexsummerschool.ui.fragment.history;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,20 +13,23 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
+import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
+import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
 import com.luseen.yandexsummerschool.utils.Logger;
 
-import butterknife.BindView;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryContract.Presenter>
+import java.util.List;
+
+import butterknife.BindView;
+
+public class HistoryFragment extends ApiFragment<HistoryContract.View,
+        HistoryContract.Presenter>
         implements HistoryContract.View,
-        RealmChangeListener<RealmResults<History>>,
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
         SearchView.SearchListener {
 
@@ -37,14 +39,14 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     @BindView(R.id.history_recycler_view)
     RecyclerView historyRecyclerView;
 
+    @BindView(R.id.info_shower_coordinator_layout)
+    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
+
     private HistoryAndFavouriteRecyclerAdapter adapter;
-    private RealmResults<History> historyRealmResults;
+    private List<History> historyList;
 
     public static HistoryFragment newInstance() {
-        Bundle args = new Bundle();
-        HistoryFragment fragment = new HistoryFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new HistoryFragment();
     }
 
     @Override
@@ -58,6 +60,8 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
+        infoShowerCoordinatorLayout.setInfoText("This is test text for testing");
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_fav);
     }
 
     @NonNull
@@ -72,30 +76,22 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     }
 
     @Override
-    public void onHistoryResult(RealmResults<History> historyList) {
-        this.historyRealmResults = historyList;
-        setUpOrUpdateRecyclerView(historyList);
+    public void onHistoryResult(List<History> historyList) {
+        this.historyList = historyList;
+        setUpOrUpdateRecyclerView();
     }
 
-    private void setUpOrUpdateRecyclerView(RealmResults<History> historyList) {
+    private void setUpOrUpdateRecyclerView() {
+        infoShowerCoordinatorLayout.hideInfo();
+        searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
-            adapter = new HistoryAndFavouriteRecyclerAdapter(historyRealmResults);
+            adapter = new HistoryAndFavouriteRecyclerAdapter(historyList);
             adapter.setAdapterItemClickListener(this);
             historyRecyclerView.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             historyRecyclerView.setLayoutManager(manager);
-            historyRealmResults.removeAllChangeListeners();
-            historyRealmResults.addChangeListener(this);
         } else {
             adapter.updateAdapterList(historyList);
-        }
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (historyRealmResults != null) {
-            historyRealmResults.removeAllChangeListeners();
         }
     }
 
@@ -117,18 +113,35 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View, HistoryCo
     @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
+        infoShowerCoordinatorLayout.showInfo();
+    }
+
+    @Subscribe
+    public void onChange(HistoryEvent historyEvent) {
+        Logger.log("History on Change ");
+        presenter.fetchHistory();
     }
 
     @Override
-    public void onChange(RealmResults<History> historyList) {
-        if (adapter != null) {
-            adapter.updateAdapterList(historyList);
-        }
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onAdapterItemClick(History history) {
         Logger.log("onHistoryItemClick " + history);
+    }
+
+    @Override
+    public void onFavouriteClicked(boolean isFavourite, String identifier) {
+        EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
     }
 
     @Override

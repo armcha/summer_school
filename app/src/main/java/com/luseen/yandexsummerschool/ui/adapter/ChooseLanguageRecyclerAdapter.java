@@ -1,6 +1,8 @@
 package com.luseen.yandexsummerschool.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +14,6 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageTextSectionViewHolder;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.ChooseLanguageViewHolder;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import java.util.List;
 
@@ -65,22 +66,26 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        Context context = App.getInstance();
         if (holder instanceof ChooseLanguageViewHolder) {
             Language language = getCurrentLanguage(holder.getAdapterPosition());
             ChooseLanguageViewHolder viewHolder = (ChooseLanguageViewHolder) holder;
             ImageView checkLanguageIcon = viewHolder.getCheckLanguageIcon();
             boolean needShowCheckIcon = position >= (textSectionSize + lastUsedLanguageList.size());
+
             if (lastSelectedLanguage.equalsIgnoreCase(language.getLangCode()) && needShowCheckIcon) {
                 checkLanguageIcon.setVisibility(View.VISIBLE);
+                int selectedItemColor = ContextCompat.getColor(context, R.color.selected_item_color);
+                holder.itemView.setBackgroundColor(selectedItemColor);
             } else {
                 checkLanguageIcon.setVisibility(View.GONE);
+                holder.itemView.setBackgroundColor(Color.WHITE);
             }
+
             viewHolder.bind(language, lastSelectedLanguage);
         } else if (holder instanceof ChooseLanguageTextSectionViewHolder) {
             ChooseLanguageTextSectionViewHolder sectionHolder = (ChooseLanguageTextSectionViewHolder) holder;
             String sectionText;
-            Context context = App.getInstance();
             if (position == 0 && hasLastUsedLanguages) {
                 sectionText = context.getString(R.string.last_used_languages);
             } else {

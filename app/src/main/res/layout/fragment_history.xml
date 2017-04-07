@@ -1,8 +1,9 @@
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/info_shower_coordinator_layout"
     android:background="@color/white"
     tools:context="com.luseen.yandexsummerschool.ui.fragment.history.HistoryFragment">
 
@@ -22,9 +23,9 @@
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v7.widget.RecyclerView xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/history_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/history_recycler_view"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-</android.support.design.widget.CoordinatorLayout>
+</com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout>

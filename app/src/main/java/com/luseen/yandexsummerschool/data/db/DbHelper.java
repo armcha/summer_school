@@ -16,6 +16,8 @@ public interface DbHelper {
 
     void saveHistory(History history);
 
+    Observable<History> getHistoryByIdentifier(String identifier);
+
     Observable<RealmResults<History>> getHistoryList();
 
     Observable<RealmResults<History>> getFavouriteList();

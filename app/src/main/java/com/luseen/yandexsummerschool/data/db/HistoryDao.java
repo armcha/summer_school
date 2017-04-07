@@ -77,6 +77,15 @@ public class HistoryDao {
         return histories;
     }
 
+    public History getHistoryByIdentifier(String identifier) {
+        Realm realm = Realm.getDefaultInstance();
+        History history = realm.where(History.class)
+                .equalTo(History.IDENTIFIER, identifier)
+                .findFirst();
+        realm.close();
+        return history;
+    }
+
     private RealmQuery<History> getBaseQuery(String keyWord) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<History> realmQuery = realm.where(History.class)

@@ -5,9 +5,6 @@ import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
-import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
-
-import java.util.concurrent.Callable;
 
 import io.realm.RealmResults;
 import rx.Observable;
@@ -25,6 +22,11 @@ public class AppDbHelper implements DbHelper {
     @Override
     public void saveHistory(History history) {
         historyDao.saveObject(history);
+    }
+
+    @Override
+    public Observable<History> getHistoryByIdentifier(String identifier) {
+        return Observable.fromCallable(() -> historyDao.getHistoryByIdentifier(identifier));
     }
 
     @Override

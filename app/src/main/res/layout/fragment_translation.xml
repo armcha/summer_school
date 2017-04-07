@@ -104,4 +104,14 @@
 
     <include layout="@layout/progress_view" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/favourite_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:backgroundTint="@color/colorPrimary"
+        app:fabSize="normal"
+        app:srcCompat="@drawable/ic_tab_fav" />
+
 </FrameLayout>

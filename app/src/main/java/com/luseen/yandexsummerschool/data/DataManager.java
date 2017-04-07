@@ -75,6 +75,11 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
+    public Observable<History> getHistoryByIdentifier(String identifier) {
+        return appDbHelper.getHistoryByIdentifier(identifier);
+    }
+
+    @Override
     public Observable<RealmResults<History>> getHistoryList() {
         return appDbHelper.getHistoryList();
     }

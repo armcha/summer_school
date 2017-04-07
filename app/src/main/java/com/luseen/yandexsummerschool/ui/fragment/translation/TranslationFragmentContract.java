@@ -19,9 +19,9 @@ public interface TranslationFragmentContract {
 
         void showError();
 
-        void onTranslationResult(Translation translation);
+        void onTranslationResult(Translation translation, String identifier);
 
-        void onDictionaryResult(Dictionary dictionary);
+        void onDictionaryResult(Dictionary dictionary, String identifier);
 
         void openChooseLanguageActivity(String languageChooseType);
 
@@ -30,6 +30,8 @@ public interface TranslationFragmentContract {
         void animateLanguageSwap(LanguagePair languagePair);
 
         void updateToolbarLanguages(LanguagePair languagePair);
+
+        void changeFavouriteIconState(boolean isFavourite, String identifier);
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
@@ -41,5 +43,7 @@ public interface TranslationFragmentContract {
         void handleActivityResult(int requestCode, int resultCode);
 
         void clearLastInputAndTranslate();
+
+        void setFavourite(String identifier);
     }
 }

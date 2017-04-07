@@ -3,6 +3,8 @@ package com.luseen.yandexsummerschool.ui.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.util.SparseArray;
+import android.view.ViewGroup;
 
 import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
@@ -15,9 +17,11 @@ import com.luseen.yandexsummerschool.ui.fragment.history.HistoryFragment;
 
 public class HistoryAndFavouritePagerAdapter extends FragmentPagerAdapter {
 
-    public static final int HISTORY_POSITION = 0;
-    public static final int FAVOURITE_POSITION = 1;
+    private static final int HISTORY_POSITION = 0;
+    private static final int FAVOURITE_POSITION = 1;
     private static final int PAGE_COUNT = 2;
+
+    private SparseArray<Fragment> fragmentSparseArray = new SparseArray<>(2);
     private String[] titles = new String[2];
 
     public HistoryAndFavouritePagerAdapter(FragmentManager fm) {
@@ -35,6 +39,19 @@ public class HistoryAndFavouritePagerAdapter extends FragmentPagerAdapter {
     }
 
     @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        Fragment fragment = (Fragment) super.instantiateItem(container, position);
+        fragmentSparseArray.put(position, fragment);
+        return fragment;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        fragmentSparseArray.remove(position);
+        super.destroyItem(container, position, object);
+    }
+
+    @Override
     public int getCount() {
         return PAGE_COUNT;
     }
@@ -42,5 +59,9 @@ public class HistoryAndFavouritePagerAdapter extends FragmentPagerAdapter {
     @Override
     public CharSequence getPageTitle(int position) {
         return titles[position];
+    }
+
+    public Fragment getFragmentByIndex(int index) {
+        return fragmentSparseArray.get(index);
     }
 }

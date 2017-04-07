@@ -50,10 +50,10 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
         compositeSubscription.add(dataManager.getFavouriteList()
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(favouriteList -> {
+                    getView().onFavouriteResult(favouriteList);
                     if (favouriteList.size() == 0) {
                         getView().onEmptyResult();
                     }
-                    getView().onFavouriteResult(favouriteList);
                 }, throwable -> {
                     Logger.log(throwable.getMessage());
                     getView().showError();

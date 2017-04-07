@@ -22,7 +22,6 @@ public class ChooseLanguageTextSectionViewHolder extends RecyclerView.ViewHolder
     public ChooseLanguageTextSectionViewHolder(View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
-
     }
 
     public void bind(String sectionText) {

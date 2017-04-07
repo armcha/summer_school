@@ -13,17 +13,22 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
+import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
+import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
 import com.luseen.yandexsummerschool.utils.Logger;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.util.List;
+
 import butterknife.BindView;
-import io.realm.RealmChangeListener;
-import io.realm.RealmResults;
 
 public class FavouriteFragment extends ApiFragment<FavouriteContract.View, FavouriteContract.Presenter>
         implements FavouriteContract.View,
-        RealmChangeListener<RealmResults<History>>,
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
         SearchView.SearchListener {
 
@@ -33,7 +38,10 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     @BindView(R.id.favourite_recycler_view)
     RecyclerView favouriteRecyclerView;
 
-    private RealmResults<History> favouriteRealmResults;
+    @BindView(R.id.info_shower_coordinator_layout)
+    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
+
+    //private List<History> favouriteList;
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
     public static FavouriteFragment newInstance() {
@@ -58,6 +66,8 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.favourite_search_hint));
         searchView.setSearchListener(this);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_settings);
+        infoShowerCoordinatorLayout.setInfoText("THIS IS FAVOURITE EMPTY");
     }
 
     @Override
@@ -81,37 +91,47 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     }
 
     @Override
-    public void onFavouriteResult(RealmResults<History> favouriteRealmResults) {
-        this.favouriteRealmResults = favouriteRealmResults;
+    public void onFavouriteResult(List<History> favouriteRealmResults) {
+        //this.favouriteList = favouriteRealmResults;
         setUpOrUpdateRecyclerView(favouriteRealmResults);
     }
 
-    private void setUpOrUpdateRecyclerView(RealmResults<History> favouriteRealmResults) {
+    private void setUpOrUpdateRecyclerView(List<History> favouriteList) {
+        infoShowerCoordinatorLayout.hideInfo();
+        searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
-            adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteRealmResults);
+            adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteList);
             adapter.setAdapterItemClickListener(this);
             favouriteRecyclerView.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             favouriteRecyclerView.setLayoutManager(manager);
-            this.favouriteRealmResults.removeAllChangeListeners();
-            this.favouriteRealmResults.addChangeListener(this);
         } else {
-            adapter.updateAdapterList(favouriteRealmResults);
+            adapter.updateAdapterList(favouriteList);
         }
+    }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
-        Logger.log("EMPTY ");
+        infoShowerCoordinatorLayout.showInfo();
     }
 
-    @Override
-    public void onChange(RealmResults<History> favouriteList) {
-        if (adapter != null) {
-            adapter.updateAdapterList(favouriteList);
-        }
+    @Subscribe
+    public void onChange(FavouriteEvent favouriteEvent) {
+        Logger.log("Favourite on Change ");
+        presenter.fetchFavourite();
     }
 
     @Override
@@ -120,11 +140,11 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (favouriteRealmResults != null) {
-            favouriteRealmResults.removeAllChangeListeners();
-        }
+    public void onFavouriteClicked(boolean isFavourite, String identifier) {
+        // TODO: 07.04.2017 Add listener
+        presenter.fetchFavourite();
+        EventBus.getDefault().post(new HistoryEvent());
+        EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
     }
 
     @Override

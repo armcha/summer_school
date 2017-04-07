@@ -2,11 +2,13 @@ package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
@@ -33,6 +36,9 @@ import com.luseen.yandexsummerschool.utils.Logger;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.concurrent.TimeUnit;
 
@@ -77,9 +83,13 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.progress_view)
     YaProgressView progressView;
 
+    @BindView(R.id.favourite_icon)
+    FloatingActionButton favouriteIcon;
+
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
     private DictionaryView dictView;
+    private String currentIdentifier;
 
     public static TranslationFragment newInstance() {
         return new TranslationFragment();
@@ -120,6 +130,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
             if (!isOpen) translationView.disable();
         });
+        favouriteIcon.hide();
     }
 
     private void setUpDictView() {
@@ -147,6 +158,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         translationTextView.reset();
         progressView.hide();
         dictView.reset();
+        favouriteIcon.hide();
     }
 
     @Override
@@ -156,6 +168,18 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             textWatcherSubscription.unsubscribe();
         }
         unregistrar.unregister();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -186,19 +210,45 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void onTranslationResult(Translation translation) {
+    public void onTranslationResult(Translation translation, String identifier) {
         if (translationView.hasText()) {
             translationTextView.setText(translation.getTranslatedText());
             dictView.reset();
+            Logger.log("onTranslationResult " + identifier);
+            currentIdentifier = identifier;
+            setUpFavouriteIcon(translation.isFavourite(), identifier);
         }
     }
 
     @Override
-    public void onDictionaryResult(Dictionary dictionary) {
+    public void onDictionaryResult(Dictionary dictionary, String identifier) {
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
             dictView.updateDictionary(dictionary);
+            Logger.log("onDictionaryResult " + identifier);
+            currentIdentifier = identifier;
+            setUpFavouriteIcon(dictionary.isFavourite(), identifier);
         }
+    }
+
+
+
+    private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
+        if (currentIdentifier.equals(identifier)) {
+            if (isFavourite) {
+                favouriteIcon.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+            } else {
+                favouriteIcon.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+            }
+            favouriteIcon.show();
+        }
+    }
+
+    @Subscribe
+    public void onFavouriteEvent(FavouriteEvent favouriteEvent) {
+        Logger.log("Current " + currentIdentifier);
+        Logger.log("favouriteEvent " + favouriteEvent.getIdentifier());
+        setUpFavouriteIcon(favouriteEvent.isFavourite(), favouriteEvent.getIdentifier());
     }
 
     @Override
@@ -207,6 +257,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         String targetLanguage = languagePair.getTargetLanguage().getFullLanguageName();
         sourceLanguageTextView.setText(sourceLanguage);
         targetLanguageTextView.setText(targetLanguage);
+    }
+
+    @Override
+    public void changeFavouriteIconState(boolean isFavourite, String identifier) {
+        setUpFavouriteIcon(isFavourite,identifier);
     }
 
     @Override
@@ -247,5 +302,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @OnClick({R.id.source_language_text_view, R.id.target_language_text_view, R.id.swap_languages})
     public void onViewClicked(View view) {
         presenter.handleToolbarClicks(view.getId());
+    }
+
+    @OnClick(R.id.favourite_icon)
+    public void onFavouriteClick() {
+        presenter.setFavourite(currentIdentifier);
     }
 }

@@ -11,8 +11,10 @@
         android:id="@+id/section_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dp"
-        android:padding="18dp"
+        android:layout_marginLeft="10dp"
+        android:paddingBottom="15dp"
+        android:paddingLeft="10dp"
+        android:paddingTop="15dp"
         android:text="Armenia"
         android:textColor="@color/light_gray"
         android:textSize="12sp" />

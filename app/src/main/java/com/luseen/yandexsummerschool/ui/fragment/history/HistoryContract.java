@@ -15,7 +15,7 @@ public interface HistoryContract {
 
     interface View extends ApiContract.View {
 
-        void onHistoryResult(RealmResults<History> historyList);
+        void onHistoryResult(List<History> historyList);
 
         void showLoading();
 

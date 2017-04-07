@@ -27,7 +27,8 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by Chatikyan on 31.03.2017.
  */
 
-public class SearchView extends RelativeLayout implements Viewable,
+public class SearchView extends RelativeLayout
+        implements Viewable,
         View.OnClickListener,
         CloseIcon.CloseIconClickListener {
 
@@ -71,6 +72,7 @@ public class SearchView extends RelativeLayout implements Viewable,
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
         textChangeSubscription = RxTextView.textChanges(searchEditText)
+                .skip(1)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .map(String::trim)

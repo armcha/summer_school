@@ -46,6 +46,10 @@ public class HistoryAndFavouriteViewHolder extends RecyclerView.ViewHolder {
         translatedTextView.setText(dictionary.getTranslatedText());
         String language = pair.getLookupLanguage().toUpperCase();
         translationLanguageTextView.setText(language);
+        onFavourite(history);
+    }
+
+    public void onFavourite(History history) {
         if (history.isFavourite()) {
             int favouriteColor = ContextCompat.getColor(App.getInstance(), R.color.colorPrimary);
             favouriteIcon.setColorFilter(favouriteColor, PorterDuff.Mode.SRC_IN);

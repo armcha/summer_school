@@ -10,16 +10,20 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.RxUtil;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 
 import io.realm.Realm;
 import rx.Observable;
+import rx.Subscription;
+import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -27,6 +31,8 @@ import rx.Observable;
 
 public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragmentContract.View>
         implements TranslationFragmentContract.Presenter {
+
+    private Subscription historySubscription;
 
     @Override
     public void onCreate() {
@@ -52,31 +58,39 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             getView().hideLoading();
             if (requestType == RequestType.TRANSLATION) {
                 Translation translation = ((Translation) response);
-                boolean isFavourite = isResponseFavourite(translation.getOriginalText());
+                String historyIdentifier = getIdentifier(translation.getOriginalText());
+                boolean isFavourite = isResponseFavourite(historyIdentifier);
                 translation.setFavourite(isFavourite);
+
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
+
                 createHistoryFromTranslationAndSave(translation);
-                getView().onTranslationResult(translation);
+
+                getView().onTranslationResult(translation, historyIdentifier);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
-                boolean isFavourite = isResponseFavourite(dictionary.getOriginalText());
+                String historyIdentifier = getIdentifier(dictionary.getOriginalText());
+                boolean isFavourite = isResponseFavourite(historyIdentifier);
                 dictionary.setFavourite(isFavourite);
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 createHistoryFromDictionaryAndSave(dictionary);
-                getView().onDictionaryResult(dictionary);
+                getView().onDictionaryResult(dictionary, historyIdentifier);
             }
         }
     }
 
-    //Checking if our response is in favourite list
-    private boolean isResponseFavourite(String originalText) {
-        Realm realm = Realm.getDefaultInstance();
+    private String getIdentifier(String originalText) {
         LanguagePair pair = dataManager.getLanguagePair();
         String pairId = pair.getSourceLanguage().getLangCode() +
                 pair.getTargetLanguage().getLangCode();
-        String historyIdentifier = originalText + pairId;
+        return originalText + pairId;
+    }
+
+    //Checking if our response is in favourite list
+    private boolean isResponseFavourite(String identifier) {
+        Realm realm = Realm.getDefaultInstance();
         History historyFromDb = realm.where(History.class)
-                .equalTo(History.IDENTIFIER, historyIdentifier)
+                .equalTo(History.IDENTIFIER, identifier)
                 .findFirst();
         realm.close();
         return historyFromDb != null && historyFromDb.isFavourite();
@@ -101,10 +115,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     private void saveHistory(History history) {
         dataManager.saveHistory(history);
-//        //Notify for first time, then realm result will be notified self
-//        if (dataManager.getHistoryListSize() == 1) {
-//            EventBus.getDefault().post(new HistoryEvent());
-//        }
+        EventBus.getDefault().post(new HistoryEvent());
     }
 
     @Override
@@ -182,5 +193,29 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     public void clearLastInputAndTranslate() {
         dataManager.saveLastTypedText(StringUtils.EMPTY);
         dataManager.saveLastTranslatedWord(StringUtils.EMPTY);
+    }
+
+    @Override
+    public void setFavourite(String identifier) {
+        boolean isFavourite = isResponseFavourite(identifier);
+        historySubscription = dataManager.getHistoryByIdentifier(identifier)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(history -> {
+                    Realm realm = Realm.getDefaultInstance();
+                    realm.beginTransaction();
+                    history.setFavourite(!history.isFavourite());
+                    realm.commitTransaction();
+                    EventBus.getDefault().post(new HistoryEvent());
+                    EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
+                    if (isViewAttached()) {
+                        getView().changeFavouriteIconState(history.isFavourite(), identifier);
+                    }
+                });
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        RxUtil.unsubscribe(historySubscription);
     }
 }

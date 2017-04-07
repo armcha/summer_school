@@ -52,8 +52,9 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
                 .subscribe(histories -> {
                     if (histories.size() == 0) {
                         getView().onEmptyResult();
+                    } else {
+                        getView().onHistoryResult(histories);
                     }
-                    getView().onHistoryResult(histories);
                 }, throwable -> {
                     Logger.log(throwable.getMessage());
                     getView().onError();

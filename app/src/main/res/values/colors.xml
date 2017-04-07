@@ -10,4 +10,5 @@
     <color name="black">#000</color>
     <color name="white">#fff</color>
     <color name="light_gray">#bdbdbd</color>
+    <color name="selected_item_color">#ebe9e9e9</color>
 </resources>
