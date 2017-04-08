@@ -9,7 +9,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Chatikyan on 02.04.2017.
  */
 
-public class History extends RealmObject {
+public class History extends RealmObject{
 
     public static final String TRANSLATED_TEXT = "dictionary.translatedText";
     public static final String ORIGINAL_TEXT = "dictionary.originalText";

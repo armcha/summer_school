@@ -4,7 +4,7 @@ import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.utils.Logger;
-import com.luseen.yandexsummerschool.utils.RxUtil;
+import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import io.realm.RealmResults;
 import rx.Observable;
@@ -51,7 +51,7 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(histories -> {
-                    Logger.log(" " + histories);
+                    Logger.log("getHistoryObservable " + histories.size());
                     if (histories.size() == 0) {
                         getView().onEmptyResult();
                     } else {
@@ -80,7 +80,7 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(compositeSubscription);
+        RxUtils.unsubscribe(compositeSubscription);
     }
 
     private Observable<RealmResults<History>> getHistory() {

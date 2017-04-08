@@ -14,8 +14,7 @@ import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
-import com.luseen.yandexsummerschool.utils.RxUtil;
+import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -23,7 +22,6 @@ import org.greenrobot.eventbus.EventBus;
 import io.realm.Realm;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -46,6 +44,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    //Show loading when request started
     @Override
     public void onStart(RequestType requestType) {
         if (isViewAttached()) {
@@ -53,6 +52,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    //Request finished on success
     @Override
     public <T> void onSuccess(RequestType requestType, T response) {
         if (isViewAttached()) {
@@ -64,15 +64,14 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 translation.setFavourite(isFavourite);
 
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
-
                 createHistoryFromTranslationAndSave(translation);
-
                 getView().onTranslationResult(translation, historyIdentifier);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
                 String historyIdentifier = getIdentifier(dictionary.getOriginalText());
                 boolean isFavourite = isResponseFavourite(historyIdentifier);
                 dictionary.setFavourite(isFavourite);
+
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 createHistoryFromDictionaryAndSave(dictionary);
                 getView().onDictionaryResult(dictionary, historyIdentifier);
@@ -80,6 +79,24 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    //Request finished on error
+    @Override
+    public void onError(RequestType requestType, Throwable throwable) {
+        if (isViewAttached()) {
+            if (HttpUtils.getYaError(throwable) == YaError.LANGUAGE_IS_NOT_SUPPORTED) {
+                //Making translation request, if dictionary request returns LANGUAGE_IS_NOT_SUPPORTED
+                LanguagePair pair = dataManager.getLanguagePair();
+                String translationLanguage = pair.getTargetLanguage().getLangCode();
+                String inputText = dataManager.getLastTypedText();
+                makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
+            } else {
+                getView().hideLoading();
+                getView().showError();
+            }
+        }
+    }
+
+    //Getting current history identifier
     private String getIdentifier(String originalText) {
         LanguagePair pair = dataManager.getLanguagePair();
         String pairId = pair.getSourceLanguage().getLangCode() +
@@ -114,41 +131,35 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         saveHistory(history);
     }
 
+    //Saving history and notifying history fragment to to reload data
     private void saveHistory(History history) {
         historySubscriptions.add(dataManager.saveHistory(history)
-                // FIXME: 07.04.2017 
-                //.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<History>() {
-                    @Override
-                    public void call(History history) {
-                        Logger.log(" ONCOMPLATE");
-                        EventBus.getDefault().post(new HistoryEvent());
-                    }
-                }));
+                .subscribe(history1 -> EventBus.getDefault().post(new HistoryEvent())));
     }
 
-    @Override
-    public void onError(RequestType requestType, Throwable throwable) {
-        if (isViewAttached()) {
-            if (HttpUtils.getYaError(throwable) == YaError.LANGUAGE_IS_NOT_SUPPORTED) {
-                //Making translation request, if dictionary request returns LANGUAGE_IS_NOT_SUPPORTED
-                LanguagePair pair = dataManager.getLanguagePair();
-                String translationLanguage = pair.getTargetLanguage().getLangCode();
-                String inputText = dataManager.getLastTypedText();
-                makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
-            } else {
-                getView().hideLoading();
-                getView().showError();
-            }
-        }
-    }
-
+    //handling user input
     @Override
     public void handleInputText(String inputText) {
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
+        String historyIdentifier = getIdentifier(inputText);
+        historySubscriptions.add(dataManager.getHistoryByIdentifier(historyIdentifier)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(history -> {
+                    boolean hasResultInDb = history != null && history.isValid();
+                    if (hasResultInDb) {//If we had history in db, just showing from db, otherwise making request
+                        Dictionary dictionary = history.getDictionary();
+                        getView().onDictionaryResult(dictionary, history.getIdentifier());
+                    } else {
+                        //Making both translate and dictionary request
+                        makeLookUpAndTranslateRequest(inputText);
+                    }
+                }, throwable -> getView().showError()));
+    }
+
+    private void makeLookUpAndTranslateRequest(String inputText) {
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
         String lookUpLanguage = pair.getLookupLanguage();
@@ -157,29 +168,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 translationLanguage,
                 lookUpLanguage);
         makeRequest(dictionaryObservable, RequestType.LOOKUP);
-        String identifier = getIdentifier(inputText);
-        /*historySubscriptions.add(dataManager.getHistoryByIdentifier(identifier)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<History>() {
-                    @Override
-                    public void call(History history) {
-                        boolean hasResultInDb = history != null;
-                        Logger.log(" " + hasResultInDb);
-                        if (hasResultInDb) {
-                            Logger.log(" " + history.getDictionary());
-                            //onSuccess(RequestType.LOOKUP, history.getDictionary());
-                        } else {
-                            //Making both translate and dictionary request
-                            // makeRequest(dictionaryObservable, RequestType.LOOKUP);
-                        }
-                    }
-                }, new Action1<Throwable>() {
-                    @Override
-                    public void call(Throwable throwable) {
-                        Logger.log(" " + throwable.getMessage());
-                    }
-                }));*/
     }
 
     @Override
@@ -197,14 +185,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 break;
             case R.id.swap_languages:
                 //Swap current languages, save it and make request
+                // FIXME: 08.04.2017 get from db
                 LanguagePair dbLanguagePair = dataManager.getLanguagePair();
-                Logger.log("dbLanguagePair " + dbLanguagePair);
                 LanguagePair languagePair = new LanguagePair();
                 languagePair.setSourceLanguage(dbLanguagePair.getTargetLanguage());
                 languagePair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
-                Logger.log("Created  " + languagePair);
                 dataManager.saveLanguagePair(languagePair);
-                Logger.log("After save " + dataManager.getLanguagePair());
 
                 getView().animateLanguageSwap(languagePair);
                 getView().setTranslationViewText(dataManager.getLastTranslatedText());
@@ -248,6 +234,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(historySubscriptions);
+        RxUtils.unsubscribe(historySubscriptions);
     }
 }

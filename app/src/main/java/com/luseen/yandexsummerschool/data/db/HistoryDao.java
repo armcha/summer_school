@@ -8,6 +8,7 @@ import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
+import io.realm.Case;
 import io.realm.Realm;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
@@ -29,7 +30,7 @@ public class HistoryDao {
     public Observable<History> saveHistory(History history) {
         return Observable.fromEmitter(emitter -> {
             Realm realm = Realm.getDefaultInstance();
-            realm.executeTransaction(r -> {
+            realm.executeTransactionAsync(r -> {
                 int historyId = RealmUtils.generateId(r, History.class);
                 int definitionId = RealmUtils.generateId(r, Definition.class);
                 int dictionaryTranslationId = RealmUtils.generateId(r, DictionaryTranslation.class);
@@ -53,10 +54,10 @@ public class HistoryDao {
                     }
                 }
                 r.copyToRealmOrUpdate(history);
+            }, () -> {
                 emitter.onNext(history);
                 emitter.onCompleted();
-            });
-
+            }, emitter::onError);
             realm.close();
         }, Emitter.BackpressureMode.BUFFER);
     }
@@ -78,32 +79,29 @@ public class HistoryDao {
         return histories;
     }
 
-    public History getHistoryByIdentifier(String identifier) {
+    public Observable<History> getHistoryByIdentifier(String identifier) {
         Realm realm = Realm.getDefaultInstance();
-        History history = realm.where(History.class)
+        Observable<History> history = realm
+                .where(History.class)
                 .equalTo(History.IDENTIFIER, identifier)
-                .findFirst();
+                .findFirstAsync()
+                .asObservable()
+                .filter(realmObject -> realmObject.isLoaded())
+                .first()
+                .map(realmObject -> ((History) realmObject));
         realm.close();
         return history;
     }
 
-    private RealmQuery<History> getBaseQuery(String keyWord) {
-        Realm realm = Realm.getDefaultInstance();
-        RealmQuery<History> realmQuery = realm.where(History.class)
-                .beginGroup()
-                .contains(History.ORIGINAL_TEXT, keyWord)
-                .or()
-                .contains(History.TRANSLATED_TEXT, keyWord)
-                .endGroup();
-        realm.close();
-        return realmQuery;
-    }
 
-    public RealmResults<History> getHistoryList() {
+    public Observable<RealmResults<History>> getHistoryList() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<History> histories = realm
+        Observable<RealmResults<History>> histories = realm
                 .where(History.class)
-                .findAllSorted(History.ID, Sort.DESCENDING);
+                .findAllSortedAsync(History.ID, Sort.DESCENDING)
+                .asObservable()
+                .filter(RealmResults::isLoaded)// isLoaded is true when query is completed
+                .first(); // Only get the first result and then complete
         realm.close();
         return histories;
     }
@@ -132,5 +130,17 @@ public class HistoryDao {
         RealmResults<History> historyRealmResults = realm.where(History.class).findAll();
         realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
         realm.close();
+    }
+
+    private RealmQuery<History> getBaseQuery(String keyWord) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmQuery<History> realmQuery = realm.where(History.class)
+                .beginGroup()
+                .contains(History.ORIGINAL_TEXT, keyWord, Case.INSENSITIVE)
+                .or()
+                .contains(History.TRANSLATED_TEXT, keyWord, Case.INSENSITIVE)
+                .endGroup();
+        realm.close();
+        return realmQuery;
     }
 }

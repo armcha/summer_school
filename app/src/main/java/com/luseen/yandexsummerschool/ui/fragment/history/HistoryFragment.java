@@ -151,11 +151,13 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View,
 
     @Override
     public void onResetClicked() {
+        Logger.log("onResetClicked ");
         presenter.resetHistory();
     }
 
     @Override
     public void onEmptyInput() {
+        Logger.log("onEmptyInput ");
         presenter.resetHistory();
     }
 }

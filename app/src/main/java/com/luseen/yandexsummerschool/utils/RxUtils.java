@@ -7,9 +7,9 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Chatikyan on 02.04.2017.
  */
 
-public class RxUtil {
+public class RxUtils {
 
-    private RxUtil() {
+    private RxUtils() {
         throw new RuntimeException("Private constructor cannot be accessed");
     }
 
@@ -20,6 +20,7 @@ public class RxUtil {
         }
     }
 
+    //Helper method to unsubscribe CompositeSubscription
     public static void unsubscribe(CompositeSubscription compositeSubscription) {
         if (compositeSubscription != null &&
                 !compositeSubscription.isUnsubscribed() &&

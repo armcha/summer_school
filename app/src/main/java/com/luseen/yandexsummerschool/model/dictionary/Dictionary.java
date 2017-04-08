@@ -17,7 +17,6 @@ public class Dictionary extends RealmObject {
     private String translatedText;
     private String originalText;
     private boolean isFavourite;
-
     @SerializedName("def")
     private RealmList<Definition> definition = new RealmList<>();
 

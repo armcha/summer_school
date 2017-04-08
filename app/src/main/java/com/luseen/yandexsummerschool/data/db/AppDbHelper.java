@@ -8,7 +8,6 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import io.realm.RealmResults;
 import rx.Observable;
-import rx.Single;
 
 /**
  * Created by Chatikyan on 25.03.2017.
@@ -27,12 +26,12 @@ public class AppDbHelper implements DbHelper {
 
     @Override
     public Observable<History> getHistoryByIdentifier(String identifier) {
-        return Observable.fromCallable(() -> historyDao.getHistoryByIdentifier(identifier));
+        return historyDao.getHistoryByIdentifier(identifier);
     }
 
     @Override
     public Observable<RealmResults<History>> getHistoryList() {
-        return Observable.fromCallable(historyDao::getHistoryList);
+        return historyDao.getHistoryList();
     }
 
     @Override

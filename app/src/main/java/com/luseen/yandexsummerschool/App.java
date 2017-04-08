@@ -8,6 +8,7 @@ import io.realm.DynamicRealm;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.RealmMigration;
+import io.realm.rx.RealmObservableFactory;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -32,6 +33,7 @@ public class App extends Application {
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
                 .name("yandexSummerSchool.realm")
+                .rxFactory(new RealmObservableFactory())
                 .deleteRealmIfMigrationNeeded()
                 .build();
         Realm.setDefaultConfiguration(config);

@@ -2,13 +2,10 @@ package com.luseen.yandexsummerschool.ui.fragment.favourite;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
-import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.utils.Logger;
-import com.luseen.yandexsummerschool.utils.RxUtil;
+import com.luseen.yandexsummerschool.utils.RxUtils;
 
-import io.realm.RealmResults;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -77,6 +74,6 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
     @Override
     public void onDestroy() {
         super.onDestroy();
-        RxUtil.unsubscribe(compositeSubscription);
+        RxUtils.unsubscribe(compositeSubscription);
     }
 }
