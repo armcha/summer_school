@@ -242,8 +242,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Subscribe
     public void onFavouriteEvent(FavouriteEvent favouriteEvent) {
-        Logger.log("Current " + currentIdentifier);
-        Logger.log("favouriteEvent " + favouriteEvent.getIdentifier());
         setUpFavouriteIcon(favouriteEvent.isFavourite(), favouriteEvent.getIdentifier());
     }
 

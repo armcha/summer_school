@@ -204,8 +204,7 @@ public class DictionaryView extends NestedScrollView implements Viewable {
                         }
                         //Checking if has example, and building text view
                         TextView examplesTextView = baseTextView(blue);
-                        // FIXME: 07.04.2017 typeFace null
-                        examplesTextView.setTypeface(null, Typeface.ITALIC);
+                        examplesTextView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
                         linearLayout.addView(examplesTextView);
                         //in dp, left margin from parent
                         ViewUtils.setViewMargins(examplesTextView, new int[]{40, 0, 0, 0});

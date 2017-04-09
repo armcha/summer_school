@@ -14,8 +14,6 @@ import io.realm.annotations.PrimaryKey;
 public class Definition extends RealmObject {
 
     @PrimaryKey
-    private int id;
-
     @SerializedName("text")
     private String word;
 
@@ -60,11 +58,13 @@ public class Definition extends RealmObject {
         this.translations = translations;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    @Override
+    public String toString() {
+        return "Definition{" +
+                ", word='" + word + '\'' +
+                ", partOfSpeech='" + partOfSpeech + '\'' +
+                ", transcription='" + transcription + '\'' +
+                ", translations=" + translations +
+                '}';
     }
 }

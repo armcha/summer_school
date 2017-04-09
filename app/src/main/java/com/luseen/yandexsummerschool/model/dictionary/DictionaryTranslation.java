@@ -3,7 +3,7 @@ package com.luseen.yandexsummerschool.model.dictionary;
 import com.google.gson.annotations.SerializedName;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -17,8 +17,6 @@ import io.realm.annotations.PrimaryKey;
 public class DictionaryTranslation extends RealmObject {
 
     @PrimaryKey
-    private int id;
-
     @SerializedName("text")
     private String word;
 
@@ -74,30 +72,20 @@ public class DictionaryTranslation extends RealmObject {
     }
 
     public List<Synonym> getSynonyms() {
-        return synonyms == null ? new ArrayList<>() : synonyms;
+        return synonyms == null ? Collections.emptyList() : synonyms;
     }
 
     public List<TranslatedString> getMeanings() {
-        return meanings == null ? new ArrayList<>() : meanings;
+        return meanings == null ? Collections.emptyList() : meanings;
     }
 
     public List<Example> getExamples() {
-        return examples == null ? new ArrayList<>() : examples;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+        return examples == null ? Collections.emptyList() : examples;
     }
 
     @Override
     public String toString() {
-        return "DictionaryTranslation{" +
-                "id=" + id +
-                ", word='" + word + '\'' +
+        return "DictionaryTranslation{ word='" + word + '\'' +
                 ", partOfSpeech='" + partOfSpeech + '\'' +
                 ", gen='" + gen + '\'' +
                 ", synonyms=" + synonyms +

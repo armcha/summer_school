@@ -36,22 +36,22 @@ public class LanguagePairDao {
     }
 
     public LanguagePair getLanguagePair() {
+        Realm realm = Realm.getDefaultInstance();
         try {
-            Realm realm = Realm.getDefaultInstance();
             LanguagePair languagePair = realm.where(LanguagePair.class)
                     .equalTo(LanguagePair.ID, LanguagePair.SINGLE_ID)
                     .findFirst();
-            // FIXME: 07.04.2017
             if (languagePair != null) {
-                //realm.close();
                 return languagePair;
             } else {
-                //realm.close();
                 return getDefaultLanguagePair();
             }
         } catch (Throwable throwable) {
             ExceptionTracker.trackException(throwable);
-            Logger.log("Failed to save pair " + throwable.getMessage());
+            Logger.log("Failed to save language pair " + throwable.getMessage());
+        } finally {
+            // FIXME: 07.04.2017
+            //realm.close();
         }
         return getDefaultLanguagePair();
     }

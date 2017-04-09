@@ -6,6 +6,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Case;
@@ -27,32 +28,28 @@ public class HistoryDao {
         return instance;
     }
 
+    // TODO: 08.04.2017 change to Observable -> Completable
     public Observable<History> saveHistory(History history) {
         return Observable.fromEmitter(emitter -> {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransactionAsync(r -> {
-                int historyId = RealmUtils.generateId(r, History.class);
-                int definitionId = RealmUtils.generateId(r, Definition.class);
-                int dictionaryTranslationId = RealmUtils.generateId(r, DictionaryTranslation.class);
+                int uniqueId = RealmUtils.generateId(r, History.class);
+                //Logger.log("uniqueId " + uniqueId);
                 Dictionary dictionary = history.getDictionary();
                 dictionary.setIdentifier(dictionary.getOriginalText() + dictionary.getTranslatedText());
                 LanguagePair pair = history.getLanguagePair();
-                String pairId = pair.getSourceLanguage().getLangCode() +
-                        pair.getTargetLanguage().getLangCode();
-                LanguagePair historyLanguagePair = new LanguagePair();
-                historyLanguagePair.setId(pairId);
-                historyLanguagePair.setSourceLanguage(pair.getSourceLanguage());
-                historyLanguagePair.setTargetLanguage(pair.getTargetLanguage());
-                history.setLanguagePair(historyLanguagePair);
+                String pairId = pair.getSourceLanguage().getLangCode() + pair.getTargetLanguage().getLangCode();
+                LanguagePair historyLanguagePair = createLanguagePair(pair);
                 String historyIdentifier = dictionary.getOriginalText() + pairId;
+                history.setLanguagePair(historyLanguagePair);
                 history.setIdentifier(historyIdentifier);
-                history.setId(historyId);
-                for (Definition definition : dictionary.getDefinition()) {
-                    definition.setId(definitionId);
-                    for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
-                        dictionaryTranslation.setId(dictionaryTranslationId);
-                    }
-                }
+                history.setId(uniqueId);
+                //for (Definition definition : dictionary.getDefinition()) {
+                //    definition.setId(++uniqueId);
+                //    //for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
+                //    //    dictionaryTranslation.setId(++uniqueId);
+                //    //}
+                //}
                 r.copyToRealmOrUpdate(history);
             }, () -> {
                 emitter.onNext(history);
@@ -60,6 +57,16 @@ public class HistoryDao {
             }, emitter::onError);
             realm.close();
         }, Emitter.BackpressureMode.BUFFER);
+    }
+
+    private LanguagePair createLanguagePair(LanguagePair languagePair) {
+        String pairId = languagePair.getSourceLanguage().getLangCode()
+                + languagePair.getTargetLanguage().getLangCode();
+        LanguagePair historyLanguagePair = new LanguagePair();
+        historyLanguagePair.setId(pairId);
+        historyLanguagePair.setSourceLanguage(languagePair.getSourceLanguage());
+        historyLanguagePair.setTargetLanguage(languagePair.getTargetLanguage());
+        return historyLanguagePair;
     }
 
     public RealmResults<History> getFavouritesByKeyWord(String keyWord) {

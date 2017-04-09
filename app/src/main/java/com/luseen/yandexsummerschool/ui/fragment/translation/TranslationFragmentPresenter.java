@@ -135,7 +135,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     private void saveHistory(History history) {
         historySubscriptions.add(dataManager.saveHistory(history)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(history1 -> EventBus.getDefault().post(new HistoryEvent())));
+                .subscribe(__ -> EventBus.getDefault().post(new HistoryEvent())));
     }
 
     //handling user input
@@ -151,6 +151,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                     boolean hasResultInDb = history != null && history.isValid();
                     if (hasResultInDb) {//If we had history in db, just showing from db, otherwise making request
                         Dictionary dictionary = history.getDictionary();
+                        // TODO: 08.04.2017 add helper method
+                        Realm realm = Realm.getDefaultInstance();
+                        realm.beginTransaction();
+                        dictionary.setFavourite(history.isFavourite());
+                        realm.commitTransaction();
+                        realm.close();
                         getView().onDictionaryResult(dictionary, history.getIdentifier());
                     } else {
                         //Making both translate and dictionary request
