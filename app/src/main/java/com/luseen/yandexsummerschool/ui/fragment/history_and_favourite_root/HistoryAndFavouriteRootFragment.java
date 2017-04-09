@@ -9,15 +9,18 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
+import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouritePagerAdapter;
-import com.luseen.yandexsummerschool.ui.fragment.favourite.FavouriteFragment;
-import com.luseen.yandexsummerschool.ui.fragment.history.HistoryFragment;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.FontTabLayout;
-import com.luseen.yandexsummerschool.utils.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -32,13 +35,13 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     @BindView(R.id.view_pager)
     ViewPager viewPager;
 
+    @BindView(R.id.delete_history_icon)
+    ImageView deleteHistoryIcon;
+
     private HistoryAndFavouritePagerAdapter adapter;
 
     public static HistoryAndFavouriteRootFragment newInstance() {
-        Bundle args = new Bundle();
-        HistoryAndFavouriteRootFragment fragment = new HistoryAndFavouriteRootFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new HistoryAndFavouriteRootFragment();
     }
 
     @Override
@@ -60,6 +63,7 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
     }
+
     @Override
     protected boolean whitButterKnife() {
         return true;
@@ -71,6 +75,7 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     }
 
     private void showDeleteDialog() {
+        // TODO: 09.04.2017 Add real title and messages
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Delete");
         builder.setMessage("Really delete ?")
@@ -83,20 +88,42 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     }
 
     @Override
-    public void onHistoryAndFavouriteCleared() {
-        Logger.log("onHistoryAndFavouriteCleared ");
-        Fragment fragmentByIndex = adapter.getFragmentByIndex(viewPager.getCurrentItem());
-//        if (fragmentByIndex instanceof HistoryFragment) {
-//            HistoryFragment historyFragment = ((HistoryFragment) fragmentByIndex);
-//            historyFragment.onEmptyResult();
-//        } else if (fragmentByIndex instanceof FavouriteFragment) {
-//            FavouriteFragment favouriteFragment = ((FavouriteFragment) fragmentByIndex);
-//            favouriteFragment.onEmptyResult();
-//        }
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-        if (fragmentByIndex instanceof HistoryAndFavouriteBaseFragment) {
-            HistoryAndFavouriteBaseFragment historyFragment = ((HistoryAndFavouriteBaseFragment) fragmentByIndex);
-            historyFragment.onEmptyResult();
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onHistoryChange(HistoryEvent historyEvent) {
+        presenter.countHistory();
+    }
+
+    @Override
+    public void onHistoryAndFavouriteCleared() {
+        for (int i = 0; i < adapter.getCount(); i++) {
+            Fragment fragmentByIndex = adapter.getFragmentByIndex(i);
+            if (fragmentByIndex instanceof HistoryAndFavouriteBaseFragment) {
+                HistoryAndFavouriteBaseFragment historyFragment =
+                        ((HistoryAndFavouriteBaseFragment) fragmentByIndex);
+                historyFragment.onEmptyResult();
+            }
+            EventBus.getDefault().post(new ResetEvent());
         }
+    }
+
+    @Override
+    public void showDeleteIcon() {
+        deleteHistoryIcon.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void hideDeleteIcon() {
+        deleteHistoryIcon.setVisibility(View.GONE);
     }
 }

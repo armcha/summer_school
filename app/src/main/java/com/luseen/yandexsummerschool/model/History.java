@@ -15,7 +15,7 @@ public class History extends RealmObject{
     public static final String ORIGINAL_TEXT = "dictionary.originalText";
     public static final String IS_FAVOURITE = "isFavourite";
     public static final String IDENTIFIER = "identifier";
-    public static final String ID = "id";
+    public static final String ORDER_ID = "orderId";
 
     @PrimaryKey
     private String identifier;
@@ -24,9 +24,8 @@ public class History extends RealmObject{
     private Dictionary dictionary;
     private boolean isFavourite = false;
 
-    // TODO: 04.04.2017 change id -> orderId
     //need for ordering
-    private int id;
+    private int orderId;
 
     public History() {
     }
@@ -60,16 +59,16 @@ public class History extends RealmObject{
         this.identifier = identifier;
     }
 
-    public int getId() {
-        return id;
+    public int getOrderId() {
+        return orderId;
     }
 
     public String getIdentifier() {
         return identifier;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setOrderId(int orderId) {
+        this.orderId = orderId;
     }
 
 
@@ -80,7 +79,7 @@ public class History extends RealmObject{
                 ", languagePair=" + languagePair +
                 ", dictionary=" + dictionary +
                 ", isFavourite=" + isFavourite +
-                ", id=" + id +
+                ", orderId=" + orderId +
                 '}';
     }
 }

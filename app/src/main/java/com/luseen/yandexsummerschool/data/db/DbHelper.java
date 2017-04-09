@@ -6,6 +6,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import io.realm.RealmResults;
+import rx.Completable;
 import rx.Observable;
 import rx.Single;
 
@@ -15,7 +16,7 @@ import rx.Single;
 
 public interface DbHelper {
 
-    Observable<History> saveHistory(History history);
+    Completable saveHistory(History history);
 
     Observable<History> getHistoryByIdentifier(String identifier);
 

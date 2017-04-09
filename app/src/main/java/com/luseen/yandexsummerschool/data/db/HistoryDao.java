@@ -11,10 +11,11 @@ import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Case;
 import io.realm.Realm;
+import io.realm.RealmObject;
 import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
-import rx.Emitter;
+import rx.Completable;
 import rx.Observable;
 
 public class HistoryDao {
@@ -28,13 +29,12 @@ public class HistoryDao {
         return instance;
     }
 
-    // TODO: 08.04.2017 change to Observable -> Completable
-    public Observable<History> saveHistory(History history) {
-        return Observable.fromEmitter(emitter -> {
+    public Completable saveHistory(History history) {
+        return Completable.fromEmitter(emitter -> {
             Realm realm = Realm.getDefaultInstance();
-            realm.executeTransactionAsync(r -> {
-                int uniqueId = RealmUtils.generateId(r, History.class);
-                //Logger.log("uniqueId " + uniqueId);
+            realm.executeTransaction(r -> {
+                int uniqueId = RealmUtils.generateId(r, Definition.class);
+                Logger.log("uniqueId " + uniqueId);
                 Dictionary dictionary = history.getDictionary();
                 dictionary.setIdentifier(dictionary.getOriginalText() + dictionary.getTranslatedText());
                 LanguagePair pair = history.getLanguagePair();
@@ -43,20 +43,16 @@ public class HistoryDao {
                 String historyIdentifier = dictionary.getOriginalText() + pairId;
                 history.setLanguagePair(historyLanguagePair);
                 history.setIdentifier(historyIdentifier);
-                history.setId(uniqueId);
-                //for (Definition definition : dictionary.getDefinition()) {
-                //    definition.setId(++uniqueId);
-                //    //for (DictionaryTranslation dictionaryTranslation : definition.getTranslations()) {
-                //    //    dictionaryTranslation.setId(++uniqueId);
-                //    //}
-                //}
+                int orderId = RealmUtils.generateOrderId(r, History.class);
+                history.setOrderId(orderId);
+                for (Definition definition : dictionary.getDefinition()) {
+                    definition.setId(++uniqueId);
+                }
                 r.copyToRealmOrUpdate(history);
-            }, () -> {
-                emitter.onNext(history);
                 emitter.onCompleted();
-            }, emitter::onError);
+            });
             realm.close();
-        }, Emitter.BackpressureMode.BUFFER);
+        });
     }
 
     private LanguagePair createLanguagePair(LanguagePair languagePair) {
@@ -73,7 +69,7 @@ public class HistoryDao {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<History> realmQuery = getBaseQuery(keyWord)
                 .equalTo(History.IS_FAVOURITE, true);
-        RealmResults<History> favourites = realmQuery.findAllSorted(History.ID, Sort.DESCENDING);
+        RealmResults<History> favourites = realmQuery.findAllSorted(History.ORDER_ID, Sort.DESCENDING);
         realm.close();
         return favourites;
     }
@@ -81,7 +77,7 @@ public class HistoryDao {
     public RealmResults<History> getHistoriesByKeyWord(String keyWord) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<History> realmQuery = getBaseQuery(keyWord);
-        RealmResults<History> histories = realmQuery.findAllSorted(History.ID, Sort.DESCENDING);
+        RealmResults<History> histories = realmQuery.findAllSorted(History.ORDER_ID, Sort.DESCENDING);
         realm.close();
         return histories;
     }
@@ -105,7 +101,7 @@ public class HistoryDao {
         Realm realm = Realm.getDefaultInstance();
         Observable<RealmResults<History>> histories = realm
                 .where(History.class)
-                .findAllSortedAsync(History.ID, Sort.DESCENDING)
+                .findAllSortedAsync(History.ORDER_ID, Sort.DESCENDING)
                 .asObservable()
                 .filter(RealmResults::isLoaded)// isLoaded is true when query is completed
                 .first(); // Only get the first result and then complete
@@ -118,7 +114,7 @@ public class HistoryDao {
         RealmResults<History> favourites = realm
                 .where(History.class)
                 .equalTo(History.IS_FAVOURITE, true)
-                .findAllSorted(History.ID, Sort.DESCENDING);
+                .findAllSorted(History.ORDER_ID, Sort.DESCENDING);
         realm.close();
         return favourites;
     }
@@ -134,9 +130,23 @@ public class HistoryDao {
 
     public void clearHistoryAndFavouriteData() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<History> historyRealmResults = realm.where(History.class).findAll();
-        realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
+//        RealmResults<History> historyRealmResults = realm.where(History.class).findAll();
+//        realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
+//        RealmResults<Definition> definitionRealmResults = realm.where(Definition.class).findAll();
+//        realm.executeTransaction(realm1 -> definitionRealmResults.deleteAllFromRealm());
+//        RealmResults<DictionaryTranslation> dictionaryTranslations = realm.where(DictionaryTranslation.class).findAll();
+//        realm.executeTransaction(realm1 -> dictionaryTranslations.deleteAllFromRealm());
+
+        deleteRealmResult(History.class);
+        deleteRealmResult(Definition.class);
+        deleteRealmResult(DictionaryTranslation.class);
         realm.close();
+    }
+
+    private <R extends RealmObject> void deleteRealmResult(Class<R> clazz) {
+        Realm realm = Realm.getDefaultInstance();
+        RealmResults<R> realmResults = realm.where(clazz).findAll();
+        realm.executeTransaction(realm1 -> realmResults.deleteAllFromRealm());
     }
 
     private RealmQuery<History> getBaseQuery(String keyWord) {

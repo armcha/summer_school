@@ -1,5 +1,7 @@
 package com.luseen.yandexsummerschool.utils;
 
+import com.luseen.yandexsummerschool.model.History;
+
 import io.realm.Realm;
 import io.realm.RealmObject;
 
@@ -15,12 +17,11 @@ public class RealmUtils {
 
     public static int generateId(Realm realm, Class<? extends RealmObject> targetClass) {
         Number number = realm.where(targetClass).max("id");
-        int id;
-        if (number == null) {
-            id = 1;
-        } else {
-            id = number.intValue() + 1;
-        }
-        return id;
+        return number == null ? 1 : number.intValue() + 1;
+    }
+
+    public static int generateOrderId(Realm realm, Class<? extends RealmObject> targetClass) {
+        Number number = realm.where(targetClass).max(History.ORDER_ID);
+        return number == null ? 1 : number.intValue() + 1;
     }
 }

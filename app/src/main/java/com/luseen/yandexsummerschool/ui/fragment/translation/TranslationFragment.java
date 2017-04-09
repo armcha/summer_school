@@ -24,6 +24,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
@@ -32,7 +33,6 @@ import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
@@ -291,6 +291,14 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onClosePressed(CloseIcon closeIcon) {
         translationView.reset();
         reset();
+    }
+
+    @Subscribe
+    public void resetAll(ResetEvent resetEvent) {
+        if (translationView.hasText()) {
+            translationView.resetTextAndIcon();
+            reset();
+        }
     }
 
     @OnClick({R.id.source_language_text_view, R.id.target_language_text_view, R.id.swap_languages})

@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 import android.app.Activity;
 
+import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
@@ -12,6 +13,7 @@ import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.RxUtils;
@@ -48,7 +50,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void onStart(RequestType requestType) {
         if (isViewAttached()) {
-            getView().showLoading();
+            //getView().showLoading();
         }
     }
 
@@ -135,7 +137,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     private void saveHistory(History history) {
         historySubscriptions.add(dataManager.saveHistory(history)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(__ -> EventBus.getDefault().post(new HistoryEvent())));
+                .subscribe(() -> EventBus.getDefault().post(new HistoryEvent())));
     }
 
     //handling user input
@@ -144,6 +146,9 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
+        if (isViewAttached()) {
+            getView().showLoading();
+        }
         String historyIdentifier = getIdentifier(inputText);
         historySubscriptions.add(dataManager.getHistoryByIdentifier(historyIdentifier)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -157,12 +162,19 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                         dictionary.setFavourite(history.isFavourite());
                         realm.commitTransaction();
                         realm.close();
-                        getView().onDictionaryResult(dictionary, history.getIdentifier());
+                        dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
+                        if (isViewAttached()) {
+                            getView().hideLoading();
+                            getView().onDictionaryResult(dictionary, history.getIdentifier());
+                        }
                     } else {
                         //Making both translate and dictionary request
                         makeLookUpAndTranslateRequest(inputText);
                     }
-                }, throwable -> getView().showError()));
+                }, throwable -> {
+                    getView().hideLoading();
+                    getView().showError();
+                }));
     }
 
     private void makeLookUpAndTranslateRequest(String inputText) {
@@ -191,7 +203,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 break;
             case R.id.swap_languages:
                 //Swap current languages, save it and make request
-                // FIXME: 08.04.2017 get from db
                 LanguagePair dbLanguagePair = dataManager.getLanguagePair();
                 LanguagePair languagePair = new LanguagePair();
                 languagePair.setSourceLanguage(dbLanguagePair.getTargetLanguage());

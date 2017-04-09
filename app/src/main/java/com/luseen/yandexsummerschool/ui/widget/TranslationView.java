@@ -62,7 +62,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 super.onTextChanged(s, start, before, count);
-                if (count > 0 ) {
+                if (count > 0) {
                     closeIcon.show();
                 } else if (s.length() == 0) {
                     closeIcon.hide();
@@ -177,9 +177,13 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     }
 
     public void reset() {
+        resetTextAndIcon();
+        if (!isEnable) enable();
+    }
+
+    public void resetTextAndIcon() {
         translationEditText.setText(StringUtils.EMPTY);
         closeIcon.hide();
-        if (!isEnable) enable();
     }
 
     public CloseIcon getCloseIcon() {

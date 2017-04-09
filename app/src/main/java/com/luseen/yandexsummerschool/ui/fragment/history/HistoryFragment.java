@@ -16,6 +16,7 @@ import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
+import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
 import com.luseen.yandexsummerschool.utils.Logger;
@@ -27,7 +28,7 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class HistoryFragment extends ApiFragment<HistoryContract.View,
+public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryContract.View,
         HistoryContract.Presenter>
         implements HistoryContract.View,
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
@@ -43,7 +44,6 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View,
     InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
 
     private HistoryAndFavouriteRecyclerAdapter adapter;
-    private List<History> historyList;
 
     public static HistoryFragment newInstance() {
         return new HistoryFragment();
@@ -60,7 +60,7 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View,
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoText("This is test text for testing");
+        infoShowerCoordinatorLayout.setInfoText("This is test text for testing History");
         infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_fav);
     }
 
@@ -77,11 +77,10 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View,
 
     @Override
     public void onHistoryResult(List<History> historyList) {
-        this.historyList = historyList;
-        setUpOrUpdateRecyclerView();
+        setUpOrUpdateRecyclerView(historyList);
     }
 
-    private void setUpOrUpdateRecyclerView() {
+    private void setUpOrUpdateRecyclerView(List<History> historyList) {
         infoShowerCoordinatorLayout.hideInfo();
         searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
@@ -120,18 +119,6 @@ public class HistoryFragment extends ApiFragment<HistoryContract.View,
     public void onChange(HistoryEvent historyEvent) {
         Logger.log("History on Change ");
         presenter.fetchHistory();
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

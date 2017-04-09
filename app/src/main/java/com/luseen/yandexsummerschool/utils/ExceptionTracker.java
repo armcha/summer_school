@@ -7,6 +7,6 @@ package com.luseen.yandexsummerschool.utils;
 public class ExceptionTracker {
 
     public static void trackException(Throwable throwable) {
-        Logger.releaseLog("ExceptionTracker " + throwable.getMessage());
+        Logger.log("ExceptionTracker " + throwable.getMessage());
     }
 }

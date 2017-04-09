@@ -11,6 +11,12 @@ public class HistoryAndFavouritePresenter extends ApiPresenter<HistoryAndFavouri
         implements HistoryAndFavouriteContract.Presenter {
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        countHistory();
+    }
+
+    @Override
     public void onStart(RequestType requestType) {
 
     }
@@ -25,12 +31,24 @@ public class HistoryAndFavouritePresenter extends ApiPresenter<HistoryAndFavouri
 
     }
 
-
     @Override
     public void clearHistoryAndFavouriteData() {
         dataManager.clearHistoryAndFavouriteData();
-        if(isViewAttached()){
+        if (isViewAttached()) {
             getView().onHistoryAndFavouriteCleared();
+            countHistory();
+        }
+    }
+
+    @Override
+    public void countHistory() {
+        if (isViewAttached()) {
+            int historySize = dataManager.getHistoryListSize();
+            if (historySize > 0) {
+                getView().showDeleteIcon();
+            } else {
+                getView().hideDeleteIcon();
+            }
         }
     }
 }

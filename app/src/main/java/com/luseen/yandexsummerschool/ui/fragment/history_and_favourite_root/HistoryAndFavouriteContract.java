@@ -11,9 +11,16 @@ public interface HistoryAndFavouriteContract {
     interface View extends ApiContract.View {
 
         void onHistoryAndFavouriteCleared();
+
+        void showDeleteIcon();
+
+        void hideDeleteIcon();
     }
 
     interface Presenter extends ApiContract.Presenter<View> {
+
         void clearHistoryAndFavouriteData();
+
+        void countHistory();
     }
 }

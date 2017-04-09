@@ -29,9 +29,7 @@ public class LanguagePairDao {
 
     public void saveLanguagePair(LanguagePair languagePair) {
         Realm realm = Realm.getDefaultInstance();
-        realm.beginTransaction();
-        realm.copyToRealmOrUpdate(languagePair);
-        realm.commitTransaction();
+        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(languagePair));
         realm.close();
     }
 
@@ -49,9 +47,6 @@ public class LanguagePairDao {
         } catch (Throwable throwable) {
             ExceptionTracker.trackException(throwable);
             Logger.log("Failed to save language pair " + throwable.getMessage());
-        } finally {
-            // FIXME: 07.04.2017
-            //realm.close();
         }
         return getDefaultLanguagePair();
     }

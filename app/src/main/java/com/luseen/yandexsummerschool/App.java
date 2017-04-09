@@ -4,10 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import io.realm.DynamicRealm;
+import com.luseen.yandexsummerschool.utils.RxBus;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmMigration;
 import io.realm.rx.RealmObservableFactory;
 
 /**

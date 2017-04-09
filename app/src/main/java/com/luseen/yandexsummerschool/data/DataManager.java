@@ -17,6 +17,7 @@ import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 
 import io.realm.RealmResults;
+import rx.Completable;
 import rx.Observable;
 
 /**
@@ -70,7 +71,7 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<History> saveHistory(History History) {
+    public Completable saveHistory(History History) {
         return appDbHelper.saveHistory(History);
     }
 

@@ -7,6 +7,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 
 import io.realm.RealmResults;
+import rx.Completable;
 import rx.Observable;
 
 /**
@@ -20,7 +21,7 @@ public class AppDbHelper implements DbHelper {
     private LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
 
     @Override
-    public Observable<History> saveHistory(History history) {
+    public Completable saveHistory(History history) {
         return historyDao.saveHistory(history);
     }
 

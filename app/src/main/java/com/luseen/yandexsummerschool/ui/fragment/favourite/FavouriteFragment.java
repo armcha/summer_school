@@ -11,11 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.luseen.yandexsummerschool.R;
-import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
+import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
 import com.luseen.yandexsummerschool.utils.Logger;
@@ -27,7 +27,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
-public class FavouriteFragment extends ApiFragment<FavouriteContract.View, FavouriteContract.Presenter>
+public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<FavouriteContract.View,
+        FavouriteContract.Presenter>
         implements FavouriteContract.View,
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
         SearchView.SearchListener {
@@ -41,7 +42,6 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
     @BindView(R.id.info_shower_coordinator_layout)
     InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
 
-    //private List<History> favouriteList;
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
     public static FavouriteFragment newInstance() {
@@ -92,7 +92,6 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
 
     @Override
     public void onFavouriteResult(List<History> favouriteRealmResults) {
-        //this.favouriteList = favouriteRealmResults;
         setUpOrUpdateRecyclerView(favouriteRealmResults);
     }
 
@@ -108,18 +107,6 @@ public class FavouriteFragment extends ApiFragment<FavouriteContract.View, Favou
         } else {
             adapter.updateAdapterList(favouriteList);
         }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        EventBus.getDefault().register(this);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        EventBus.getDefault().unregister(this);
     }
 
     @Override

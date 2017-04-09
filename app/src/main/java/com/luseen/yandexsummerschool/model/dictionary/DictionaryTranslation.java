@@ -16,6 +16,8 @@ import io.realm.annotations.PrimaryKey;
 
 public class DictionaryTranslation extends RealmObject {
 
+    private int id;
+
     @PrimaryKey
     @SerializedName("text")
     private String word;
@@ -81,6 +83,14 @@ public class DictionaryTranslation extends RealmObject {
 
     public List<Example> getExamples() {
         return examples == null ? Collections.emptyList() : examples;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override
