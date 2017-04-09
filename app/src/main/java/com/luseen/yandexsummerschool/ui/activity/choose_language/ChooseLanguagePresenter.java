@@ -118,11 +118,21 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         LanguagePair dbLanguagePair = dataManager.getLanguagePair();
         LanguagePair pair = new LanguagePair();
         if (isLanguageChooseTypeSource) {
+            if (language.equals(dbLanguagePair.getTargetLanguage())) {
+                pair.setTargetLanguage(dbLanguagePair.getSourceLanguage());
+                dataManager.saveLastTypedText(dataManager.getLastTranslatedText());
+            } else {
+                pair.setTargetLanguage(dbLanguagePair.getTargetLanguage());
+            }
             pair.setSourceLanguage(language);
-            pair.setTargetLanguage(dbLanguagePair.getTargetLanguage());
         } else {
+            if (language.equals(dbLanguagePair.getSourceLanguage())) {
+                pair.setSourceLanguage(dbLanguagePair.getTargetLanguage());
+                dataManager.saveLastTypedText(dataManager.getLastTranslatedText());
+            } else {
+                pair.setSourceLanguage(dbLanguagePair.getSourceLanguage());
+            }
             pair.setTargetLanguage(language);
-            pair.setSourceLanguage(dbLanguagePair.getSourceLanguage());
         }
         dataManager.saveLanguagePair(pair);
         if (!isViewAttached())

@@ -42,7 +42,6 @@ public class FontTabLayout extends TabLayout implements Viewable {
                 childTextView.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)));
             }
         }
-
     }
 }
 
