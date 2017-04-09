@@ -2,12 +2,11 @@ package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 
 import android.content.Intent;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
@@ -90,6 +89,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private Unregistrar unregistrar;
     private DictionaryView dictView;
     private String currentIdentifier;
+    private boolean isFavouriteIconSet;
 
     public static TranslationFragment newInstance() {
         return new TranslationFragment();
@@ -232,9 +232,21 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
         if (currentIdentifier.equals(identifier)) {
             if (isFavourite) {
-                favouriteIcon.setBackgroundTintList(ColorStateList.valueOf(Color.YELLOW));
+                AnimatedVectorDrawableCompat addFavAnimation =
+                        AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.add_fav_anim_white);
+                favouriteIcon.setImageDrawable(addFavAnimation);
+                addFavAnimation.start();
+                isFavouriteIconSet = true;
             } else {
-                favouriteIcon.setBackgroundTintList(ColorStateList.valueOf(Color.GRAY));
+                if (isFavouriteIconSet) {
+                    AnimatedVectorDrawableCompat removeFavAnimation =
+                            AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.remove_fav_anim_white);
+                    favouriteIcon.setImageDrawable(removeFavAnimation);
+                    removeFavAnimation.start();
+                    isFavouriteIconSet = false;
+                } else {
+                    favouriteIcon.setImageResource(R.drawable.add_fav_anim_icon_white);
+                }
             }
             favouriteIcon.show();
         }

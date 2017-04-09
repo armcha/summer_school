@@ -61,7 +61,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
         infoShowerCoordinatorLayout.setInfoText("This is test text for testing History");
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_fav);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_settings);
     }
 
     @NonNull
@@ -81,7 +81,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     }
 
     private void setUpOrUpdateRecyclerView(List<History> historyList) {
-        infoShowerCoordinatorLayout.hideInfo();
+        infoShowerCoordinatorLayout.hide();
         searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new HistoryAndFavouriteRecyclerAdapter(historyList);
@@ -112,7 +112,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
-        infoShowerCoordinatorLayout.showInfo();
+        infoShowerCoordinatorLayout.show();
     }
 
     @Subscribe

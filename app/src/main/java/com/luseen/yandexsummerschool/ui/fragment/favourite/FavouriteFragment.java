@@ -66,7 +66,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.favourite_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_settings);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.remove_fav_anim_icon);
         infoShowerCoordinatorLayout.setInfoText("THIS IS FAVOURITE EMPTY");
     }
 
@@ -96,7 +96,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     }
 
     private void setUpOrUpdateRecyclerView(List<History> favouriteList) {
-        infoShowerCoordinatorLayout.hideInfo();
+        infoShowerCoordinatorLayout.hide();
         searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new HistoryAndFavouriteRecyclerAdapter(favouriteList);
@@ -112,7 +112,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
-        infoShowerCoordinatorLayout.showInfo();
+        infoShowerCoordinatorLayout.show();
     }
 
     @Subscribe

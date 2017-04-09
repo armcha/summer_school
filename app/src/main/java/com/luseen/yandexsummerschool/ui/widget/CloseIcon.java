@@ -12,13 +12,14 @@ import android.util.StateSet;
 import android.view.View;
 
 import com.luseen.yandexsummerschool.R;
+import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.CommonUtils;
 
 /**
  * Created by Chatikyan on 20.03.2017.
  */
 
-public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable {
+public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable,AnimatableView {
 
     public static final long ANIMATION_DURATION = 150L;
 
@@ -61,6 +62,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
         }
     }
 
+    @Override
     public void show() {
         if (getVisibility() == VISIBLE) {
             return;
@@ -73,6 +75,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
                 .setDuration(ANIMATION_DURATION)
                 .scaleX(1)
                 .scaleY(1)
+                .setInterpolator(AnimationUtils.getFastOutSlowInInterpolator())
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(View view) {
@@ -82,11 +85,13 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
                 .start();
     }
 
+    @Override
     public void hide() {
         ViewCompat.animate(this)
                 .setDuration(ANIMATION_DURATION)
                 .scaleX(0)
                 .scaleY(0)
+                .setInterpolator(AnimationUtils.getFastOutSlowInInterpolator())
                 .setListener(new ViewPropertyAnimatorListenerAdapter() {
                     @Override
                     public void onAnimationEnd(final View view) {

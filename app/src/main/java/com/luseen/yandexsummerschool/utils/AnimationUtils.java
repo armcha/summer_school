@@ -1,5 +1,6 @@
 package com.luseen.yandexsummerschool.utils;
 
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Interpolator;
@@ -33,5 +34,11 @@ public class AnimationUtils {
         rotate.setDuration(300);
         rotate.setInterpolator(getFastOutSlowInInterpolator());
         view.startAnimation(rotate);
+    }
+
+    public static AnimatedVectorDrawableCompat createAnimatedVector(int vectorId) {
+        AnimatedVectorDrawableCompat animatedVectorDrawableCompat =
+                AnimatedVectorDrawableCompat.create(App.getInstance(), vectorId);
+        return animatedVectorDrawableCompat;
     }
 }

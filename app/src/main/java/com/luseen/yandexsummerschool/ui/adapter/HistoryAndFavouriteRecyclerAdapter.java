@@ -1,5 +1,8 @@
 package com.luseen.yandexsummerschool.ui.adapter;
 
+import android.graphics.drawable.Drawable;
+import android.support.graphics.drawable.Animatable2Compat;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +11,7 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.ui.adapter.view_holder.HistoryAndFavouriteViewHolder;
+import com.luseen.yandexsummerschool.utils.AnimationUtils;
 
 import java.util.List;
 
@@ -56,15 +60,37 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
                 realm.beginTransaction();
                 history.setFavourite(!history.isFavourite());
                 realm.commitTransaction();
-                if (adapterItemClickListener != null) {
-                    adapterItemClickListener.onFavouriteClicked(history.isFavourite(),
-                            history.getIdentifier());
+
+                if (history.isFavourite()) {
+                    AnimatedVectorDrawableCompat addFavAnimation =
+                            AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim);
+                    holder.getFavouriteIcon().setImageDrawable(addFavAnimation);
+                    addFavAnimation.start();
+                    addFavAnimation.registerAnimationCallback(getAnimationCallback(history));
+                } else {
+                    AnimatedVectorDrawableCompat removeFavAnimation =
+                            AnimationUtils.createAnimatedVector(R.drawable.remove_fav_anim);
+                    holder.getFavouriteIcon().setImageDrawable(removeFavAnimation);
+                    removeFavAnimation.start();
+                    removeFavAnimation.registerAnimationCallback(getAnimationCallback(history));
                 }
-                holder.onFavourite(history);
             }
         });
 
         return holder;
+    }
+
+    private Animatable2Compat.AnimationCallback getAnimationCallback(History history) {
+        return new Animatable2Compat.AnimationCallback() {
+            @Override
+            public void onAnimationEnd(Drawable drawable) {
+                super.onAnimationEnd(drawable);
+                if (adapterItemClickListener != null) {
+                    adapterItemClickListener.onFavouriteClicked(history.isFavourite(),
+                            history.getIdentifier());
+                }
+            }
+        };
     }
 
     @Override
@@ -83,7 +109,7 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
         this.historyList = historyList;
         notifyDataSetChanged();
 
-        //It is not work as i expected, so comment it ...
+        //It is not works as i expected, so comment it ...
 //        DiffCallback diffCallback = new DiffCallback(this.historyList, historyList);
 //        DiffUtil.DiffResult diffResult = DiffUtil.calculateDiff(diffCallback);
 //        diffResult.dispatchUpdatesTo(this);

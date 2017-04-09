@@ -6,9 +6,9 @@ package com.luseen.yandexsummerschool.ui.widget;
 
 public interface InfoShower {
 
-    void showInfo();
+    void show();
 
-    void hideInfo();
+    void hide();
 
     void setInfoText(String infoText);
 
