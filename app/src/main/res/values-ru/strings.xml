@@ -10,4 +10,12 @@
     <string name="favourite_search_hint">Найти в избранном</string>
     <string name="history">История</string>
     <string name="favourite">Избранное</string>
+    <string name="translate_tab">Переводить</string>
+    <string name="favourite_tab">Избранное</string>
+    <string name="settings_tab">Настройки</string>
+    <string name="delete_history_and_fav_title">ИЗБРАННОЕ И ИСТОРИЯ</string>
+    <string name="delete_history_and_fav_text">Вы уверены что хотите очистить избранное и историю?</string>
+    <string name="yes">Да</string>
+    <string name="cancel">Отмена</string>
+    <string name="empty_history_and_translation">Нет переводов</string>
 </resources>

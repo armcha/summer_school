@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.luseen.yandexsummerschool.R;
-import com.luseen.yandexsummerschool.base_mvp.api.ApiFragment;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
@@ -60,7 +59,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoText("This is test text for testing History");
+        infoShowerCoordinatorLayout.setInfoText(getString(R.string.empty_history_and_translation));
         infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_settings);
     }
 
@@ -138,13 +137,18 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
 
     @Override
     public void onResetClicked() {
-        Logger.log("onResetClicked ");
         presenter.resetHistory();
     }
 
     @Override
     public void onEmptyInput() {
-        Logger.log("onEmptyInput ");
         presenter.resetHistory();
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean isOpen) {
+        if (!isOpen) {
+            searchView.disable();
+        }
     }
 }

@@ -2,6 +2,12 @@ package com.luseen.yandexsummerschool.utils;
 
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import com.luseen.yandexsummerschool.R;
+
+import java.lang.reflect.Field;
 
 /**
  * Created by Narek on 17.02.2017.
@@ -36,5 +42,25 @@ public class ViewUtils {
         }
         ((ViewGroup.MarginLayoutParams) view.getLayoutParams())
                 .setMargins(margins[0], margins[1], margins[2], margins[3]);
+    }
+
+    // There is no public API to set the cursor drawable.
+    // The field mCursorDrawableRes hasn't changed so this should work on all devices,
+    // unless a manufacturer changed something or it is later changed.
+    public static void setEditTextDefaultCursorDrawable(EditText editText) {
+        Field cursorDrawableField = null;
+        try {
+            cursorDrawableField = TextView.class.getDeclaredField("mCursorDrawableRes");
+            cursorDrawableField.setAccessible(true);
+        } catch (NoSuchFieldException e) {
+            ExceptionTracker.trackException(e);
+        }
+        try {
+            if (cursorDrawableField != null) {
+                cursorDrawableField.set(editText, R.drawable.cursor_drawable);
+            }
+        } catch (IllegalAccessException e) {
+            ExceptionTracker.trackException(e);
+        }
     }
 }

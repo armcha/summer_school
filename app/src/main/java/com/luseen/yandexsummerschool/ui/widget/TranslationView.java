@@ -6,6 +6,8 @@ import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.support.v4.content.ContextCompat;
+import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.EditText;
@@ -24,10 +26,10 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
 public class TranslationView extends RelativeLayout implements View.OnClickListener, Viewable {
 
     private boolean isEnable = false;
-    private int activeBorderColor = Color.BLUE;
-    private int inActiveBorderColor = Color.GRAY;
-    private int activeBorderWidth = 10;
-    private int inActiveBorderWidth = 5;
+    private int activeBorderColor;
+    private int inActiveBorderColor;
+    private int activeBorderWidth;
+    private int inActiveBorderWidth;
     private EditText translationEditText;
     private CloseIcon closeIcon;
 
@@ -43,9 +45,14 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void init(Context context) {
+        activeBorderColor = ContextCompat.getColor(context, R.color.colorPrimary);
+        inActiveBorderColor = Color.GRAY;
+        activeBorderWidth = (int) getResources().getDimension(R.dimen.translation_view_active_border);
+        inActiveBorderWidth = (int) getResources().getDimension(R.dimen.translation_view_inactive_border);
         setOnClickListener(this);
         addEditText(context);
         addCloseIcon(context);
+        enable();
     }
 
     private void addEditText(Context context) {
@@ -58,6 +65,8 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         translationEditText.setHint(context.getString(R.string.type_text));
         translationEditText.setBackground(null);
         translationEditText.setOnClickListener(this);
+        translationEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        ViewUtils.setEditTextDefaultCursorDrawable(translationEditText);
         translationEditText.addTextChangedListener(new AbstractTextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -121,7 +130,10 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if (!isEnable) enable();
+        if (!isEnable) {
+            enable();
+            KeyboardUtils.showKeyboard(this);
+        }
     }
 
     private void disableEditText() {
@@ -137,31 +149,13 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     public void disable() {
         disableEditText();
         changeBorderWidth(activeBorderWidth, inActiveBorderWidth);
-        KeyboardUtils.hideKeyboard(this);
         isEnable = false;
     }
 
     public void enable() {
         enableEditText();
         changeBorderWidth(inActiveBorderWidth, activeBorderWidth);
-        KeyboardUtils.showKeyboard(this);
         isEnable = true;
-    }
-
-    public void forceEnable() {
-        enableEditText();
-        setBackgroundShape(activeBorderWidth);
-        changeBackgroundShapeColor(activeBorderColor);
-        KeyboardUtils.showKeyboard(this);
-        isEnable = true;
-    }
-
-    public void forceDisable() {
-        disableEditText();
-        setBackgroundShape(inActiveBorderWidth);
-        changeBackgroundShapeColor(inActiveBorderColor);
-        KeyboardUtils.hideKeyboard(this);
-        isEnable = false;
     }
 
     public boolean isEnable() {

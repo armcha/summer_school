@@ -5,9 +5,12 @@ import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.util.AttributeSet;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.luseen.yandexsummerschool.utils.Logger;
 
 /**
  * Created by Chatikyan on 31.03.2017.
@@ -39,6 +42,7 @@ public class FontTabLayout extends TabLayout implements Viewable {
             View tabViewChild = tabView.getChildAt(i);
             if (tabViewChild instanceof TextView) {
                 TextView childTextView = ((TextView) tabViewChild);
+                childTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
                 childTextView.setTypeface((Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)));
             }
         }

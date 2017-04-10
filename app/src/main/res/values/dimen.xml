@@ -5,4 +5,6 @@
     <dimen name="translation_text_left_padding">10dp</dimen>
     <dimen name="dict_view_sides_padding">10dp</dimen>
     <dimen name="dict_view_bottom_padding">5dp</dimen>
+    <dimen name="translation_view_active_border">3dp</dimen>
+    <dimen name="translation_view_inactive_border">1dp</dimen>
 </resources>

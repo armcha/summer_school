@@ -32,8 +32,11 @@ import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
+import com.luseen.yandexsummerschool.utils.KeyboardUtils;
+import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
+import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
 import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -51,7 +54,8 @@ import rx.android.schedulers.AndroidSchedulers;
  */
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
         implements TranslationFragmentContract.View,
-        CloseIcon.CloseIconClickListener {
+        CloseIcon.CloseIconClickListener,
+        KeyboardVisibilityEventListener {
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
 
@@ -101,19 +105,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         return inflater.inflate(R.layout.fragment_translation, container, false);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (translationView.hasText()) {
-
-            translationView.forceDisable();
-            // FIXME: 30.03.2017 Hide keyboard
-            // KeyboardUtils.hideKeyboard(rootLayout);
-        } else {
-            translationView.forceEnable();
-        }
-    }
-
     @NonNull
     @Override
     public TranslationFragmentContract.Presenter createPresenter() {
@@ -127,15 +118,22 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         setUpTextWatcher();
         translationView.getCloseIcon().setCloseIconClickListener(this);
 
-        unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), isOpen -> {
-            if (!isOpen) translationView.disable();
-        });
+        unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), this);
         favouriteIcon.hide();
     }
 
     private void setUpDictView() {
         dictView = new DictionaryView(getActivity());
         rootLayout.addView(dictView);
+        dictView.setOnClickListener(v -> {
+            if (translationView.isEnable()) {
+                translationView.disable();
+                KeyboardUtils.hideKeyboard(rootLayout);
+            } else {
+                translationView.enable();
+                KeyboardUtils.showKeyboard(rootLayout);
+            }
+        });
     }
 
     private void setUpTextWatcher() {
@@ -164,10 +162,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (textWatcherSubscription != null && !textWatcherSubscription.isUnsubscribed()) {
-            textWatcherSubscription.unsubscribe();
+        RxUtils.unsubscribe(textWatcherSubscription);
+        if (unregistrar != null) {
+            unregistrar.unregister();
         }
-        unregistrar.unregister();
     }
 
     @Override
@@ -191,6 +189,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onClick() {
         if (translationView.isEnable()) {
             translationView.disable();
+            KeyboardUtils.hideKeyboard(rootLayout);
+        } else {
+            translationView.enable();
+            KeyboardUtils.showKeyboard(rootLayout);
         }
     }
 
@@ -233,14 +235,14 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (currentIdentifier.equals(identifier)) {
             if (isFavourite) {
                 AnimatedVectorDrawableCompat addFavAnimation =
-                        AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.add_fav_anim_white);
+                        AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_icon_white);
                 favouriteIcon.setImageDrawable(addFavAnimation);
                 addFavAnimation.start();
                 isFavouriteIconSet = true;
             } else {
                 if (isFavouriteIconSet) {
                     AnimatedVectorDrawableCompat removeFavAnimation =
-                            AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.remove_fav_anim_white);
+                            AnimationUtils.createAnimatedVector(R.drawable.remove_fav_anim_white);
                     favouriteIcon.setImageDrawable(removeFavAnimation);
                     removeFavAnimation.start();
                     isFavouriteIconSet = false;
@@ -273,6 +275,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void setTranslationViewText(String text) {
         translationView.getTranslationEditText().setText(text);
+        translationView.getTranslationEditText().setSelection(text.length());
         // TODO: 31.03.2017 need testing
         //translationView.disable();
     }
@@ -321,5 +324,12 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @OnClick(R.id.favourite_icon)
     public void onFavouriteClick() {
         presenter.setFavourite(currentIdentifier);
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean isOpen) {
+        if (!isOpen) {
+            translationView.disable();
+        }
     }
 }

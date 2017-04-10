@@ -67,7 +67,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         searchView.setHint(getString(R.string.favourite_search_hint));
         searchView.setSearchListener(this);
         infoShowerCoordinatorLayout.setInfoIcon(R.drawable.remove_fav_anim_icon);
-        infoShowerCoordinatorLayout.setInfoText("THIS IS FAVOURITE EMPTY");
+        infoShowerCoordinatorLayout.setInfoText(getString(R.string.empty_history_and_translation));
     }
 
     @Override
@@ -128,7 +128,6 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
 
     @Override
     public void onFavouriteClicked(boolean isFavourite, String identifier) {
-        // TODO: 07.04.2017 Add listener
         presenter.fetchFavourite();
         EventBus.getDefault().post(new HistoryEvent());
         EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
@@ -147,5 +146,12 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     @Override
     public void onEmptyInput() {
         presenter.resetFavourite();
+    }
+
+    @Override
+    public void onVisibilityChanged(boolean isOpen) {
+        if (!isOpen) {
+            searchView.disable();
+        }
     }
 }

@@ -130,21 +130,13 @@ public class HistoryDao {
 
     public void clearHistoryAndFavouriteData() {
         Realm realm = Realm.getDefaultInstance();
-//        RealmResults<History> historyRealmResults = realm.where(History.class).findAll();
-//        realm.executeTransaction(realm1 -> historyRealmResults.deleteAllFromRealm());
-//        RealmResults<Definition> definitionRealmResults = realm.where(Definition.class).findAll();
-//        realm.executeTransaction(realm1 -> definitionRealmResults.deleteAllFromRealm());
-//        RealmResults<DictionaryTranslation> dictionaryTranslations = realm.where(DictionaryTranslation.class).findAll();
-//        realm.executeTransaction(realm1 -> dictionaryTranslations.deleteAllFromRealm());
-
-        deleteRealmResult(History.class);
-        deleteRealmResult(Definition.class);
-        deleteRealmResult(DictionaryTranslation.class);
+        deleteRealmResult(realm, History.class);
+        deleteRealmResult(realm, Definition.class);
+        deleteRealmResult(realm, DictionaryTranslation.class);
         realm.close();
     }
 
-    private <R extends RealmObject> void deleteRealmResult(Class<R> clazz) {
-        Realm realm = Realm.getDefaultInstance();
+    private <R extends RealmObject> void deleteRealmResult(Realm realm, Class<R> clazz) {
         RealmResults<R> realmResults = realm.where(clazz).findAll();
         realm.executeTransaction(realm1 -> realmResults.deleteAllFromRealm());
     }

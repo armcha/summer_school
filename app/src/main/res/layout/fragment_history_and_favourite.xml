@@ -23,22 +23,22 @@
                 android:layout_height="?actionBarSize"
                 android:layout_centerHorizontal="true"
                 app:tabGravity="center"
-                app:tabPadding="0dp"
                 app:tabMode="fixed"
+                app:tabPadding="0dp"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextAppearance="@style/TabLayoutTextAppearance"
                 app:tabTextColor="@color/gray" />
 
             <ImageView
+                android:id="@+id/delete_history_icon"
                 android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:id="@+id/delete_history_icon"
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="true"
-                android:padding="10dp"
-                app:srcCompat="@drawable/ic_tab_fav" />
+                android:padding="12dp"
+                app:srcCompat="@drawable/delete" />
 
         </RelativeLayout>
     </android.support.design.widget.AppBarLayout>

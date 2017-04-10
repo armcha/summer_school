@@ -1,10 +1,6 @@
 package com.luseen.yandexsummerschool.ui.widget;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.ValueAnimator;
 import android.content.Context;
-import android.graphics.Color;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -16,8 +12,8 @@ import android.widget.RelativeLayout;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
-import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.DimenUtils;
+import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
 import rx.Subscription;
@@ -27,9 +23,7 @@ import rx.android.schedulers.AndroidSchedulers;
  * Created by Chatikyan on 31.03.2017.
  */
 
-public class SearchView extends RelativeLayout
-        implements Viewable,
-        View.OnClickListener,
+public class SearchView extends RelativeLayout implements Viewable, View.OnClickListener,
         CloseIcon.CloseIconClickListener {
 
     public interface SearchListener {
@@ -120,7 +114,6 @@ public class SearchView extends RelativeLayout
         divider = new View(context);
         divider.setBackgroundColor(inActiveBorderColor);
         addView(divider);
-        //some hack 0.5 dp
         int dividerHeight = DimenUtils.dpToPx(context, 1);
         LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, dividerHeight);
         params.addRule(ALIGN_PARENT_BOTTOM);
@@ -146,6 +139,7 @@ public class SearchView extends RelativeLayout
         searchEditText.setBackground(null);
         searchEditText.setSingleLine(true);
         searchEditText.setOnClickListener(this);
+        ViewUtils.setEditTextDefaultCursorDrawable(searchEditText);
         //underline thickness
         searchEditText.setPadding(0, 2, 0, 0);
         searchEditText.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16);
@@ -181,35 +175,15 @@ public class SearchView extends RelativeLayout
         searchEditText.requestFocus();
     }
 
-    private void setDividerEnabled(boolean enabled) {
-        ValueAnimator animator = ValueAnimator.ofFloat(enabled ? 0.7f : 1, enabled ? 1 : 0.7f);
-        animator.setDuration(500);
-        animator.setInterpolator(AnimationUtils.getFastOutSlowInInterpolator());
-        animator.addUpdateListener(valueAnimator -> {
-            float animatedValue = (float) valueAnimator.getAnimatedValue();
-            divider.setScaleY(animatedValue);
-        });
-        animator.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                divider.setScaleY(enabled ? 1 : 0.7f);
-                divider.setBackgroundColor(enabled ? Color.BLUE : Color.GRAY);
-            }
-        });
-        animator.start();
-    }
-
     public void enable() {
         enableEditText();
-        //setDividerEnabled(true);
         divider.setBackgroundColor(activeBorderColor);
+        KeyboardUtils.showKeyboard(this);
         isEnable = true;
     }
 
     public void disable() {
         disableEditText();
-        //setDividerEnabled(false);
         divider.setBackgroundColor(inActiveBorderColor);
         isEnable = false;
     }

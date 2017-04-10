@@ -18,6 +18,7 @@ import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouritePagerAdapter;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.FontTabLayout;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -77,13 +78,12 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     private void showDeleteDialog() {
         // TODO: 09.04.2017 Add real title and messages
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("Delete");
-        builder.setMessage("Really delete ?")
-                .setPositiveButton("Yes", (dialog, id) -> {
-                    presenter.clearHistoryAndFavouriteData();
-                })
-                .setNegativeButton("No", (dialog, id) ->
-                        dialog.cancel());
+        CharSequence title = StringUtils.makeColorSpanWithSize(getString(R.string.delete_history_and_fav_title),
+                R.color.red, 0.8f);
+        builder.setTitle(title);
+        builder.setMessage(getString(R.string.delete_history_and_fav_text))
+                .setPositiveButton(R.string.yes, (dialog, id) -> presenter.clearHistoryAndFavouriteData())
+                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
         builder.create().show();
     }
 

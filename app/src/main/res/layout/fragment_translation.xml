@@ -58,7 +58,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
+                        android:textSize="17sp"
                         tools:ignore="RelativeOverlap" />
 
                     <com.luseen.yandexsummerschool.ui.widget.AnimatedTextView
@@ -74,7 +74,7 @@
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="17sp" />
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
