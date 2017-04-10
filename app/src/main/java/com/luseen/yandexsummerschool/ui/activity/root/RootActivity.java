@@ -1,12 +1,13 @@
 package com.luseen.yandexsummerschool.ui.activity.root;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
-import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationView;
 import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
@@ -30,6 +31,11 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     CustomBottomNavigationView bottomNavigationView;
 
     private Subscription viewPagerSubscription;
+
+    public static void start(Context context) {
+        Intent starter = new Intent(context, RootActivity.class);
+        context.startActivity(starter);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -122,6 +122,18 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         favouriteIcon.hide();
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        // FIXME: 10.04.2017 hide keyboard after opening lock screen
+//        if (KeyboardVisibilityEvent.isKeyboardVisible(getActivity())) {
+//            KeyboardUtils.hideKeyboard(rootLayout);
+//            if (translationView.isEnable()) {
+//                translationView.disable();
+//            }
+//        }
+    }
+
     private void setUpDictView() {
         dictView = new DictionaryView(getActivity());
         rootLayout.addView(dictView);
@@ -235,7 +247,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (currentIdentifier.equals(identifier)) {
             if (isFavourite) {
                 AnimatedVectorDrawableCompat addFavAnimation =
-                        AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_icon_white);
+                        AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_white);
                 favouriteIcon.setImageDrawable(addFavAnimation);
                 addFavAnimation.start();
                 isFavouriteIconSet = true;
@@ -306,6 +318,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onClosePressed(CloseIcon closeIcon) {
         translationView.reset();
         reset();
+        KeyboardUtils.showKeyboard(rootLayout);
     }
 
     @Subscribe

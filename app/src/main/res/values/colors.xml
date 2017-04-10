@@ -13,4 +13,5 @@
     <color name="light_gray">#bdbdbd</color>
     <color name="selected_item_color">#ebe9e9e9</color>
     <color name="navigation_bar_color">#999999</color>
+    <color name="splash_status_bar_color">#F5F6F7</color>
 </resources>
