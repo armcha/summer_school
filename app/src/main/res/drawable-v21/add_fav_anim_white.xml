@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <animated-vector xmlns:aapt="http://schemas.android.com/apk/res/android"
-    aapt:drawable="@drawable/add_fav_anim_icon_white">
+    aapt:drawable="@drawable/add_fav_anim_icon_black">
     <target
         aapt:name="path_2"
         aapt:animation="@animator/add_fav_anim_2" />

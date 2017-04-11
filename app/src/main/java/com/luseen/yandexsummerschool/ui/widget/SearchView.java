@@ -6,6 +6,7 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -121,15 +122,15 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
     }
 
     private void addSearchIcon(Context context) {
+        // FIXME: 11.04.2017 Magnify not showing in pre lollipop
         searchIcon = new ImageView(context);
         searchIcon.setImageResource(R.drawable.magnify);
         searchIcon.setId(SEARCH_ICON_ID);
         searchIcon.setOnClickListener(this);
-        addView(searchIcon);
-        LayoutParams params = ((LayoutParams) searchIcon.getLayoutParams());
+        LayoutParams params = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(CENTER_VERTICAL);
-        searchIcon.setLayoutParams(params);
+        addView(searchIcon, params);
         ViewUtils.setViewMargins(searchIcon, new int[]{10, 0, 10, 0});
     }
 
@@ -139,6 +140,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
         searchEditText.setBackground(null);
         searchEditText.setSingleLine(true);
         searchEditText.setOnClickListener(this);
+        searchEditText.setHintTextColor(inActiveBorderColor);
         ViewUtils.setEditTextDefaultCursorDrawable(searchEditText);
         //underline thickness
         searchEditText.setPadding(0, 2, 0, 0);

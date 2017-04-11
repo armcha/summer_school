@@ -3,23 +3,20 @@ package com.luseen.yandexsummerschool.ui.widget;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.StateListDrawable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorListenerAdapter;
 import android.support.v7.widget.AppCompatImageView;
-import android.util.StateSet;
 import android.view.View;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
-import com.luseen.yandexsummerschool.utils.CommonUtils;
 
 /**
  * Created by Chatikyan on 20.03.2017.
  */
 
-public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable,AnimatableView {
+public class CloseIcon extends AppCompatImageView implements View.OnClickListener, Viewable, AnimatableView {
 
     public static final long ANIMATION_DURATION = 150L;
 
@@ -39,19 +36,11 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
         int[] attrs = {R.attr.selectableItemBackgroundBorderless};
         TypedArray typedArray = context.obtainStyledAttributes(attrs);
         int backgroundResource = typedArray.getResourceId(0, 0);
-        Drawable foreground = ContextCompat.getDrawable(context, backgroundResource);
+        Drawable backGround = ContextCompat.getDrawable(context, backgroundResource);
         typedArray.recycle();
         setVisibility(GONE);
-        StateListDrawable stateListDrawable = new StateListDrawable();
-        // TODO: 24.03.2017 support api < 21
-        Drawable drawablePressed = ContextCompat.getDrawable(context, R.drawable.close_icon_pressed);
-        Drawable drawableNormal = ContextCompat.getDrawable(context, R.drawable.close_icon);
-        stateListDrawable.addState(new int[]{android.R.attr.state_pressed}, drawablePressed);
-        stateListDrawable.addState(StateSet.WILD_CARD, drawableNormal);
-        if (CommonUtils.isMarshmallowOrHigher()) {
-            setForeground(foreground);
-        }
-        setImageDrawable(stateListDrawable);
+        setBackground(backGround);
+        setImageResource(R.drawable.close_icon);
         setOnClickListener(this);
     }
 

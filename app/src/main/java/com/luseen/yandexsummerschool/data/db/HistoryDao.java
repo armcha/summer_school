@@ -6,7 +6,9 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
-import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.model.dictionary.Example;
+import com.luseen.yandexsummerschool.model.dictionary.Synonym;
+import com.luseen.yandexsummerschool.model.dictionary.TranslatedString;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Case;
@@ -34,7 +36,6 @@ public class HistoryDao {
             Realm realm = Realm.getDefaultInstance();
             realm.executeTransaction(r -> {
                 int uniqueId = RealmUtils.generateId(r, Definition.class);
-                Logger.log("uniqueId " + uniqueId);
                 Dictionary dictionary = history.getDictionary();
                 dictionary.setIdentifier(dictionary.getOriginalText() + dictionary.getTranslatedText());
                 LanguagePair pair = history.getLanguagePair();
@@ -133,6 +134,9 @@ public class HistoryDao {
         deleteRealmResult(realm, History.class);
         deleteRealmResult(realm, Definition.class);
         deleteRealmResult(realm, DictionaryTranslation.class);
+        deleteRealmResult(realm, Synonym.class);
+        deleteRealmResult(realm, TranslatedString.class);
+        deleteRealmResult(realm, Example.class);
         realm.close();
     }
 

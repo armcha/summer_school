@@ -66,7 +66,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.favourite_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.remove_fav_anim_icon);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.bookmark_check);
         infoShowerCoordinatorLayout.setInfoText(getString(R.string.empty_history_and_translation));
     }
 

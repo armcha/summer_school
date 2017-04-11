@@ -1,5 +1,6 @@
 package com.luseen.yandexsummerschool.ui.adapter.view_holder;
 
+import android.graphics.PorterDuff;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -50,11 +51,9 @@ public class HistoryAndFavouriteViewHolder extends RecyclerView.ViewHolder {
 
     public void onFavourite(History history) {
         if (history.isFavourite()) {
-            int favouriteColor = ContextCompat.getColor(App.getInstance(), R.color.colorPrimary);
-            favouriteIcon.setImageResource(R.drawable.remove_fav_anim_icon);
+            favouriteIcon.setImageResource(R.drawable.bookmark_check);
         } else {
-            int defaultColor = ContextCompat.getColor(App.getInstance(), R.color.light_gray);
-            favouriteIcon.setImageResource(R.drawable.add_fav_anim_icon);
+            favouriteIcon.setImageResource(R.drawable.bookmark_outline);
         }
     }
 

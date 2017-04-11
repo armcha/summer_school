@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
@@ -30,6 +31,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     private int inActiveBorderColor;
     private int activeBorderWidth;
     private int inActiveBorderWidth;
+    private int hintColor;
     private EditText translationEditText;
     private CloseIcon closeIcon;
 
@@ -46,7 +48,8 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     @Override
     public void init(Context context) {
         activeBorderColor = ContextCompat.getColor(context, R.color.colorPrimary);
-        inActiveBorderColor = Color.GRAY;
+        inActiveBorderColor = ContextCompat.getColor(context, R.color.gray);
+        hintColor = ContextCompat.getColor(context, R.color.light_gray);
         activeBorderWidth = (int) getResources().getDimension(R.dimen.translation_view_active_border);
         inActiveBorderWidth = (int) getResources().getDimension(R.dimen.translation_view_inactive_border);
         setOnClickListener(this);
@@ -61,11 +64,13 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         LayoutParams params = (LayoutParams) translationEditText.getLayoutParams();
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(ALIGN_PARENT_TOP);
-        ViewUtils.setViewMargins(translationEditText, new int[]{10, 0, 40, 50});
+        ViewUtils.setViewMargins(translationEditText, new int[]{10, 0, 20, 30});
         translationEditText.setHint(context.getString(R.string.type_text));
         translationEditText.setBackground(null);
         translationEditText.setOnClickListener(this);
+        translationEditText.setHintTextColor(hintColor);
         translationEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
+        translationEditText.setSingleLine(false);
         ViewUtils.setEditTextDefaultCursorDrawable(translationEditText);
         translationEditText.addTextChangedListener(new AbstractTextWatcher() {
             @Override
@@ -86,7 +91,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         LayoutParams params = (LayoutParams) closeIcon.getLayoutParams();
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(ALIGN_PARENT_BOTTOM);
-        ViewUtils.setViewMargins(closeIcon, new int[]{7, 0, 0, 7});
+        ViewUtils.setViewMargins(closeIcon, new int[]{5, 0, 0, 5});
     }
 
     private void setBackgroundShape(int borderWidth) {

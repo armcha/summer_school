@@ -32,7 +32,9 @@ import com.luseen.yandexsummerschool.ui.widget.TranslationTextView;
 import com.luseen.yandexsummerschool.ui.widget.TranslationView;
 import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
+import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -246,20 +248,25 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
         if (currentIdentifier.equals(identifier)) {
             if (isFavourite) {
-                AnimatedVectorDrawableCompat addFavAnimation =
-                        AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_white);
-                favouriteIcon.setImageDrawable(addFavAnimation);
-                addFavAnimation.start();
+                if (CommonUtils.isLollipopOrHigher()) {
+                    AnimatedVectorDrawableCompat addFavAnimation =
+                            AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_white);
+                    favouriteIcon.setImageDrawable(addFavAnimation);
+                    addFavAnimation.start();
+                } else {
+                    favouriteIcon.setImageResource(R.drawable.bookmark_check_black);
+                }
+
                 isFavouriteIconSet = true;
             } else {
-                if (isFavouriteIconSet) {
+                if (isFavouriteIconSet && CommonUtils.isLollipopOrHigher()) {
                     AnimatedVectorDrawableCompat removeFavAnimation =
                             AnimationUtils.createAnimatedVector(R.drawable.remove_fav_anim_white);
                     favouriteIcon.setImageDrawable(removeFavAnimation);
                     removeFavAnimation.start();
                     isFavouriteIconSet = false;
                 } else {
-                    favouriteIcon.setImageResource(R.drawable.add_fav_anim_icon_white);
+                    favouriteIcon.setImageResource(R.drawable.bookmark_outline_black);
                 }
             }
             favouriteIcon.show();
@@ -268,6 +275,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Subscribe
     public void onFavouriteEvent(FavouriteEvent favouriteEvent) {
+        Logger.log("FAVOURITE EVENT " + favouriteEvent.getIdentifier());
         setUpFavouriteIcon(favouriteEvent.isFavourite(), favouriteEvent.getIdentifier());
     }
 

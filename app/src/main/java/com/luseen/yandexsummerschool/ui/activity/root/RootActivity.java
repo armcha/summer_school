@@ -58,7 +58,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         BottomNavigationItem translationTab = new BottomNavigationItem(getString(R.string.translate_tab),
                 R.color.blue, R.drawable.ic_tab_translate);
         BottomNavigationItem favTab = new BottomNavigationItem(getString(R.string.favourite_tab),
-                R.color.blue, R.drawable.remove_fav_anim_icon);
+                R.color.blue, R.drawable.bookmark_check);
         BottomNavigationItem settingsTab = new BottomNavigationItem(getString(R.string.settings_tab),
                 R.color.blue, R.drawable.ic_tab_settings);
         bottomNavigationView.addTab(translationTab);
