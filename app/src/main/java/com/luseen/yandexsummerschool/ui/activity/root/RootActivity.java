@@ -49,6 +49,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
+        mainViewPager.setCurrentItem(2);
         mainViewPager.setPagingEnabled(false);
         viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
                 .subscribe(bottomNavigationView::selectTab);
@@ -59,8 +60,12 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
                 R.color.blue, R.drawable.ic_tab_translate);
         BottomNavigationItem favTab = new BottomNavigationItem(getString(R.string.favourite_tab),
                 R.color.blue, R.drawable.bookmark_check);
-        BottomNavigationItem settingsTab = new BottomNavigationItem(getString(R.string.settings_tab),
-                R.color.blue, R.drawable.ic_tab_settings);
+        BottomNavigationItem settingsTab = new BottomNavigationItem(getString(R.string.about_tab),
+                R.color.blue, R.drawable.ic_about);
+        float activeTextSize = getResources().getDimension(R.dimen.bottom_active_text);
+        float inActiveTextSize = getResources().getDimension(R.dimen.bottom_in_active_text);
+        bottomNavigationView.setTextActiveSize(activeTextSize);
+        bottomNavigationView.setTextInactiveSize(inActiveTextSize);
         bottomNavigationView.addTab(translationTab);
         bottomNavigationView.addTab(favTab);
         bottomNavigationView.addTab(settingsTab);

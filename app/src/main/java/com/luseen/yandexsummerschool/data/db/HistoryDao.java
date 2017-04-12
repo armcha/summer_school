@@ -110,12 +110,15 @@ public class HistoryDao {
         return histories;
     }
 
-    public RealmResults<History> getFavouriteList() {
+    public Observable<RealmResults<History>> getFavouriteList() {
         Realm realm = Realm.getDefaultInstance();
-        RealmResults<History> favourites = realm
+        Observable<RealmResults<History>> favourites = realm
                 .where(History.class)
                 .equalTo(History.IS_FAVOURITE, true)
-                .findAllSorted(History.ORDER_ID, Sort.DESCENDING);
+                .findAllSortedAsync(History.ORDER_ID, Sort.DESCENDING)
+                .asObservable()
+                .filter(RealmResults::isLoaded)// isLoaded is true when query is completed
+                .first(); // Only get the first result and then complete
         realm.close();
         return favourites;
     }

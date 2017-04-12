@@ -62,8 +62,7 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
                                                      String translationLanguage,
                                                      String lookUpLanguage) {
         return Observable.zip(translate(text, translationLanguage),
-                lookup(lookUpLanguage, text),
-                (translation, dictionary) -> {
+                lookup(lookUpLanguage, text), (translation, dictionary) -> {
                     dictionary.setOriginalText(text);
                     dictionary.setTranslatedText(translation.getTranslatedText());
                     return dictionary;

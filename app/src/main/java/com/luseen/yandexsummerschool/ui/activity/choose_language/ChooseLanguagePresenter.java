@@ -7,6 +7,7 @@ import com.luseen.yandexsummerschool.model.AvailableLanguages;
 import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
+import com.luseen.yandexsummerschool.utils.LanguageUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -108,8 +109,9 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
     @Override
     public void startAvailableLanguagesRequest() {
         if (isViewAttached()) {
-            // TODO: 28.03.2017 get user language
-            makeRequest(dataManager.getAvailableTranslationLanguages("ru"), RequestType.AVAILABLE_LANGUAGES);
+            String uiLanguage = LanguageUtils.getCurrentLocal().toString();
+            makeRequest(dataManager.getAvailableTranslationLanguages(uiLanguage),
+                    RequestType.AVAILABLE_LANGUAGES);
         }
     }
 

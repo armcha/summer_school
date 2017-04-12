@@ -50,7 +50,6 @@ public class LanguagePairDao {
             }
         } catch (Throwable throwable) {
             ExceptionTracker.trackException(throwable);
-            Logger.log("Failed to save language pair " + throwable.getMessage());
         }
         return getDefaultLanguagePair();
     }

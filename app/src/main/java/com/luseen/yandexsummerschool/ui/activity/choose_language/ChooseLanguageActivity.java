@@ -61,17 +61,10 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     private void setUpToolbar() {
         setSupportActionBar(toolbar);
         String toolbarTitle;
-        switch (languageChooseType) {
-            case LanguageChooseType.TYPE_SOURCE:
-                toolbarTitle = getString(R.string.source_language);
-                break;
-            case LanguageChooseType.TYPE_TARGET:
-                toolbarTitle = getString(R.string.target_language);
-                break;
-            default:
-                // TODO: 06.04.2017 Change to if else
-                toolbarTitle = "";
-                break;
+        if (languageChooseType.equals(LanguageChooseType.TYPE_SOURCE)) {
+            toolbarTitle = getString(R.string.source_language);
+        } else {
+            toolbarTitle = getString(R.string.target_language);
         }
         toolbarTitleTextView.setAnimatedText(toolbarTitle);
     }

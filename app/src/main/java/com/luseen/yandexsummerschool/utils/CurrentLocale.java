@@ -7,8 +7,7 @@ package com.luseen.yandexsummerschool.utils;
 public enum CurrentLocale {
 
     RUSSIAN("ru"),
-    ENGLISH("en"),
-    UNKNOWN("unknown");
+    ENGLISH("en");
 
     private String languageCode;
 
@@ -22,6 +21,11 @@ public enum CurrentLocale {
                 return currentLocale;
             }
         }
-        return UNKNOWN;
+        return ENGLISH;
+    }
+
+    @Override
+    public String toString() {
+        return languageCode;
     }
 }

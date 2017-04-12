@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.luseen.yandexsummerschool.ui.fragment.TestFragment;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_root.HistoryAndFavouriteRootFragment;
+import com.luseen.yandexsummerschool.ui.fragment.about.AboutFragment;
 import com.luseen.yandexsummerschool.ui.fragment.translation.TranslationFragment;
 
 /**
@@ -25,12 +25,12 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        // TODO: 30.03.2017 add real fragments
         if (position == TRANSLATION_POSITION)
             return TranslationFragment.newInstance();
         else if (position == HISTORY_POSITION)
             return HistoryAndFavouriteRootFragment.newInstance();
-        else return new TestFragment();
+        else
+            return AboutFragment.newInstance();
     }
 
     @Override

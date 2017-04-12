@@ -12,10 +12,24 @@
     <string name="favourite">Favorites</string>
     <string name="translate_tab">Translate</string>
     <string name="favourite_tab">Favorite</string>
-    <string name="settings_tab">Settings</string>
+    <string name="about_tab">About</string>
     <string name="delete_history_and_fav_title">HISTORY AND FAVORITE</string>
     <string name="delete_history_and_fav_text">Are you sure to clear your history and favourite?</string>
     <string name="yes">Yes</string>
     <string name="cancel">Cancel</string>
     <string name="empty_history_and_translation">No translations</string>
+    <string name="about_agreement">License agreement</string>
+    <string name="about_another_apps">More Yandex apps</string>
+    <string name="about_privacy_policy">Privacy policy</string>
+    <string name="about_help_info">Help</string>
+    <string name="about_mobilization">Mobilization</string>
+    <string name="translator">Translator</string>
+
+    <string-array name="about">
+        <item>@string/about_another_apps</item>
+        <item>@string/about_agreement</item>
+        <item>@string/about_privacy_policy</item>
+        <item>@string/about_mobilization</item>
+    </string-array>
+
 </resources>

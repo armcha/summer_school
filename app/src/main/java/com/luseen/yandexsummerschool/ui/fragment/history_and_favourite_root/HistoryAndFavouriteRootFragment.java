@@ -76,7 +76,6 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     }
 
     private void showDeleteDialog() {
-        // TODO: 09.04.2017 Add real title and messages
         final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         CharSequence title = StringUtils.makeColorSpanWithSize(getString(R.string.delete_history_and_fav_title),
                 R.color.red, 0.8f);

@@ -35,6 +35,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
+                android:hapticFeedbackEnabled="true"
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:padding="12dp"

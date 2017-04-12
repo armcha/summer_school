@@ -7,4 +7,7 @@
     <dimen name="dict_view_bottom_padding">5dp</dimen>
     <dimen name="translation_view_active_border">3dp</dimen>
     <dimen name="translation_view_inactive_border">1dp</dimen>
+    <dimen name="bottom_active_text">14sp</dimen>
+    <dimen name="bottom_in_active_text">12sp</dimen>
+    <dimen name="about_logo_size">100dp</dimen>
 </resources>

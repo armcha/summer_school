@@ -7,6 +7,6 @@ package com.luseen.yandexsummerschool.utils;
 public class ExceptionTracker {
 
     public static void trackException(Throwable throwable) {
-        Logger.log("ExceptionTracker " + throwable.getMessage());
+        Logger.log("ExceptionTracker has bad message for you - " + throwable.getMessage());
     }
 }

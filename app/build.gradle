@@ -45,6 +45,7 @@ dependencies {
     compile "com.android.support:support-v4:${supportLibVersion}"
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.android.support:cardview-v7:${supportLibVersion}"
+    compile "com.android.support:customtabs:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.squareup.retrofit2:converter-gson:${retrofitVersion}"
     compile "com.squareup.retrofit2:adapter-rxjava:${retrofitVersion}"
@@ -61,4 +62,5 @@ dependencies {
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     debugCompile 'com.ghedeon:rebro-client:0.1'
+    compile 'com.android.support:support-v4:25.3.1'
 }

@@ -61,6 +61,7 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
                 realm.beginTransaction();
                 history.setFavourite(!history.isFavourite());
                 realm.commitTransaction();
+                realm.close();
 
                 if (history.isFavourite()) {
                     if (CommonUtils.isLollipopOrHigher()) {
