@@ -24,6 +24,8 @@ public interface FavouriteContract {
         void onFavouriteResult(List<History> favouriteList);
 
         void onEmptyResult();
+
+        void onEmptySearchResult();
     }
 
     interface Presenter extends ApiContract.Presenter<View> {

@@ -59,8 +59,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
         super.onViewCreated(view, savedInstanceState);
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoText(getString(R.string.empty_history_and_translation));
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_tab_settings);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_no_history);
     }
 
     @NonNull
@@ -80,7 +79,8 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     }
 
     private void setUpOrUpdateRecyclerView(List<History> historyList) {
-        infoShowerCoordinatorLayout.hide();
+        if (historyList.size() != 0)
+            infoShowerCoordinatorLayout.hide();
         searchView.setVisibility(View.VISIBLE);
         if (adapter == null) {
             adapter = new HistoryAndFavouriteRecyclerAdapter(historyList);
@@ -111,6 +111,15 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
+        infoShowerCoordinatorLayout.whitTopMargin(false);
+        infoShowerCoordinatorLayout.setInfoText(getString(R.string.empty_history_and_translation));
+        infoShowerCoordinatorLayout.show();
+    }
+
+    @Override
+    public void onEmptySearchResult() {
+        infoShowerCoordinatorLayout.whitTopMargin(true);
+        infoShowerCoordinatorLayout.setInfoText(getString(R.string.no_matches_found));
         infoShowerCoordinatorLayout.show();
     }
 

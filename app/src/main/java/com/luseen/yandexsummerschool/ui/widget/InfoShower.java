@@ -10,6 +10,10 @@ public interface InfoShower {
 
     void hide();
 
+    void forceShow();
+
+    void forceHide();
+
     void setInfoText(String infoText);
 
     void setInfoIcon(int infoIcon);

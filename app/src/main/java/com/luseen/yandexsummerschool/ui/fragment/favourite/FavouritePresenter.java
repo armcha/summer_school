@@ -63,7 +63,12 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
             return;
         compositeSubscription.add(dataManager.getFavouritesByKeyWord(input)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getView()::onFavouriteResult));
+                .subscribe(histories -> {
+                    getView().onFavouriteResult(histories);
+                    if (histories.size() == 0) {
+                        getView().onEmptySearchResult();
+                    }
+                }));
     }
 
     @Override

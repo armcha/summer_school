@@ -24,6 +24,7 @@
     <string name="about_help_info">Справка</string>
     <string name="about_mobilization">Мобилизация</string>
     <string name="translator">Переводчик</string>
+    <string name="no_matches_found">Ничего не найдено</string>
 
     <string-array name="about">
         <item>@string/about_another_apps</item>

@@ -24,6 +24,8 @@ public interface HistoryContract {
         void onError();
 
         void onEmptyResult();
+
+        void onEmptySearchResult();
     }
 
     interface Presenter extends ApiContract.Presenter<View> {

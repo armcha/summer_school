@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.ViewUtils;
 
 /**
  * Created by Chatikyan on 06.04.2017.
@@ -24,6 +24,7 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
     private AppCompatImageView infoIconImageView;
     private TextView infoTextView;
     private View rootView;
+    private boolean whitTopMargin = false;
 
     public InfoShowerCoordinatorLayout(Context context) {
         super(context);
@@ -41,6 +42,7 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
         rootView = inflater.inflate(R.layout.info_view, this, false);
         infoIconImageView = (AppCompatImageView) rootView.findViewById(R.id.info_icon);
         infoTextView = (TextView) rootView.findViewById(R.id.info_text);
+        rootView.setVisibility(GONE);
         addView(rootView);
 
         hide();
@@ -58,6 +60,8 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
 
     @Override
     public void show() {
+        if (rootView.getVisibility() == VISIBLE) return;
+
         rootView.setVisibility(VISIBLE);
         rootView.setScaleX(0);
         rootView.setScaleY(0);
@@ -90,5 +94,28 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
                     }
                 })
                 .start();
+    }
+
+    @Override
+    public void forceShow() {
+        rootView.setVisibility(VISIBLE);
+        rootView.setScaleX(1);
+        rootView.setScaleY(1);
+    }
+
+    @Override
+    public void forceHide() {
+        rootView.setVisibility(GONE);
+        rootView.setScaleX(0);
+        rootView.setScaleY(0);
+    }
+
+    public void whitTopMargin(boolean enable) {
+        this.whitTopMargin = enable;
+        if (enable) {
+            ViewUtils.setViewMargins(rootView, new int[]{0, 70, 0, 0});
+        } else {
+            ViewUtils.setViewMargins(rootView, new int[]{0, 30, 0, 0});
+        }
     }
 }

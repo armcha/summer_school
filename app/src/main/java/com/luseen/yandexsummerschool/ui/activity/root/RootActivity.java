@@ -49,7 +49,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
-        mainViewPager.setCurrentItem(2);
+        mainViewPager.setCurrentItem(1);
         mainViewPager.setPagingEnabled(false);
         viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
                 .subscribe(bottomNavigationView::selectTab);

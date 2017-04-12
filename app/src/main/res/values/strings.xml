@@ -24,6 +24,7 @@
     <string name="about_help_info">Help</string>
     <string name="about_mobilization">Mobilization</string>
     <string name="translator">Translator</string>
+    <string name="no_matches_found">No matches were found</string>
 
     <string-array name="about">
         <item>@string/about_another_apps</item>

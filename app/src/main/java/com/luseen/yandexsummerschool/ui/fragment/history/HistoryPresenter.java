@@ -9,6 +9,8 @@ import com.luseen.yandexsummerschool.utils.RxUtils;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -68,7 +70,12 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
             return;
         compositeSubscription.add(dataManager.getHistoriesByKeyWord(input)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(getView()::onHistoryResult));
+                .subscribe(histories -> {
+                    getView().onHistoryResult(histories);
+                    if (histories.size() == 0) {
+                        getView().onEmptySearchResult();
+                    }
+                }));
     }
 
     @Override
