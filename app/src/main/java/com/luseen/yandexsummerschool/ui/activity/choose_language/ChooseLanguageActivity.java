@@ -7,6 +7,8 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiActivity;
@@ -39,6 +41,9 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     @BindView(R.id.progress_view)
     YaProgressView progressView;
+
+    @BindView(R.id.error_view)
+    LinearLayout errorView;
 
     private String languageChooseType;
 
@@ -87,13 +92,14 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     @Override
     public void showError() {
-        // TODO: 05.04.2017
+        errorView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onResult(AvailableLanguages availableLanguages,
                          String lastSelectedLanguage,
                          List<Language> lastUsedLanguages) {
+        errorView.setVisibility(View.GONE);
         setUpRecyclerView(availableLanguages, lastSelectedLanguage, lastUsedLanguages);
     }
 
@@ -140,5 +146,10 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
         super.onBackPressed();
         presenter.handleBackPress();
         enableExitAnimation();
+    }
+
+    @OnClick(R.id.retry_button)
+    public void onRetryClicked() {
+        presenter.retry();
     }
 }

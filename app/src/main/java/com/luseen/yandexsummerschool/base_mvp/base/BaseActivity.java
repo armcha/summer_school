@@ -48,6 +48,10 @@ public abstract class BaseActivity<V extends BaseContract.View, P extends BaseCo
             unbinder.unbind();
         }
     }
+    
+    protected void showError(){
+        // TODO: 12.04.2017  
+    }
 
     protected void enableEnterAnimation() {
         overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);

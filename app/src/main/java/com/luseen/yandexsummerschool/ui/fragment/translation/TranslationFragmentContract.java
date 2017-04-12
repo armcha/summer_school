@@ -45,5 +45,7 @@ public interface TranslationFragmentContract {
         void clearLastInputAndTranslate();
 
         void setFavourite(String identifier);
+
+        void retry(String inputText);
     }
 }

@@ -25,6 +25,10 @@
     <string name="about_mobilization">Мобилизация</string>
     <string name="translator">Переводчик</string>
     <string name="no_matches_found">Ничего не найдено</string>
+    <string name="no_connection_text">Проверьте подключение к Интернету и повторите попытку.
+        Для работы без интернета загрузите офлайн-перевод для этого направления в настройках.</string>
+    <string name="no_connection_title">Ошибка соединения</string>
+    <string name="retry">Повторить</string>
 
     <string-array name="about">
         <item>@string/about_another_apps</item>

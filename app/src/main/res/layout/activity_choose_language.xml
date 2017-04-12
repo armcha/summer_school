@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context="com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity">
 
     <include layout="@layout/toolbar" />
@@ -11,8 +12,9 @@
         android:id="@+id/choose_language_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?actionBarSize"
-        android:background="@color/white" />
+        android:layout_marginTop="?actionBarSize" />
+
+    <include layout="@layout/error_view" />
 
     <include layout="@layout/progress_view" />
 

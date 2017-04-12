@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/error_view"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:visibility="gone"
+    android:layout_gravity="center"
+    android:orientation="vertical">
+
+    <com.luseen.yandexsummerschool.ui.widget.FontTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="10dp"
+        android:text="@string/no_connection_title"
+        android:textColor="@color/gray"
+        android:textSize="17sp" />
+
+    <com.luseen.yandexsummerschool.ui.widget.FontTextView
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="@string/no_connection_text"
+        android:textColor="@color/gray"
+        android:textSize="14sp" />
+
+    <Button
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="35dp"
+        android:layout_gravity="center_horizontal"
+        android:background="@color/retry_button_color"
+        android:foreground="?selectableItemBackground"
+        android:text="@string/retry"
+        android:textStyle="normal"
+        android:id="@+id/retry_button"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:textColor="@color/black"
+        android:textSize="13sp" />
+</LinearLayout>

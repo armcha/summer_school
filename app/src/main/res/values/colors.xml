@@ -16,4 +16,5 @@
     <color name="splash_status_bar_color">#F5F6F7</color>
     <color name="ripple_color_pre_lollipop">#90FFD740</color>
     <color name="ripple_color">#FFD740</color>
+    <color name="retry_button_color">#ebe9e9e9</color>
 </resources>

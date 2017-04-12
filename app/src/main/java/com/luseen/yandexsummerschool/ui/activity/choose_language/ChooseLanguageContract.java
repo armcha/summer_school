@@ -38,5 +38,7 @@ public interface ChooseLanguageContract {
         void handleLanguageSelection(Language language);
 
         void handleBackPress();
+
+        void retry();
     }
 }

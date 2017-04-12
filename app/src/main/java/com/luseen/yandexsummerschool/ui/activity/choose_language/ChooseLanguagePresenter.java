@@ -8,6 +8,7 @@ import com.luseen.yandexsummerschool.model.Language;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.utils.LanguageUtils;
+import com.luseen.yandexsummerschool.utils.NetworkUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -109,9 +110,14 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
     @Override
     public void startAvailableLanguagesRequest() {
         if (isViewAttached()) {
-            String uiLanguage = LanguageUtils.getCurrentLocal().toString();
-            makeRequest(dataManager.getAvailableTranslationLanguages(uiLanguage),
-                    RequestType.AVAILABLE_LANGUAGES);
+            if (NetworkUtils.isNetworkAvailable()) {
+                String uiLanguage = LanguageUtils.getCurrentLocal().toString();
+                makeRequest(dataManager.getAvailableTranslationLanguages(uiLanguage),
+                        RequestType.AVAILABLE_LANGUAGES);
+            } else {
+                getView().hideLoading();
+                getView().showError();
+            }
         }
     }
 
@@ -149,6 +155,11 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         if (isViewAttached()) {
             getView().setResultCancel();
         }
+    }
+
+    @Override
+    public void retry() {
+        startAvailableLanguagesRequest();
     }
 
     @Override

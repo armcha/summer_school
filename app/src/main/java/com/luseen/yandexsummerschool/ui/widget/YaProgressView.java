@@ -27,14 +27,14 @@ public class YaProgressView extends View implements Viewable {
 
     private static final long ANIMATION_START_DELAY = 500L;
     private static final int HIDE_SHOW_DURATION = 100;
-    private static final int ROTATE_DURATION = 1000;
+    private static final int ROTATE_DURATION = 900;
     private static final float SWEEP_ANGLE = 180;
     private static final float START_ANGLE = 0;
 
-    private int progressColor;
     private RotateAnimation rotateAnimation;
     private Paint progressPaint;
     private RectF rectF;
+    private int progressColor;
 
     public YaProgressView(@NonNull Context context) {
         super(context);

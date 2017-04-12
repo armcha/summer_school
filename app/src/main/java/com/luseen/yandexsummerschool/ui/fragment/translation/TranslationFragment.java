@@ -36,7 +36,6 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtils;
-import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -51,17 +50,14 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
         implements TranslationFragmentContract.View,
         CloseIcon.CloseIconClickListener,
         KeyboardVisibilityEventListener {
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
+    public static final long DEBOUNCE_TIMEOUT = 500L;
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -92,6 +88,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @BindView(R.id.favourite_icon)
     FloatingActionButton favouriteIcon;
+
+    @BindView(R.id.error_view)
+    LinearLayout errorView;
 
     private Subscription textWatcherSubscription;
     private Unregistrar unregistrar;
@@ -162,7 +161,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                         reset();
                     }
                 })
-                .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
+                .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(String::trim)
                 .filter(input -> !input.isEmpty())
                 .subscribe(s -> presenter.handleInputText(s));
@@ -174,6 +173,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         progressView.hide();
         dictView.reset();
         favouriteIcon.hide();
+        errorView.setVisibility(View.GONE);
     }
 
     @Override
@@ -206,7 +206,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onClick() {
         if (translationView.isEnable()) {
             translationView.disable();
-            Logger.log("Root hide ");
             KeyboardUtils.hideKeyboard(rootLayout);
         } else {
             translationView.enable();
@@ -226,11 +225,14 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void showError() {
-
+        errorView.setVisibility(View.VISIBLE);
+        dictView.reset();
+        translationTextView.reset();
     }
 
     @Override
     public void onTranslationResult(Translation translation, String identifier) {
+        errorView.setVisibility(View.GONE);
         if (translationView.hasText()) {
             translationTextView.setText(translation.getTranslatedText());
             dictView.reset();
@@ -241,6 +243,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Override
     public void onDictionaryResult(Dictionary dictionary, String identifier) {
+        errorView.setVisibility(View.GONE);
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
             dictView.updateDictionary(dictionary);
@@ -356,5 +359,10 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (!isOpen) {
             translationView.disable();
         }
+    }
+
+    @OnClick(R.id.retry_button)
+    public void onRetryClicked() {
+        presenter.retry(translationView.getTranslationEditText().getText().toString());
     }
 }

@@ -13,8 +13,9 @@ import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
+import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.NetworkUtils;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
@@ -170,10 +171,19 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                             getView().onDictionaryResult(dictionary, history.getIdentifier());
                         }
                     } else {
+                        //check if network is available, than onError or make request
+                        if (!NetworkUtils.isNetworkAvailable()) {
+                            if (isViewAttached()) {
+                                getView().hideLoading();
+                                getView().showError();
+                            }
+                            return;
+                        }
                         //Making both translate and dictionary request
                         makeLookUpAndTranslateRequest(inputText);
                     }
                 }, throwable -> {
+                    ExceptionTracker.trackException(throwable);
                     getView().hideLoading();
                     getView().showError();
                 }));
@@ -248,6 +258,11 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                         getView().changeFavouriteIconState(history.isFavourite(), identifier);
                     }
                 }));
+    }
+
+    @Override
+    public void retry(String inputText) {
+        handleInputText(inputText);
     }
 
     @Override
