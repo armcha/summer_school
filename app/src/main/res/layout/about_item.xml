@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="?selectableItemBackground"
+    android:background="@drawable/ripple_bg"
     android:clickable="true">
 
     <com.luseen.yandexsummerschool.ui.widget.FontTextView

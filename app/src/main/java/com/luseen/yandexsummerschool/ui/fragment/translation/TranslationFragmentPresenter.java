@@ -2,7 +2,6 @@ package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 import android.app.Activity;
 
-import com.luseen.yandexsummerschool.App;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
@@ -13,9 +12,9 @@ import com.luseen.yandexsummerschool.model.YaError;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
-import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
@@ -143,12 +142,15 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     //handling user input
     @Override
     public void handleInputText(String inputText) {
+        if (inputText.equals(dataManager.getLastTranslatedText())) return;
+
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
         if (isViewAttached()) {
             getView().showLoading();
         }
+
         String historyIdentifier = getIdentifier(inputText);
         historySubscriptions.add(dataManager.getHistoryByIdentifier(historyIdentifier)
                 .observeOn(AndroidSchedulers.mainThread())

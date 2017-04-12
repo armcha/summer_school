@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -141,6 +142,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
         searchEditText.setSingleLine(true);
         searchEditText.setOnClickListener(this);
         searchEditText.setHintTextColor(inActiveBorderColor);
+        searchEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         ViewUtils.setEditTextDefaultCursorDrawable(searchEditText);
         //underline thickness
         searchEditText.setPadding(0, 2, 0, 0);

@@ -33,11 +33,7 @@ public class CloseIcon extends AppCompatImageView implements View.OnClickListene
 
     @Override
     public void init(Context context) {
-        int[] attrs = {R.attr.selectableItemBackgroundBorderless};
-        TypedArray typedArray = context.obtainStyledAttributes(attrs);
-        int backgroundResource = typedArray.getResourceId(0, 0);
-        Drawable backGround = ContextCompat.getDrawable(context, backgroundResource);
-        typedArray.recycle();
+        Drawable backGround = ContextCompat.getDrawable(context, R.drawable.ripple_bg);
         setVisibility(GONE);
         setBackground(backGround);
         setImageResource(R.drawable.close_icon);

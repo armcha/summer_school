@@ -7,9 +7,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.support.v4.content.ContextCompat;
+import android.text.InputFilter;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 
@@ -25,6 +27,8 @@ import com.luseen.yandexsummerschool.utils.ViewUtils;
  */
 
 public class TranslationView extends RelativeLayout implements View.OnClickListener, Viewable {
+
+    public static final int MAX_INPUT_LENGTH = 1000;
 
     private boolean isEnable = false;
     private int activeBorderColor;
@@ -71,6 +75,8 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         translationEditText.setHintTextColor(hintColor);
         translationEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         translationEditText.setSingleLine(false);
+        translationEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        translationEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_INPUT_LENGTH)});
         ViewUtils.setEditTextDefaultCursorDrawable(translationEditText);
         translationEditText.addTextChangedListener(new AbstractTextWatcher() {
             @Override

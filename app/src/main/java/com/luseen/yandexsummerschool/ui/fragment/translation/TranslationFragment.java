@@ -36,6 +36,7 @@ import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtils;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEventListener;
@@ -50,6 +51,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -119,7 +121,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         setUpDictView();
         setUpTextWatcher();
         translationView.getCloseIcon().setCloseIconClickListener(this);
-
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), this);
         favouriteIcon.hide();
     }
@@ -127,6 +128,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onResume() {
         super.onResume();
+        //translationView.enable();
+        //KeyboardUtils.showKeyboard(rootLayout);
         // FIXME: 10.04.2017 hide keyboard after opening lock screen
 //        if (KeyboardVisibilityEvent.isKeyboardVisible(getActivity())) {
 //            KeyboardUtils.hideKeyboard(rootLayout);
@@ -160,8 +163,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                     }
                 })
                 .debounce(500L, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
-                .filter(input -> !input.isEmpty())
                 .map(String::trim)
+                .filter(input -> !input.isEmpty())
                 .subscribe(s -> presenter.handleInputText(s));
     }
 
@@ -203,6 +206,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onClick() {
         if (translationView.isEnable()) {
             translationView.disable();
+            Logger.log("Root hide ");
             KeyboardUtils.hideKeyboard(rootLayout);
         } else {
             translationView.enable();

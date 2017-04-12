@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
@@ -32,7 +33,7 @@ import static android.widget.LinearLayout.VERTICAL;
  * Created by Chatikyan on 22.03.2017.
  */
 
-public class DictionaryView extends NestedScrollView implements Viewable {
+public class DictionaryView extends ScrollView implements Viewable {
 
     private static final float RELATIVE_SPAN_PROPORTION = 0.7f;
     private static final float DEFAULT_TEXT_SIZE_IN_SP = 18f;
