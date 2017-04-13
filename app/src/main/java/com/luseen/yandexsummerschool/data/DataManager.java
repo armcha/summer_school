@@ -75,6 +75,11 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
+    public Observable<History> setFavourite(History history) {
+        return appDbHelper.setFavourite(history);
+    }
+
+    @Override
     public Observable<History> getHistoryByIdentifier(String identifier) {
         return appDbHelper.getHistoryByIdentifier(identifier);
     }

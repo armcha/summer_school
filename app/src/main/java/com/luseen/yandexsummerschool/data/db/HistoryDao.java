@@ -18,6 +18,7 @@ import io.realm.RealmQuery;
 import io.realm.RealmResults;
 import io.realm.Sort;
 import rx.Completable;
+import rx.Emitter;
 import rx.Observable;
 
 public class HistoryDao {
@@ -54,6 +55,22 @@ public class HistoryDao {
             });
             realm.close();
         });
+    }
+
+    public Observable<History> setFavourite(History history) {
+        return Observable.fromEmitter(historyEmitter -> {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> {
+                try {
+                    history.setFavourite(!history.isFavourite());
+                    historyEmitter.onNext(history);
+                    historyEmitter.onCompleted();
+                } catch (Exception e) {
+                    historyEmitter.onError(e);
+                }
+            });
+            realm.close();
+        }, Emitter.BackpressureMode.BUFFER);
     }
 
     private LanguagePair createLanguagePair(LanguagePair languagePair) {

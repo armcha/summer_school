@@ -138,7 +138,6 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
 
     @Override
     public void onFavouriteClicked(boolean isFavourite, String identifier) {
-        presenter.fetchFavourite();
         EventBus.getDefault().post(new HistoryEvent());
         EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
     }

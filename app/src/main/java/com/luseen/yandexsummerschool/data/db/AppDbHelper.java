@@ -26,6 +26,11 @@ public class AppDbHelper implements DbHelper {
     }
 
     @Override
+    public Observable<History> setFavourite(History history) {
+        return historyDao.setFavourite(history);
+    }
+
+    @Override
     public Observable<History> getHistoryByIdentifier(String identifier) {
         return historyDao.getHistoryByIdentifier(identifier);
     }

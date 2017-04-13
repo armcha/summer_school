@@ -8,7 +8,6 @@ import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import io.realm.RealmResults;
 import rx.Completable;
 import rx.Observable;
-import rx.Single;
 
 /**
  * Created by Chatikyan on 19.03.2017.
@@ -17,6 +16,8 @@ import rx.Single;
 public interface DbHelper {
 
     Completable saveHistory(History history);
+
+    Observable<History> setFavourite(History history);
 
     Observable<History> getHistoryByIdentifier(String identifier);
 

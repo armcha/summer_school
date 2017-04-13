@@ -42,7 +42,7 @@ public class DiffCallback extends DiffUtil.Callback {
     public boolean areContentsTheSame(int oldItemPosition, int newItemPosition) {
         final History oldItem = oldHistory.get(oldItemPosition);
         final History newItem = newHistory.get(newItemPosition);
-        return oldItem.getDictionary().getOriginalText().equals(newItem.getDictionary().getOriginalText());
+        return true;
     }
 
     @Nullable

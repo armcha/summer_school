@@ -143,7 +143,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     //handling user input
     @Override
     public void handleInputText(String inputText) {
-        if (inputText.equals(dataManager.getLastTranslatedText())) return;
+        //if (inputText.equals(dataManager.getLastTranslatedText())) return;
 
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
