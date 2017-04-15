@@ -40,6 +40,7 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     ImageView deleteHistoryIcon;
 
     private HistoryAndFavouritePagerAdapter adapter;
+    private AlertDialog alertDialog;
 
     public static HistoryAndFavouriteRootFragment newInstance() {
         return new HistoryAndFavouriteRootFragment();
@@ -83,7 +84,8 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
         builder.setMessage(getString(R.string.delete_history_and_fav_text))
                 .setPositiveButton(R.string.yes, (dialog, id) -> presenter.clearHistoryAndFavouriteData())
                 .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
-        builder.create().show();
+        alertDialog = builder.create();
+        alertDialog.show();
     }
 
     @Override
@@ -124,5 +126,13 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     @Override
     public void hideDeleteIcon() {
         deleteHistoryIcon.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (alertDialog != null && alertDialog.isShowing()) {
+            alertDialog.dismiss();
+        }
     }
 }

@@ -35,5 +35,7 @@ public interface FavouriteContract {
         void doSearch(String input);
 
         void resetFavourite();
+
+        void decideFavouriteFetching(String searchText);
     }
 }

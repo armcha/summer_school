@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.ui.widget;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
@@ -14,6 +15,7 @@ import android.widget.RelativeLayout;
 
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
+import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.DimenUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
@@ -35,6 +37,8 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
 
         void onEmptyInput();
     }
+
+    public static final String SEARCH_TEXT_STATE_KEY = "search_text_state_key";
 
     @IdRes
     public static final int SEARCH_ICON_ID = 1;
@@ -110,6 +114,18 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
             if (!isEnable) enable();
         });
         disable();
+    }
+
+    public void onSaveInstance(Bundle outState) {
+        outState.putString(SEARCH_TEXT_STATE_KEY, searchEditText.getText().toString());
+    }
+
+    public void restoreInstance(Bundle savedInstance) {
+        if (CommonUtils.bundleContainsKeyAndNonNull(savedInstance, SEARCH_TEXT_STATE_KEY)) {
+            String inputText = savedInstance.getString(SEARCH_TEXT_STATE_KEY);
+            resetIcon.show();
+            searchEditText.setText(inputText);
+        }
     }
 
     private void addBottomDivider(Context context) {
@@ -225,5 +241,9 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
 
     public void setSearchListener(SearchListener searchListener) {
         this.searchListener = searchListener;
+    }
+
+    public String getSearchText() {
+        return searchEditText.getText().toString();
     }
 }

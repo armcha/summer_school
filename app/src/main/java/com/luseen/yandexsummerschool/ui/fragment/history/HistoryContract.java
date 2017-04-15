@@ -1,11 +1,11 @@
 package com.luseen.yandexsummerschool.ui.fragment.history;
 
+import android.os.Bundle;
+
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
 import com.luseen.yandexsummerschool.model.History;
 
 import java.util.List;
-
-import io.realm.RealmResults;
 
 /**
  * Created by Chatikyan on 02.04.2017.
@@ -35,5 +35,7 @@ public interface HistoryContract {
         void doSearch(String input);
 
         void resetHistory();
+
+        void decideHistoryFetching(String searchText);
     }
 }

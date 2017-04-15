@@ -61,8 +61,8 @@ public class Api {
                     .build();
             return chain.proceed(request);
         });
-        builder.readTimeout(10, TimeUnit.SECONDS)
-                .connectTimeout(10, TimeUnit.SECONDS);
+        builder.readTimeout(15, TimeUnit.SECONDS)
+                .connectTimeout(15, TimeUnit.SECONDS);
 
         return builder.build();
     }

@@ -57,9 +57,21 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpSearchView(savedInstanceState);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_no_history);
+        presenter.decideHistoryFetching(searchView.getSearchText());
+    }
+
+    private void setUpSearchView(Bundle savedInstanceState) {
         searchView.setHint(getString(R.string.history_search_hint));
         searchView.setSearchListener(this);
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_no_history);
+        searchView.restoreInstance(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        searchView.onSaveInstance(outState);
     }
 
     @NonNull

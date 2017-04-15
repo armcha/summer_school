@@ -20,6 +20,6 @@ public class NetworkUtils {
         ConnectivityManager connectivityManager = (ConnectivityManager)
                 App.getInstance().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null;
+        return CommonUtils.nonNull(activeNetworkInfo);
     }
 }

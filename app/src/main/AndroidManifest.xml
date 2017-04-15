@@ -23,7 +23,7 @@
         <activity
             android:name=".ui.activity.root.RootActivity"
             android:theme="@style/NoActionBar"
-            android:windowSoftInputMode="adjustPan|stateVisible">
+            android:windowSoftInputMode="adjustPan">
         </activity>
         <activity
             android:name=".ui.activity.choose_language.ChooseLanguageActivity"

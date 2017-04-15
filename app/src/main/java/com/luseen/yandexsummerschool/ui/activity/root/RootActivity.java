@@ -3,6 +3,7 @@ package com.luseen.yandexsummerschool.ui.activity.root;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
@@ -14,6 +15,7 @@ import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.CustomBottomNavigationView;
 import com.luseen.yandexsummerschool.ui.widget.NonSwappableViewPager;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
 import rx.Subscription;
@@ -22,6 +24,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         implements RootActivityContract.View,
         OnBottomNavigationItemClickListener {
 
+    public static final String CURRENT_POSITION_KEY = "current_fragment_position_bundle_key";
     public static final int FIRST_ITEM = 0;
 
     @BindView(R.id.main_view_pager)
@@ -31,6 +34,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     CustomBottomNavigationView bottomNavigationView;
 
     private Subscription viewPagerSubscription;
+    private int currentFragmentPosition;
 
     public static void start(Context context) {
         Intent starter = new Intent(context, RootActivity.class);
@@ -45,13 +49,25 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         setUpViewPager();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(CURRENT_POSITION_KEY, currentFragmentPosition);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        currentFragmentPosition = savedInstanceState.getInt(CURRENT_POSITION_KEY);
+    }
+
     private void setUpViewPager() {
         MainPagerAdapter pagerAdapter = new MainPagerAdapter(getSupportFragmentManager());
         mainViewPager.setAdapter(pagerAdapter);
         mainViewPager.setOffscreenPageLimit(3);
         mainViewPager.setPagingEnabled(false);
         viewPagerSubscription = RxViewPager.pageSelections(mainViewPager)
-                .subscribe(bottomNavigationView::selectTab);
+                .subscribe(position -> bottomNavigationView.selectTab(position));
     }
 
     private void setUpBottomNavigation() {
@@ -100,5 +116,10 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     @Override
     public void onNavigationItemClick(int index) {
         mainViewPager.setCurrentItem(index);
+        currentFragmentPosition = index;
+    }
+
+    public int getCurrentFragmentPosition() {
+        return currentFragmentPosition;
     }
 }

@@ -64,8 +64,20 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpSearchView(savedInstanceState);
+        presenter.decideFavouriteFetching(searchView.getSearchText());
+    }
+
+    private void setUpSearchView(Bundle savedInstanceState) {
         searchView.setHint(getString(R.string.favourite_search_hint));
         searchView.setSearchListener(this);
+        searchView.restoreInstance(savedInstanceState);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        searchView.onSaveInstance(outState);
     }
 
     @Override

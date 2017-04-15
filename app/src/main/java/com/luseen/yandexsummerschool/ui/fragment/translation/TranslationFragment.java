@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -25,6 +24,7 @@ import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
+import com.luseen.yandexsummerschool.ui.activity.root.RootActivity;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
 import com.luseen.yandexsummerschool.ui.widget.DictionaryView;
@@ -48,8 +48,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
-import rx.Subscription;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.subscriptions.CompositeSubscription;
 
 public class TranslationFragment extends ApiFragment<TranslationFragmentContract.View, TranslationFragmentContract.Presenter>
         implements TranslationFragmentContract.View,
@@ -57,6 +58,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         KeyboardVisibilityEventListener {
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
+    public static final int TRANSLATION_FRAGMENT_POSITION = 0;
+    public static final int KEYBOARD_OPEN_DELAY = 500;
     public static final long DEBOUNCE_TIMEOUT = 500L;
 
     @BindView(R.id.toolbar)
@@ -92,7 +95,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.error_view)
     LinearLayout errorView;
 
-    private Subscription textWatcherSubscription;
+    private CompositeSubscription subscriptions = new CompositeSubscription();
     private Unregistrar unregistrar;
     private DictionaryView dictView;
     private String currentIdentifier;
@@ -122,6 +125,13 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         translationView.getCloseIcon().setCloseIconClickListener(this);
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), this);
         favouriteIcon.hide();
+
+        //Some hack to open keyboard on fragment start,
+        //whit stateVisible mode it opens keyboard on history and setting screen on screen orientation change
+        subscriptions.add(Observable.timer(KEYBOARD_OPEN_DELAY, TimeUnit.MILLISECONDS)
+                .map(aLong -> ((RootActivity) getActivity()).getCurrentFragmentPosition())
+                .filter(currentPosition -> currentPosition == TRANSLATION_FRAGMENT_POSITION)
+                .subscribe(aLong -> KeyboardUtils.showKeyboard(rootLayout)));
     }
 
     @Override
@@ -153,7 +163,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     private void setUpTextWatcher() {
-        textWatcherSubscription = RxTextView.textChanges(translationView.getTranslationEditText())
+        subscriptions.add(RxTextView.textChanges(translationView.getTranslationEditText())
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
@@ -164,7 +174,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .debounce(DEBOUNCE_TIMEOUT, TimeUnit.MILLISECONDS, AndroidSchedulers.mainThread())
                 .map(String::trim)
                 .filter(input -> !input.isEmpty())
-                .subscribe(s -> presenter.handleInputText(s));
+                .subscribe(input -> presenter.handleInputText(input)));
     }
 
     private void reset() {
@@ -179,7 +189,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        RxUtils.unsubscribe(textWatcherSubscription);
+        RxUtils.unsubscribe(subscriptions);
         if (unregistrar != null) {
             unregistrar.unregister();
         }

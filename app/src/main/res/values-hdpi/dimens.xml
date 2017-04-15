@@ -10,4 +10,6 @@
     <dimen name="bottom_active_text">13sp</dimen>
     <dimen name="bottom_in_active_text">11sp</dimen>
     <dimen name="about_logo_size">80dp</dimen>
+    <dimen name="translation_view_landscape_width">250dp</dimen>
+    <dimen name="translation_root_layout_landscape_margin">270dp</dimen>
 </resources>

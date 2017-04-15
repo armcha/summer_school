@@ -4,6 +4,7 @@ import android.app.Activity;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
+import com.luseen.yandexsummerschool.data.api.ApiHelper;
 import com.luseen.yandexsummerschool.data.api.RequestType;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
@@ -15,6 +16,7 @@ import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseType;
 import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
+import com.luseen.yandexsummerschool.utils.LanguageUtils;
 import com.luseen.yandexsummerschool.utils.NetworkUtils;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
@@ -193,10 +195,13 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
         String lookUpLanguage = pair.getLookupLanguage();
+        String uiLang = LanguageUtils.getCurrentLocal().toString();
         Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(
                 inputText,
                 translationLanguage,
-                lookUpLanguage);
+                lookUpLanguage,
+                uiLang,
+                ApiHelper.SHORT_POS);
         makeRequest(dictionaryObservable, RequestType.LOOKUP);
     }
 

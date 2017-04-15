@@ -48,8 +48,8 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<Dictionary> lookup(String lang, String text) {
-        return dictionaryService.lookup(lang, text);
+    public Observable<Dictionary> lookup(String lang, String text, String uiLang, int flag) {
+        return dictionaryService.lookup(lang, text, uiLang, flag);
     }
 
     @Override
@@ -58,11 +58,10 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
     }
 
     @Override
-    public Observable<Dictionary> translateAndLookUp(String text,
-                                                     String translationLanguage,
-                                                     String lookUpLanguage) {
+    public Observable<Dictionary> translateAndLookUp(String text, String translationLanguage,
+                                                     String lookUpLanguage, String uiLang, int flag) {
         return Observable.zip(translate(text, translationLanguage),
-                lookup(lookUpLanguage, text), (translation, dictionary) -> {
+                lookup(lookUpLanguage, text, uiLang, flag), (translation, dictionary) -> {
                     dictionary.setOriginalText(text);
                     dictionary.setTranslatedText(translation.getTranslatedText());
                     return dictionary;

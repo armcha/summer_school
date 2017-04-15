@@ -9,8 +9,6 @@ import com.luseen.yandexsummerschool.utils.RxUtils;
 import io.realm.RealmResults;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.functions.Func1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -21,12 +19,6 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
         implements HistoryContract.Presenter {
 
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        fetchHistory();
-    }
 
     @Override
     public void onStart(RequestType requestType) {
@@ -82,6 +74,16 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
     public void resetHistory() {
         fetchHistory();
     }
+
+    @Override
+    public void decideHistoryFetching(String searchText) {
+        if (searchText.length() > 0) {
+            doSearch(searchText);
+        } else {
+            fetchHistory();
+        }
+    }
+
 
     @Override
     public void onDestroy() {

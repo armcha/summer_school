@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.ComponentName;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.support.customtabs.CustomTabsClient;
 import android.support.customtabs.CustomTabsIntent;
 import android.support.customtabs.CustomTabsServiceConnection;
@@ -55,5 +56,16 @@ public class CommonUtils {
                 .build();
 
         customTabsIntent.launchUrl(context, Uri.parse(url));
+    }
+
+    public static boolean bundleContainsKeyAndNonNull(Bundle savedInstanceState, String key) {
+        return nonNull(savedInstanceState) &&
+                savedInstanceState.containsKey(key) &&
+                savedInstanceState.getString(key) != null &&
+                !savedInstanceState.getString(key).isEmpty();
+    }
+
+    public static boolean nonNull(Object object) {
+        return object != null;
     }
 }

@@ -18,12 +18,6 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
     private CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        fetchFavourite();
-    }
-
-    @Override
     public void onStart(RequestType requestType) {
 
     }
@@ -74,6 +68,15 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
     @Override
     public void resetFavourite() {
         fetchFavourite();
+    }
+
+    @Override
+    public void decideFavouriteFetching(String searchText) {
+        if (searchText.length() > 0) {
+            doSearch(searchText);
+        } else {
+            fetchFavourite();
+        }
     }
 
     @Override
