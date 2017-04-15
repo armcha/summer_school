@@ -12,4 +12,8 @@
     <dimen name="about_logo_size">90dp</dimen>
     <dimen name="translation_view_landscape_width">250dp</dimen>
     <dimen name="translation_root_layout_landscape_margin">270dp</dimen>
+    <dimen name="translation_view_heigth">130dp</dimen>
+    <dimen name="translate_editext_left_margin">10dp</dimen>
+    <dimen name="translate_editext_right_margin">20dp</dimen>
+    <dimen name="translate_editext_bottom_margin">30dp</dimen>
 </resources>

@@ -18,7 +18,6 @@ import android.widget.RelativeLayout;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
@@ -65,10 +64,14 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
     private void addEditText(Context context) {
         translationEditText = new EditText(context);
         addView(translationEditText, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        int editTextLeftMargin = (int) context.getResources().getDimension(R.dimen.translate_editext_left_margin);
+        int editTextRightMargin = (int) context.getResources().getDimension(R.dimen.translate_editext_right_margin);
+        int editTextBottomMargin = (int) context.getResources().getDimension(R.dimen.translate_editext_bottom_margin);
         LayoutParams params = (LayoutParams) translationEditText.getLayoutParams();
         params.addRule(ALIGN_PARENT_LEFT);
         params.addRule(ALIGN_PARENT_TOP);
-        ViewUtils.setViewMargins(translationEditText, new int[]{10, 0, 20, 30});
+        params.setMargins(editTextLeftMargin, 0, editTextRightMargin, editTextBottomMargin);
+
         translationEditText.setHint(context.getString(R.string.type_text));
         translationEditText.setBackground(null);
         translationEditText.setOnClickListener(this);

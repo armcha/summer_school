@@ -84,7 +84,7 @@
         <com.luseen.yandexsummerschool.ui.widget.TranslationView
             android:id="@+id/translation_view"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
+            android:layout_height="@dimen/translation_view_heigth"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
