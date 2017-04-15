@@ -22,6 +22,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
 import com.luseen.yandexsummerschool.ui.activity.root.RootActivity;
@@ -62,26 +63,23 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public static final int KEYBOARD_OPEN_DELAY = 500;
     public static final long DEBOUNCE_TIMEOUT = 500L;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
-    @BindView(R.id.translation_view)
-    TranslationView translationView;
-
-    @BindView(R.id.root_layout)
-    LinearLayout rootLayout;
-
-    @BindView(R.id.scroll_view)
-    NestedScrollView nestedScrollView;
-
-    @BindView(R.id.translation_text_view)
-    TranslationTextView translationTextView;
-
     @BindView(R.id.source_language_text_view)
     AnimatedTextView sourceLanguageTextView;
 
     @BindView(R.id.target_language_text_view)
     AnimatedTextView targetLanguageTextView;
+
+    @BindView(R.id.translation_text_view)
+    TranslationTextView translationTextView;
+
+    @BindView(R.id.favourite_icon)
+    FloatingActionButton favouriteIcon;
+
+    @BindView(R.id.scroll_view)
+    NestedScrollView nestedScrollView;
+
+    @BindView(R.id.translation_view)
+    TranslationView translationView;
 
     @BindView(R.id.swap_languages)
     ImageView swapLanguagesIcon;
@@ -89,16 +87,21 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.progress_view)
     YaProgressView progressView;
 
-    @BindView(R.id.favourite_icon)
-    FloatingActionButton favouriteIcon;
+    @BindView(R.id.root_layout)
+    LinearLayout rootLayout;
 
     @BindView(R.id.error_view)
     LinearLayout errorView;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+
     private CompositeSubscription subscriptions = new CompositeSubscription();
-    private Unregistrar unregistrar;
-    private DictionaryView dictView;
     private String currentIdentifier;
+    private DictionaryView dictView;
+    private Unregistrar unregistrar;
+
+    private boolean fromHistoryOrFavourite = false;
     private boolean isFavouriteIconSet;
 
     public static TranslationFragment newInstance() {
@@ -164,6 +167,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     private void setUpTextWatcher() {
         subscriptions.add(RxTextView.textChanges(translationView.getTranslationEditText())
+                .filter(charSequence -> !fromHistoryOrFavourite)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
@@ -223,6 +227,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         }
     }
 
+    @Subscribe
+    public void onHistoryReceive(FromHistoryOrFavouriteEvent fromHistoryOrFavouriteEvent) {
+        presenter.handleHistoryReceiving(fromHistoryOrFavouriteEvent.getHistory());
+    }
+
     @Override
     public void showLoading() {
         progressView.show();
@@ -252,8 +261,16 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     @Override
-    public void onDictionaryResult(Dictionary dictionary, String identifier) {
+    public void onDictionaryResult(Dictionary dictionary, String identifier, boolean fromHistoryOrFavourite) {
         errorView.setVisibility(View.GONE);
+        if (fromHistoryOrFavourite) {
+            if (currentIdentifier.equals(identifier))
+                return;
+
+            this.fromHistoryOrFavourite = true;
+            translationView.getTranslationEditText().setText(dictionary.getOriginalText());
+            this.fromHistoryOrFavourite = false;
+        }
         if (translationView.hasText()) {
             translationTextView.setText(dictionary.getTranslatedText());
             dictView.updateDictionary(dictionary);

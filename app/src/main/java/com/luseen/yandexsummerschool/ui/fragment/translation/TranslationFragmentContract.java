@@ -1,6 +1,7 @@
 package com.luseen.yandexsummerschool.ui.fragment.translation;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiContract;
+import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
@@ -21,7 +22,7 @@ public interface TranslationFragmentContract {
 
         void onTranslationResult(Translation translation, String identifier);
 
-        void onDictionaryResult(Dictionary dictionary, String identifier);
+        void onDictionaryResult(Dictionary dictionary, String identifier,boolean fromHistoryOrFavourite);
 
         void openChooseLanguageActivity(String languageChooseType);
 
@@ -47,5 +48,7 @@ public interface TranslationFragmentContract {
         void setFavourite(String identifier);
 
         void retry(String inputText);
+
+        void handleHistoryReceiving(History history);
     }
 }

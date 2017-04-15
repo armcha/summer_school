@@ -18,6 +18,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.DimenUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
+import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
 import rx.Subscription;
@@ -245,5 +246,10 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
 
     public String getSearchText() {
         return searchEditText.getText().toString();
+    }
+
+    public void reset(){
+        searchEditText.setText(StringUtils.EMPTY);
+        disable();
     }
 }

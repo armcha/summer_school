@@ -13,10 +13,11 @@ import io.realm.annotations.PrimaryKey;
 public class Dictionary extends RealmObject {
 
     @PrimaryKey
-    private String identifier;
     private String translatedText;
     private String originalText;
+    private String identifier;
     private boolean isFavourite;
+
     @SerializedName("def")
     private RealmList<Definition> definition = new RealmList<>();
 

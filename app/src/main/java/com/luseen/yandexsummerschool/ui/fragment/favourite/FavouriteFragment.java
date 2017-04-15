@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
@@ -33,14 +34,14 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
         SearchView.SearchListener {
 
-    @BindView(R.id.search_view)
-    SearchView searchView;
+    @BindView(R.id.info_shower_coordinator_layout)
+    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
 
     @BindView(R.id.favourite_recycler_view)
     RecyclerView favouriteRecyclerView;
 
-    @BindView(R.id.info_shower_coordinator_layout)
-    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
+    @BindView(R.id.search_view)
+    SearchView searchView;
 
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
@@ -139,13 +140,13 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
 
     @Subscribe
     public void onChange(FavouriteEvent favouriteEvent) {
-        Logger.log("Favourite on Change ");
+        searchView.reset();
         presenter.fetchFavourite();
     }
 
     @Override
     public void onAdapterItemClick(History history) {
-
+        EventBus.getDefault().post(new FromHistoryOrFavouriteEvent(history));
     }
 
     @Override

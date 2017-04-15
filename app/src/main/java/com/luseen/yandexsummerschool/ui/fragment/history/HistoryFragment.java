@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
+import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.HistoryEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapter;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -33,14 +33,14 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
         HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
         SearchView.SearchListener {
 
-    @BindView(R.id.search_view)
-    SearchView searchView;
+    @BindView(R.id.info_shower_coordinator_layout)
+    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
 
     @BindView(R.id.history_recycler_view)
     RecyclerView historyRecyclerView;
 
-    @BindView(R.id.info_shower_coordinator_layout)
-    InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
+    @BindView(R.id.search_view)
+    SearchView searchView;
 
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
@@ -137,13 +137,13 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
 
     @Subscribe
     public void onChange(HistoryEvent historyEvent) {
-        Logger.log("History on Change ");
+        searchView.reset();
         presenter.fetchHistory();
     }
 
     @Override
     public void onAdapterItemClick(History history) {
-        Logger.log("onHistoryItemClick " + history);
+        EventBus.getDefault().post(new FromHistoryOrFavouriteEvent(history));
     }
 
     @Override

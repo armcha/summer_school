@@ -17,6 +17,7 @@ import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseT
 import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.LanguageUtils;
+import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.NetworkUtils;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
@@ -78,7 +79,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 createHistoryFromDictionaryAndSave(dictionary);
-                getView().onDictionaryResult(dictionary, historyIdentifier);
+                getView().onDictionaryResult(dictionary, historyIdentifier, false);
             }
         }
     }
@@ -145,8 +146,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     //handling user input
     @Override
     public void handleInputText(String inputText) {
-        //if (inputText.equals(dataManager.getLastTranslatedText())) return;
-
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
@@ -160,18 +159,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 .subscribe(history -> {
                     boolean hasResultInDb = history != null && history.isValid();
                     if (hasResultInDb) {//If we had history in db, just showing from db, otherwise making request
-                        Dictionary dictionary = history.getDictionary();
-                        // TODO: 08.04.2017 add helper method
-                        Realm realm = Realm.getDefaultInstance();
-                        realm.beginTransaction();
-                        dictionary.setFavourite(history.isFavourite());
-                        realm.commitTransaction();
-                        realm.close();
-                        dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
-                        if (isViewAttached()) {
-                            getView().hideLoading();
-                            getView().onDictionaryResult(dictionary, history.getIdentifier());
-                        }
+                        dictionaryResultFromDb(history, false);
                     } else {
                         //check if network is available, than onError or make request
                         if (!NetworkUtils.isNetworkAvailable()) {
@@ -189,6 +177,20 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                     getView().hideLoading();
                     getView().showError();
                 }));
+    }
+
+    private void dictionaryResultFromDb(History history, boolean fromHistoryOrFavourite) {
+        Dictionary dictionary = history.getDictionary();
+        Realm realm = Realm.getDefaultInstance();
+        realm.beginTransaction();
+        dictionary.setFavourite(history.isFavourite());
+        realm.commitTransaction();
+        realm.close();
+        dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
+        if (isViewAttached()) {
+            getView().hideLoading();
+            getView().onDictionaryResult(dictionary, history.getIdentifier(), fromHistoryOrFavourite);
+        }
     }
 
     private void makeLookUpAndTranslateRequest(String inputText) {
@@ -268,6 +270,18 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     @Override
     public void retry(String inputText) {
         handleInputText(inputText);
+    }
+
+    @Override
+    public void handleHistoryReceiving(History history) {
+        dataManager.saveLastTypedText(history.getDictionary().getOriginalText());
+        LanguagePair historyLangPair = history.getLanguagePair();
+        LanguagePair languagePair = new LanguagePair();
+        languagePair.setSourceLanguage(historyLangPair.getSourceLanguage());
+        languagePair.setTargetLanguage(historyLangPair.getTargetLanguage());
+        dataManager.saveLanguagePair(languagePair);
+        getView().updateToolbarLanguages(history.getLanguagePair());
+        dictionaryResultFromDb(history, true);
     }
 
     @Override

@@ -12,10 +12,14 @@ import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
+import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.CustomBottomNavigationView;
 import com.luseen.yandexsummerschool.ui.widget.NonSwappableViewPager;
 import com.luseen.yandexsummerschool.utils.Logger;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import rx.Subscription;
@@ -27,11 +31,11 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     public static final String CURRENT_POSITION_KEY = "current_fragment_position_bundle_key";
     public static final int FIRST_ITEM = 0;
 
-    @BindView(R.id.main_view_pager)
-    NonSwappableViewPager mainViewPager;
-
     @BindView(R.id.bottom_navigation)
     CustomBottomNavigationView bottomNavigationView;
+
+    @BindView(R.id.main_view_pager)
+    NonSwappableViewPager mainViewPager;
 
     private Subscription viewPagerSubscription;
     private int currentFragmentPosition;
@@ -59,6 +63,23 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         currentFragmentPosition = savedInstanceState.getInt(CURRENT_POSITION_KEY);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void receiveHistory(FromHistoryOrFavouriteEvent fromHistoryOrFavouriteEvent){
+        mainViewPager.setCurrentItem(FIRST_ITEM);
     }
 
     private void setUpViewPager() {

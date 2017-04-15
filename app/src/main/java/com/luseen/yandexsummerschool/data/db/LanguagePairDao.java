@@ -5,7 +5,6 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.utils.CurrentLocale;
 import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.LanguageUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import io.realm.Realm;
 
@@ -32,9 +31,13 @@ public class LanguagePairDao {
     }
 
     public void saveLanguagePair(LanguagePair languagePair) {
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(languagePair));
-        realm.close();
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            realm.executeTransaction(realm1 -> realm1.copyToRealmOrUpdate(languagePair));
+            realm.close();
+        } catch (Exception e) {
+            ExceptionTracker.trackException(e);
+        }
     }
 
     public LanguagePair getLanguagePair() {
