@@ -36,14 +36,14 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
     @BindView(R.id.toolbar_title)
     AnimatedTextView toolbarTitleTextView;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
-
     @BindView(R.id.progress_view)
     YaProgressView progressView;
 
     @BindView(R.id.error_view)
     LinearLayout errorView;
+
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
 
     private String languageChooseType;
 

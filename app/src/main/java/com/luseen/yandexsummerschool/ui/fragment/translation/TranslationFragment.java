@@ -45,6 +45,7 @@ import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -137,20 +138,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .subscribe(aLong -> KeyboardUtils.showKeyboard(rootLayout)));
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //translationView.enable();
-        //KeyboardUtils.showKeyboard(rootLayout);
-        // FIXME: 10.04.2017 hide keyboard after opening lock screen
-//        if (KeyboardVisibilityEvent.isKeyboardVisible(getActivity())) {
-//            KeyboardUtils.hideKeyboard(rootLayout);
-//            if (translationView.isEnable()) {
-//                translationView.disable();
-//            }
-//        }
-    }
-
     private void setUpDictView() {
         dictView = new DictionaryView(getActivity());
         rootLayout.addView(dictView);
@@ -221,9 +208,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         if (translationView.isEnable()) {
             translationView.disable();
             KeyboardUtils.hideKeyboard(rootLayout);
-        } else {
-            translationView.enable();
-            KeyboardUtils.showKeyboard(rootLayout);
         }
     }
 
@@ -264,7 +248,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void onDictionaryResult(Dictionary dictionary, String identifier, boolean fromHistoryOrFavourite) {
         errorView.setVisibility(View.GONE);
         if (fromHistoryOrFavourite) {
-            if (currentIdentifier.equals(identifier))
+            if (CommonUtils.nonNull(currentIdentifier) && currentIdentifier.equals(identifier))
                 return;
 
             this.fromHistoryOrFavourite = true;
@@ -280,7 +264,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     }
 
     private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
-        if (currentIdentifier.equals(identifier)) {
+        if (CommonUtils.nonNull(currentIdentifier) && currentIdentifier.equals(identifier)) {
             if (isFavourite) {
                 if (CommonUtils.isLollipopOrHigher()) {
                     AnimatedVectorDrawableCompat addFavAnimation =
@@ -330,8 +314,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     public void setTranslationViewText(String text) {
         translationView.getTranslationEditText().setText(text);
         translationView.getTranslationEditText().setSelection(text.length());
-        // TODO: 31.03.2017 need testing
-        //translationView.disable();
     }
 
     @Override
