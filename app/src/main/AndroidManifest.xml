@@ -13,21 +13,25 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ui.activity.splash.SplashScreen"
+        <activity
+            android:name=".ui.activity.splash.SplashScreen"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".ui.activity.root.RootActivity"
             android:theme="@style/NoActionBar"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".ui.activity.choose_language.ChooseLanguageActivity"
             android:theme="@style/NoActionBar" />
+        <activity
+            android:name=".ui.activity.intro.IntroActivity"
+            android:theme="@style/VerticalIntroStyle" />
     </application>
 
 </manifest>

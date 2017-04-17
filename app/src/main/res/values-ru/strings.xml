@@ -35,4 +35,13 @@
         <item>@string/about_privacy_policy</item>
         <item>@string/about_mobilization</item>
     </string-array>
+    <string name="intro_first_title">Офлайн-перевод</string>
+    <string name="intro_first_text">Сохраните нужные пары языков в настройках, чтобы переводить без интернета</string>
+    <string name="intro_second_title">Фотоперевод</string>
+    <string name="intro_second_text">Перевод текста с картинки – сделайте снимок камерой или выберите изображение из галереи</string>
+    <string name="intro_third_title">Переводчик вас услышит</string>
+    <string name="intro_third_text">Произнесите текст — он переведёт</string>
+    <string name="intro_next">Далее</string>
+    <string name="intro_done">ПЕРЕВОД</string>
+    <string name="intro_skip">Пропустить</string>
 </resources>

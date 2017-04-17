@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
+import com.luseen.yandexsummerschool.ui.activity.intro.IntroActivity;
 import com.luseen.yandexsummerschool.ui.activity.root.RootActivity;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 
@@ -25,7 +26,7 @@ public class SplashScreen extends BaseActivity<SplashScreenContract.View, Splash
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen, false);
         splashSubscription = Completable.timer(ROOT_ACTIVITY_START_DELAY, TimeUnit.MILLISECONDS)
-                .subscribe(() -> presenter.prepareRootOpening());
+                .subscribe(() -> presenter.decideOpening());
     }
 
     @NonNull
@@ -41,8 +42,20 @@ public class SplashScreen extends BaseActivity<SplashScreenContract.View, Splash
     }
 
     @Override
+    public void openIntroActivity() {
+        IntroActivity.start(this);
+        finish();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        RxUtils.unsubscribe(splashSubscription);
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
         RxUtils.unsubscribe(splashSubscription);
     }
 }

@@ -35,5 +35,14 @@
         <item>@string/about_privacy_policy</item>
         <item>@string/about_mobilization</item>
     </string-array>
+    <string name="intro_first_title">Offline translation</string>
+    <string name="intro_first_text">Save the language pairs you need in the settings to translate without an internet connection</string>
+    <string name="intro_second_title">Visual translation</string>
+    <string name="intro_second_text">Translate text from images – simply take a picture or choose a photo from your gallery</string>
+    <string name="intro_third_title">Yandex.Translate is listening</string>
+    <string name="intro_third_text">Speak the text and it will be translated</string>
+    <string name="intro_next">Next</string>
+    <string name="intro_done">Translate</string>
+    <string name="intro_skip">Skip</string>
 
 </resources>

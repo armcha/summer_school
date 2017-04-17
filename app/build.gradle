@@ -60,6 +60,8 @@ dependencies {
     compile 'org.greenrobot:eventbus:3.0.0'
     //My library https://github.com/armcha/LuseenBottomNavigation
     compile 'com.github.armcha:LuseenBottomNavigation:1.8.2'
+    //My intro library https://github.com/armcha/Vertical-Intro
+    compile 'com.github.armcha:Vertical-Intro:1.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
     debugCompile 'com.ghedeon:rebro-client:0.1'
     compile 'com.android.support:support-v4:25.3.1'

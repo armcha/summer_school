@@ -11,10 +11,12 @@ public interface SplashScreenContract {
     interface View extends BaseContract.View {
 
         void openRootActivity();
+
+        void openIntroActivity();
     }
 
     interface Presenter extends BaseContract.Presenter<View> {
 
-        void prepareRootOpening();
+        void decideOpening();
     }
 }

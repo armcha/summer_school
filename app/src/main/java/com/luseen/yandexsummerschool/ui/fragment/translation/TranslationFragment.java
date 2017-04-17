@@ -45,7 +45,6 @@ import net.yslibrary.android.keyboardvisibilityevent.Unregistrar;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;

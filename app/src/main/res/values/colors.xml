@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#FFC400</color>
     <color name="colorAccent">#000</color>
 
+    <color name="yandex_yellow">#FFDC61</color>
     <color name="gray">#607D8B</color>
     <color name="brown">#795548</color>
     <color name="blue">#0277BD</color>
@@ -17,4 +18,12 @@
     <color name="ripple_color_pre_lollipop">#90FFD740</color>
     <color name="ripple_color">#FFD740</color>
     <color name="retry_button_color">#ebe9e9e9</color>
+    <color name="intro_first">#0F9D58</color>
+    <color name="intro_second">#F09300</color>
+    <color name="intro_third">#00BCD4</color>
+
+    <color name="introFirstColor">#4285F4</color>
+    <color name="introSecondColor">#0F9D58</color>
+    <color name="introThirdColor">#00BCD4</color>
+    <color name="introFourthColor">#F09300</color>
 </resources>
