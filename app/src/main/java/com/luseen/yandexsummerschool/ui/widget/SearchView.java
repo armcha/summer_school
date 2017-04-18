@@ -111,7 +111,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
         addSearchEditText(context);
         addResetIcon(context);
         addBottomDivider(context);
-        setOnClickListener(v -> {
+        setOnClickListener(__ -> {
             if (!isEnable) enable();
         });
         disable();
@@ -248,7 +248,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
         return searchEditText.getText().toString();
     }
 
-    public void reset(){
+    public void reset() {
         searchEditText.setText(StringUtils.EMPTY);
         disable();
     }

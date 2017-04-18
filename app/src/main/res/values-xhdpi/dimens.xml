@@ -16,4 +16,6 @@
     <dimen name="translate_editext_left_margin">10dp</dimen>
     <dimen name="translate_editext_right_margin">20dp</dimen>
     <dimen name="translate_editext_bottom_margin">30dp</dimen>
+    <dimen name="favourite_button_margin">16dp</dimen>
+    <dimen name="about_item_text_size">13sp</dimen>
 </resources>

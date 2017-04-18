@@ -15,8 +15,7 @@
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingTop="15dp"
-        android:text="Armenia"
-        android:textColor="@color/light_gray"
+        android:textColor="@color/gray"
         android:textSize="12sp" />
 
 </RelativeLayout>

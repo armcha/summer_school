@@ -11,6 +11,10 @@ import com.luseen.yandexsummerschool.BuildConfig;
 
 public class ExceptionTracker {
 
+    private ExceptionTracker() {
+        throw new RuntimeException("Private constructor cannot be accessed");
+    }
+
     public static void trackException(Throwable throwable) {
         Logger.log("EXCEPTION TRACKER HAS BAD MESSAGE FOR YOU - " + throwable.getMessage());
         if (BuildConfig.DEBUG)

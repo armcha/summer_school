@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -60,7 +59,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
     public static final int TRANSLATION_FRAGMENT_POSITION = 0;
-    public static final int KEYBOARD_OPEN_DELAY = 500;
     public static final long DEBOUNCE_TIMEOUT = 500L;
 
     @BindView(R.id.source_language_text_view)
@@ -102,7 +100,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private Unregistrar unregistrar;
 
     private boolean fromHistoryOrFavourite = false;
-    private boolean isFavouriteIconSet;
 
     public static TranslationFragment newInstance() {
         return new TranslationFragment();
@@ -131,16 +128,17 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
         //Some hack to open keyboard on fragment start,
         //whit stateVisible mode it opens keyboard on history and setting screen on screen orientation change
-        subscriptions.add(Observable.timer(KEYBOARD_OPEN_DELAY, TimeUnit.MILLISECONDS)
-                .map(aLong -> ((RootActivity) getActivity()).getCurrentFragmentPosition())
+        int keyboardOpenDelay = CommonUtils.isLollipopOrHigher() ? 500 : 800;
+        subscriptions.add(Observable.timer(keyboardOpenDelay, TimeUnit.MILLISECONDS)
+                .map(__ -> ((RootActivity) getActivity()).getCurrentFragmentPosition())
                 .filter(currentPosition -> currentPosition == TRANSLATION_FRAGMENT_POSITION)
-                .subscribe(aLong -> KeyboardUtils.showKeyboard(rootLayout)));
+                .subscribe(__ -> KeyboardUtils.showKeyboard(rootLayout)));
     }
 
     private void setUpDictView() {
         dictView = new DictionaryView(getActivity());
         rootLayout.addView(dictView);
-        dictView.setOnClickListener(v -> {
+        dictView.setOnClickListener(__ -> {
             if (translationView.isEnable()) {
                 translationView.disable();
                 KeyboardUtils.hideKeyboard(rootLayout);
@@ -153,7 +151,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     private void setUpTextWatcher() {
         subscriptions.add(RxTextView.textChanges(translationView.getTranslationEditText())
-                .filter(charSequence -> !fromHistoryOrFavourite)
+                .filter(__ -> !fromHistoryOrFavourite)
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .doOnNext(input -> {
@@ -265,26 +263,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     private void setUpFavouriteIcon(boolean isFavourite, String identifier) {
         if (CommonUtils.nonNull(currentIdentifier) && currentIdentifier.equals(identifier)) {
             if (isFavourite) {
-                if (CommonUtils.isLollipopOrHigher()) {
-                    AnimatedVectorDrawableCompat addFavAnimation =
-                            AnimationUtils.createAnimatedVector(R.drawable.add_fav_anim_white);
-                    favouriteIcon.setImageDrawable(addFavAnimation);
-                    addFavAnimation.start();
-                } else {
-                    favouriteIcon.setImageResource(R.drawable.bookmark_check_black);
-                }
-
-                isFavouriteIconSet = true;
+                favouriteIcon.setImageResource(R.drawable.bookmark_check_black);
             } else {
-                if (isFavouriteIconSet && CommonUtils.isLollipopOrHigher()) {
-                    AnimatedVectorDrawableCompat removeFavAnimation =
-                            AnimationUtils.createAnimatedVector(R.drawable.remove_fav_anim_white);
-                    favouriteIcon.setImageDrawable(removeFavAnimation);
-                    removeFavAnimation.start();
-                    isFavouriteIconSet = false;
-                } else {
-                    favouriteIcon.setImageResource(R.drawable.bookmark_outline_black);
-                }
+                favouriteIcon.setImageResource(R.drawable.bookmark_outline_black);
             }
             favouriteIcon.show();
         }
@@ -292,7 +273,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @Subscribe
     public void onFavouriteEvent(FavouriteEvent favouriteEvent) {
-        Logger.log("FAVOURITE EVENT " + favouriteEvent.getIdentifier());
         setUpFavouriteIcon(favouriteEvent.isFavourite(), favouriteEvent.getIdentifier());
     }
 

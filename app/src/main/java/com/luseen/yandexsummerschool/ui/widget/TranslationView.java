@@ -29,14 +29,15 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
 
     public static final int MAX_INPUT_LENGTH = 1000;
 
-    private boolean isEnable = false;
-    private int activeBorderColor;
-    private int inActiveBorderColor;
-    private int activeBorderWidth;
-    private int inActiveBorderWidth;
-    private int hintColor;
     private EditText translationEditText;
     private CloseIcon closeIcon;
+
+    private boolean isEnable = false;
+    private int inActiveBorderColor;
+    private int inActiveBorderWidth;
+    private int activeBorderColor;
+    private int activeBorderWidth;
+    private int hintColor;
 
     public TranslationView(Context context) {
         super(context);

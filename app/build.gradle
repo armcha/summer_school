@@ -1,4 +1,19 @@
+buildscript {
+    repositories {
+        maven { url 'https://maven.fabric.io/public' }
+    }
+
+    dependencies {
+        classpath 'io.fabric.tools:gradle:1.+'
+    }
+}
 apply plugin: 'com.android.application'
+apply plugin: 'io.fabric'
+
+repositories {
+    maven { url 'https://maven.fabric.io/public' }
+}
+
 apply plugin: 'me.tatarka.retrolambda'
 apply plugin: 'realm-android'
 
@@ -13,6 +28,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        manifestPlaceholders = [fabricKey: "93bea2706ea461370d19c46bde8c10391c01096f"]
     }
 
     compileOptions {
@@ -24,13 +40,8 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [fabricKey: "93bea2706ea461370d19c46bde8c10391c01096f"]
         }
-    }
-}
-
-repositories {
-    maven {
-        url "http://dl.bintray.com/ghedeon/maven"
     }
 }
 
@@ -63,6 +74,7 @@ dependencies {
     //My intro library https://github.com/armcha/Vertical-Intro
     compile 'com.github.armcha:Vertical-Intro:1.0.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
-    debugCompile 'com.ghedeon:rebro-client:0.1'
-    compile 'com.android.support:support-v4:25.3.1'
+    compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
+        transitive = true;
+    }
 }

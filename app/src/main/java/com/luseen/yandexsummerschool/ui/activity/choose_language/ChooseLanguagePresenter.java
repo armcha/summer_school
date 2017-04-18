@@ -11,7 +11,6 @@ import com.luseen.yandexsummerschool.utils.LanguageUtils;
 import com.luseen.yandexsummerschool.utils.NetworkUtils;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -60,7 +59,7 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
     }
 
     private void doOnResult(LastUsedLanguages lastUsedLanguages, AvailableLanguages availableLanguages) {
-        LinkedTreeMap languageMap = availableLanguages.getLanguageLinkedMap();
+        LinkedTreeMap<String, String> languageMap = availableLanguages.getLanguageLinkedMap();
         availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
         LanguagePair languagePair = dataManager.getLanguagePair();
         String lastSelectedLanguage;
@@ -88,19 +87,11 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
-    private List<Language> convertLinkedTreeMapToLanguageList(LinkedTreeMap linkedTreeMap) {
+    private List<Language> convertLinkedTreeMapToLanguageList(LinkedTreeMap<String, String> linkedTreeMap) {
         List<Language> languageList = new ArrayList<>();
-        String[] languages = linkedTreeMap
-                .toString()
-                .replaceAll("[{}]", "")
-                .trim()
-                .split(",");
-        List<String> languageAndCodeList = Arrays.asList(languages);
-        for (String languageAndCode : languageAndCodeList) {
-            String[] languageAndCodes = languageAndCode.split("=");
-            String languageCode = languageAndCodes[0].trim();
-            String fullLanguage = languageAndCodes[1].trim();
-            Language language = new Language(languageCode, fullLanguage);
+        for (String key : linkedTreeMap.keySet()) {
+            String fullLanguage = linkedTreeMap.get(key);
+            Language language = new Language(key, fullLanguage);
             languageList.add(language);
         }
         Collections.sort(languageList, Language.languageComparator);

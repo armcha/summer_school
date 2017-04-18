@@ -4,7 +4,6 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.internal.LinkedTreeMap;
 
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -20,7 +19,7 @@ public class AvailableLanguages {
 
     @SerializedName("langs")
     @Expose
-    private LinkedTreeMap languageLinkedMap;
+    private LinkedTreeMap<String, String> languageLinkedMap;
 
     private List<Language> languageList;
 
@@ -40,7 +39,7 @@ public class AvailableLanguages {
         this.languageList = languageList;
     }
 
-    public LinkedTreeMap getLanguageLinkedMap() {
+    public LinkedTreeMap<String, String> getLanguageLinkedMap() {
         return languageLinkedMap;
     }
 }

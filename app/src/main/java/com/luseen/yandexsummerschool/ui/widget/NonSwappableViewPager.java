@@ -31,7 +31,7 @@ public class NonSwappableViewPager extends ViewPager {
         return this.isPagingEnabled && super.onInterceptTouchEvent(event);
     }
 
-    public void setPagingEnabled(boolean b) {
-        this.isPagingEnabled = b;
+    public void setPagingEnabled(boolean isPagingEnabled) {
+        this.isPagingEnabled = isPagingEnabled;
     }
 }

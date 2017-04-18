@@ -6,6 +6,11 @@ package com.luseen.yandexsummerschool.utils;
 
 public class AppConstants {
 
+    private AppConstants() {
+        throw new RuntimeException("Private constructor cannot be accessed");
+    }
+
+    public static final String DATABASE_NAME = "yandexSummerSchool.realm";
     public static final String SOURCE_LANGUAGE_TAG = "source_language_tag";
     public static final String TARGET_LANGUAGE_TAG = "target_language_tag";
     public static final String LANGUAGE_CHOOSE_TYPE_INTENT_KEY = "language_choose_type_intent_key";

@@ -16,7 +16,6 @@ import java.lang.reflect.Field;
 public class ViewUtils {
 
     private ViewUtils() {
-        //no instance
         throw new RuntimeException("Private constructor cannot be accessed");
     }
 

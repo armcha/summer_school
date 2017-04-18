@@ -5,4 +5,5 @@ package com.luseen.yandexsummerschool.model.event_bus_events;
  */
 
 public class HistoryEvent {
+    //no-op
 }

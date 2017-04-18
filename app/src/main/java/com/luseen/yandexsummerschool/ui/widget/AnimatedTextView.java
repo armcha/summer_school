@@ -15,16 +15,12 @@ import com.luseen.yandexsummerschool.utils.AnimationUtils;
 
 public class AnimatedTextView extends FontTextView {
 
-    private Context context;
-
     public AnimatedTextView(Context context) {
         super(context);
-        this.context = context;
     }
 
     public AnimatedTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        this.context = context;
     }
 
     public void setAnimatedText(CharSequence text) {

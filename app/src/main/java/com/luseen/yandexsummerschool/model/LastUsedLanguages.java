@@ -24,16 +24,8 @@ public class LastUsedLanguages extends RealmObject {
         return lastUsedSourceLanguages;
     }
 
-    public void setLastUsedSourceLanguages(RealmList<Language> lastUsedSourceLanguages) {
-        this.lastUsedSourceLanguages = lastUsedSourceLanguages;
-    }
-
     public RealmList<Language> getLastUsedTargetLanguages() {
         return lastUsedTargetLanguages;
-    }
-
-    public void setLastUsedTargetLanguages(RealmList<Language> lastUsedTargetLanguages) {
-        this.lastUsedTargetLanguages = lastUsedTargetLanguages;
     }
 
     @Override

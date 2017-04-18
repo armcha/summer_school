@@ -16,7 +16,6 @@ public class MainPagerAdapter extends FragmentPagerAdapter {
 
     public static final int TRANSLATION_POSITION = 0;
     public static final int HISTORY_POSITION = 1;
-    public static final int SETTINGS_POSITION = 2;
     private static final int PAGE_COUNT = 3;
 
     public MainPagerAdapter(FragmentManager fm) {

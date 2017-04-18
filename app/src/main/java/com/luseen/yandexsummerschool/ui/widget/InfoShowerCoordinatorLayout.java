@@ -96,20 +96,6 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
                 .start();
     }
 
-    @Override
-    public void forceShow() {
-        rootView.setVisibility(VISIBLE);
-        rootView.setScaleX(1);
-        rootView.setScaleY(1);
-    }
-
-    @Override
-    public void forceHide() {
-        rootView.setVisibility(GONE);
-        rootView.setScaleX(0);
-        rootView.setScaleY(0);
-    }
-
     public void whitTopMargin(boolean enable) {
         this.whitTopMargin = enable;
         if (enable) {

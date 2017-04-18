@@ -23,8 +23,8 @@ import java.util.List;
 
 public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
 
-    private final int VIEW_TYPE_LANGUAGE = 0;
     private final int VIEW_TYPE_TEXT_SECTION = 1;
+    private final int VIEW_TYPE_LANGUAGE = 0;
 
     private ChooseLanguageItemSelectListener itemSelectListener;
     private List<Language> languageList;

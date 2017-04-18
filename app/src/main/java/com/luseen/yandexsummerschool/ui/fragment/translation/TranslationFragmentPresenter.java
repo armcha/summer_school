@@ -52,9 +52,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     //Show loading when request started
     @Override
     public void onStart(RequestType requestType) {
-        if (isViewAttached()) {
-            //getView().showLoading();
-        }
+        //no-op
     }
 
     //Request finished on success

@@ -49,7 +49,7 @@ public class HistoryAndFavouriteViewHolder extends RecyclerView.ViewHolder {
         onFavourite(history);
     }
 
-    public void onFavourite(History history) {
+    private void onFavourite(History history) {
         if (history.isFavourite()) {
             favouriteIcon.setImageResource(R.drawable.bookmark_check);
         } else {

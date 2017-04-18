@@ -46,8 +46,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     private HistoryAndFavouriteRecyclerAdapter adapter;
 
     public static FavouriteFragment newInstance() {
-        FavouriteFragment fragment = new FavouriteFragment();
-        return fragment;
+        return new FavouriteFragment();
     }
 
     @NonNull

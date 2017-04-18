@@ -37,7 +37,6 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
         if (!isViewAttached()) return;
 
         getView().showLoading();
-
         compositeSubscription.add(dataManager.getFavouriteList()
                 .doOnTerminate(getView()::hideLoading)
                 .subscribe(favouriteList -> {

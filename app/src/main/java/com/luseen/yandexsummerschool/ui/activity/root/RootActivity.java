@@ -3,7 +3,6 @@ package com.luseen.yandexsummerschool.ui.activity.root;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
@@ -11,12 +10,11 @@ import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
 import com.luseen.luseenbottomnavigation.BottomNavigation.BottomNavigationItem;
 import com.luseen.luseenbottomnavigation.BottomNavigation.OnBottomNavigationItemClickListener;
 import com.luseen.yandexsummerschool.R;
-import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
+import com.luseen.yandexsummerschool.base_mvp.dummy.DummyActivity;
 import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.CustomBottomNavigationView;
 import com.luseen.yandexsummerschool.ui.widget.NonSwappableViewPager;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -24,9 +22,7 @@ import org.greenrobot.eventbus.Subscribe;
 import butterknife.BindView;
 import rx.Subscription;
 
-public class RootActivity extends BaseActivity<RootActivityContract.View, RootActivityContract.Presenter>
-        implements RootActivityContract.View,
-        OnBottomNavigationItemClickListener {
+public class RootActivity extends DummyActivity implements OnBottomNavigationItemClickListener {
 
     public static final String CURRENT_POSITION_KEY = "current_fragment_position_bundle_key";
     public static final int FIRST_ITEM = 0;
@@ -78,7 +74,7 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
     }
 
     @Subscribe
-    public void receiveHistory(FromHistoryOrFavouriteEvent fromHistoryOrFavouriteEvent){
+    public void receiveHistory(FromHistoryOrFavouriteEvent fromHistoryOrFavouriteEvent) {
         mainViewPager.setCurrentItem(FIRST_ITEM);
     }
 
@@ -126,12 +122,6 @@ public class RootActivity extends BaseActivity<RootActivityContract.View, RootAc
         } else {
             super.onBackPressed();
         }
-    }
-
-    @NonNull
-    @Override
-    public RootActivityContract.Presenter createPresenter() {
-        return new RootActivityPresenter();
     }
 
     @Override

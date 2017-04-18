@@ -9,6 +9,7 @@ import com.luseen.yandexsummerschool.model.dictionary.DictionaryTranslation;
 import com.luseen.yandexsummerschool.model.dictionary.Example;
 import com.luseen.yandexsummerschool.model.dictionary.Synonym;
 import com.luseen.yandexsummerschool.model.dictionary.TranslatedString;
+import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.RealmUtils;
 
 import io.realm.Case;
@@ -150,14 +151,18 @@ public class HistoryDao {
     }
 
     public void clearHistoryAndFavouriteData() {
-        Realm realm = Realm.getDefaultInstance();
-        deleteRealmResult(realm, History.class);
-        deleteRealmResult(realm, Definition.class);
-        deleteRealmResult(realm, DictionaryTranslation.class);
-        deleteRealmResult(realm, Synonym.class);
-        deleteRealmResult(realm, TranslatedString.class);
-        deleteRealmResult(realm, Example.class);
-        realm.close();
+        try {
+            Realm realm = Realm.getDefaultInstance();
+            deleteRealmResult(realm, History.class);
+            deleteRealmResult(realm, Definition.class);
+            deleteRealmResult(realm, DictionaryTranslation.class);
+            deleteRealmResult(realm, Synonym.class);
+            deleteRealmResult(realm, TranslatedString.class);
+            deleteRealmResult(realm, Example.class);
+            realm.close();
+        } catch (Exception exception) {
+            ExceptionTracker.trackException(exception);
+        }
     }
 
     private <R extends RealmObject> void deleteRealmResult(Realm realm, Class<R> clazz) {

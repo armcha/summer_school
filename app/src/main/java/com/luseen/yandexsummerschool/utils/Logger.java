@@ -7,7 +7,7 @@ import com.luseen.yandexsummerschool.BuildConfig;
 public class Logger {
 
     private Logger() {
-        throw new AssertionError("No instances");
+        throw new RuntimeException("Private constructor cannot be accessed");
     }
 
     public static final String TAG = "Logger";

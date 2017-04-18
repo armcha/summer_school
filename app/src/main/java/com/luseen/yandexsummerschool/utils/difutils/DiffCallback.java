@@ -35,6 +35,7 @@ public class DiffCallback extends DiffUtil.Callback {
     public boolean areItemsTheSame(int oldItemPosition, int newItemPosition) {
         final History oldItem = oldHistory.get(oldItemPosition);
         final History newItem = newHistory.get(newItemPosition);
+
         return oldItem.getIdentifier().equals(newItem.getIdentifier());
     }
 

@@ -62,7 +62,6 @@ public class AboutFragment extends BaseFragment<AboutContract.View, AboutContrac
 
     private void setUpItems() {
         String[] itemNames = getResources().getStringArray(R.array.about);
-        // FIXME: 14.04.2017 
         for (int i = 1; i < itemsContainer.getChildCount(); i++) {
             ViewGroup aboutItem = (ViewGroup) itemsContainer.getChildAt(i);
             boolean isLastItem = i == itemsContainer.getChildCount() - 1;

@@ -4,8 +4,10 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.luseen.yandexsummerschool.utils.RxBus;
+import com.crashlytics.android.Crashlytics;
+import com.luseen.yandexsummerschool.utils.AppConstants;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.rx.RealmObservableFactory;
@@ -25,14 +27,19 @@ public class App extends Application {
         super.onCreate();
         instance = this;
 
+        initFabric();
         initRealm();
         initSharedPreferences();
+    }
+
+    private void initFabric() {
+        Fabric.with(this, new Crashlytics());
     }
 
     private void initRealm() {
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder()
-                .name("yandexSummerSchool.realm")
+                .name(AppConstants.DATABASE_NAME)
                 .rxFactory(new RealmObservableFactory())
                 .deleteRealmIfMigrationNeeded()
                 .build();

@@ -2,7 +2,7 @@ package com.luseen.yandexsummerschool.model.dictionary;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import io.realm.RealmList;
@@ -13,7 +13,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by Chatikyan on 25.03.2017.
  */
 
-public class Example extends RealmObject{
+public class Example extends RealmObject {
 
     @PrimaryKey
     @SerializedName("text")
@@ -35,6 +35,6 @@ public class Example extends RealmObject{
     }
 
     public List<TranslatedString> getExampleTranslations() {
-        return exampleTranslations == null ? new ArrayList<>() : exampleTranslations;
+        return exampleTranslations == null ? Collections.emptyList() : exampleTranslations;
     }
 }

@@ -64,6 +64,6 @@ public class IntroActivity extends VerticalIntro {
 
         RootActivity.start(this);
         finish();
-        overridePendingTransition(R.anim.slide_in_start, R.anim.slide_in_finish);
+        overridePendingTransition(R.anim.slide_bottom_start, R.anim.slide_bottom_finish);
     }
 }
