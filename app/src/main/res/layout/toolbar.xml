@@ -25,15 +25,15 @@
 
             <ImageView
                 android:id="@+id/back_arrow"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="?actionBarSize"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_centerVertical="true"
-                android:layout_margin="15dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
+                android:padding="15dp"
                 android:hapticFeedbackEnabled="true"
                 app:srcCompat="@drawable/arrow_left"
                 tools:ignore="ContentDescription" />

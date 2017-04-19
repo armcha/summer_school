@@ -17,7 +17,6 @@ import com.luseen.yandexsummerschool.ui.activity.choose_language.LanguageChooseT
 import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.HttpUtils;
 import com.luseen.yandexsummerschool.utils.LanguageUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.NetworkUtils;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;

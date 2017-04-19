@@ -85,26 +85,49 @@
             android:id="@+id/translation_view"
             android:layout_width="match_parent"
             android:layout_height="@dimen/translation_view_heigth"
-            android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="12dp" />
 
         <include layout="@layout/error_view" />
 
-        <android.support.v4.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.luseen.yandexsummerschool.ui.widget.TranslationTextView
-                android:id="@+id/translation_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-        </android.support.v4.widget.NestedScrollView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
+                <com.luseen.yandexsummerschool.ui.widget.TranslationTextView
+                    android:id="@+id/translation_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="30dp"
+                    android:layout_marginTop="10dp"
+                    android:includeFontPadding="false"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+                <ImageView
+                    android:id="@+id/full_screen_button"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_margin="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ripple_bg_circle"
+                    android:padding="6dp"
+                    android:tint="@color/gray"
+                    app:srcCompat="@drawable/ic_full_screen"
+                    tools:ignore="ContentDescription,RtlHardcoded" />
+
+            </RelativeLayout>
+        </ScrollView>
     </LinearLayout>
 
     <include layout="@layout/progress_view" />

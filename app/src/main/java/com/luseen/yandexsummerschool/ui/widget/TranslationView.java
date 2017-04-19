@@ -75,6 +75,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
 
         translationEditText.setHint(context.getString(R.string.type_text));
         translationEditText.setBackground(null);
+        translationEditText.setIncludeFontPadding(false);
         translationEditText.setOnClickListener(this);
         translationEditText.setHintTextColor(hintColor);
         translationEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);

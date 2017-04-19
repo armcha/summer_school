@@ -92,23 +92,50 @@
         android:layout_marginTop="?actionBarSize"
         android:background="@android:color/white"
         android:orientation="vertical"
-        android:paddingTop="12dp"
         tools:context="com.luseen.yandexsummerschool.ui.fragment.TranslationFragment">
 
         <include layout="@layout/error_view" />
 
-        <android.support.v4.widget.NestedScrollView
+        <ScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <com.luseen.yandexsummerschool.ui.widget.TranslationTextView
-                android:id="@+id/translation_text_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="18sp" />
-        </android.support.v4.widget.NestedScrollView>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="20dp"
+                android:layout_height="wrap_content">
+
+                <com.luseen.yandexsummerschool.ui.widget.TranslationTextView
+                    android:id="@+id/translation_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:includeFontPadding="false"
+                    android:layout_marginRight="30dp"
+                    android:textColor="@android:color/black"
+                    android:textSize="18sp"
+                    tools:ignore="RelativeOverlap,RtlHardcoded" />
+
+                <ImageView
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:id="@+id/full_screen_button"
+                    android:layout_marginBottom="5dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="@drawable/ripple_bg_circle"
+                    android:padding="6dp"
+                    android:tint="@color/gray"
+                    app:srcCompat="@drawable/ic_full_screen"
+                    tools:ignore="ContentDescription,RtlHardcoded" />
+
+            </RelativeLayout>
+        </ScrollView>
 
     </LinearLayout>
 
@@ -122,6 +149,7 @@
         android:layout_alignParentRight="true"
         android:layout_margin="16dp"
         app:backgroundTint="@color/colorPrimary"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        tools:ignore="RtlHardcoded" />
 
 </RelativeLayout>

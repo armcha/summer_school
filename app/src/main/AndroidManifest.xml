@@ -18,6 +18,7 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -31,9 +32,14 @@
         <activity
             android:name=".ui.activity.intro.IntroActivity"
             android:theme="@style/VerticalIntroStyle" />
+
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="${fabricKey}" />
+
+        <activity
+            android:name=".ui.activity.full_screen.FullScreenActivity"
+            android:theme="@style/FullScreenTheme" />
     </application>
 
 </manifest>

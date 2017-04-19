@@ -40,10 +40,7 @@ public class AboutFragment extends BaseFragment<AboutContract.View, AboutContrac
     private boolean isRussian;
 
     public static AboutFragment newInstance() {
-        Bundle args = new Bundle();
-        AboutFragment fragment = new AboutFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new AboutFragment();
     }
 
     @Override

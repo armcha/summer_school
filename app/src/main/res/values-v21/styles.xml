@@ -12,4 +12,9 @@
         <item name="colorPrimaryDark">@color/splash_status_bar_color</item>
         <item name="android:navigationBarColor">@color/navigation_bar_color</item>
     </style>
+
+    <style name="FullScreenTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimaryDark">@color/splash_status_bar_color</item>
+        <item name="android:navigationBarColor">@color/navigation_bar_color</item>
+    </style>
 </resources>

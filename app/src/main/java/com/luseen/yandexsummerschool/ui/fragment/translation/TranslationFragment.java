@@ -6,8 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +22,7 @@ import com.luseen.yandexsummerschool.model.event_bus_events.FavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouriteEvent;
 import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity;
+import com.luseen.yandexsummerschool.ui.activity.full_screen.FullScreenActivity;
 import com.luseen.yandexsummerschool.ui.activity.root.RootActivity;
 import com.luseen.yandexsummerschool.ui.widget.AnimatedTextView;
 import com.luseen.yandexsummerschool.ui.widget.CloseIcon;
@@ -34,7 +33,6 @@ import com.luseen.yandexsummerschool.ui.widget.YaProgressView;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
 import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
-import com.luseen.yandexsummerschool.utils.Logger;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import net.yslibrary.android.keyboardvisibilityevent.KeyboardVisibilityEvent;
@@ -73,8 +71,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.favourite_icon)
     FloatingActionButton favouriteIcon;
 
-    @BindView(R.id.scroll_view)
-    NestedScrollView nestedScrollView;
+    @BindView(R.id.full_screen_button)
+    ImageView fullScreenButton;
 
     @BindView(R.id.translation_view)
     TranslationView translationView;
@@ -90,9 +88,6 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     @BindView(R.id.error_view)
     LinearLayout errorView;
-
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
 
     private CompositeSubscription subscriptions = new CompositeSubscription();
     private String currentIdentifier;
@@ -125,6 +120,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         translationView.getCloseIcon().setCloseIconClickListener(this);
         unregistrar = KeyboardVisibilityEvent.registerEventListener(getActivity(), this);
         favouriteIcon.hide();
+        fullScreenButton.setVisibility(View.GONE);
 
         //Some hack to open keyboard on fragment start,
         //whit stateVisible mode it opens keyboard on history and setting screen on screen orientation change
@@ -172,6 +168,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         dictView.reset();
         favouriteIcon.hide();
         errorView.setVisibility(View.GONE);
+        currentIdentifier = null;
+        fullScreenButton.setVisibility(View.GONE);
     }
 
     @Override
@@ -239,6 +237,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             currentIdentifier = identifier;
             setUpFavouriteIcon(translation.isFavourite(), identifier);
         }
+        fullScreenButton.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -257,6 +256,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             dictView.updateDictionary(dictionary);
             currentIdentifier = identifier;
             setUpFavouriteIcon(dictionary.isFavourite(), identifier);
+            fullScreenButton.setVisibility(View.VISIBLE);
         }
     }
 
@@ -352,5 +352,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @OnClick(R.id.retry_button)
     public void onRetryClicked() {
         presenter.retry(translationView.getTranslationEditText().getText().toString());
+    }
+
+    @OnClick(R.id.full_screen_button)
+    public void onFullScreenClicked() {
+        FullScreenActivity.start(getActivity(), translationTextView.getText().toString());
+        enableEnterAnimation();
     }
 }
