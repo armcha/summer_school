@@ -44,4 +44,5 @@
     <string name="intro_next">Далее</string>
     <string name="intro_done">ПЕРЕВОД</string>
     <string name="intro_skip">Пропустить</string>
+    <string name="close_button">Close button</string>
 </resources>

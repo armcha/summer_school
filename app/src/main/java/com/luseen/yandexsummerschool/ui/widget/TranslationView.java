@@ -17,9 +17,12 @@ import android.widget.RelativeLayout;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.AnimationUtils;
+import com.luseen.yandexsummerschool.utils.FontUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
+
+import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 /**
  * Created by Chatikyan on 20.03.2017.
@@ -81,6 +84,7 @@ public class TranslationView extends RelativeLayout implements View.OnClickListe
         translationEditText.setInputType(InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
         translationEditText.setSingleLine(false);
         translationEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        translationEditText.setTypeface(FontUtils.get(context,SANS_LIGHT));
         translationEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(MAX_INPUT_LENGTH)});
         ViewUtils.setEditTextDefaultCursorDrawable(translationEditText);
         translationEditText.addTextChangedListener(new AbstractTextWatcher() {

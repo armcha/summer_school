@@ -7,6 +7,7 @@ import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.Language;
+import com.luseen.yandexsummerschool.ui.widget.FontTextView;
 import com.luseen.yandexsummerschool.utils.Logger;
 
 import butterknife.BindView;
@@ -19,7 +20,7 @@ import butterknife.ButterKnife;
 public class ChooseLanguageViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.language_name)
-    TextView languageNameTextView;
+    FontTextView languageNameTextView;
 
     @BindView(R.id.check_language_icon)
     ImageView checkLanguageIcon;
@@ -29,13 +30,8 @@ public class ChooseLanguageViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void bind(Language language, String lastSelectedLanguage) {
+    public void bind(Language language) {
         languageNameTextView.setText(language.getFullLanguageName());
-
-    }
-
-    public TextView getLanguageNameTextView() {
-        return languageNameTextView;
     }
 
     public ImageView getCheckLanguageIcon() {

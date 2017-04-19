@@ -29,13 +29,4 @@ public class FontUtils {
             return typefaceCache.get(font);
         }
     }
-
-    public static String getName(@NonNull Typeface typeface) {
-        for (Map.Entry<String, Typeface> entry : typefaceCache.entrySet()) {
-            if (entry.getValue() == typeface) {
-                return entry.getKey();
-            }
-        }
-        return null;
-    }
 }

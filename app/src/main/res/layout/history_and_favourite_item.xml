@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/ripple_bg"
     tools:context="com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity">
 
@@ -18,21 +19,23 @@
         android:layout_marginTop="10dp"
         android:orientation="vertical">
 
-        <TextView
+        <com.luseen.yandexsummerschool.ui.widget.FontTextView
             android:id="@+id/original_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:ellipsize="end"
             android:maxLines="1"
+            app:font="sans_light"
             android:textColor="@color/black"
             android:textSize="15sp" />
 
-        <TextView
+        <com.luseen.yandexsummerschool.ui.widget.FontTextView
             android:id="@+id/translated_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            app:font="sans_light"
             android:maxLines="1"
             android:textColor="@color/gray"
             android:textSize="14sp" />
@@ -47,17 +50,20 @@
         android:layout_marginLeft="5dp"
         android:layout_marginRight="5dp"
         android:background="?selectableItemBackgroundBorderless"
-        android:padding="5dp" />
+        android:padding="5dp"
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
-    <TextView
+    <com.luseen.yandexsummerschool.ui.widget.FontTextView
         android:id="@+id/translation_language_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
+        app:font="sans_light"
         android:layout_marginRight="8dp"
         android:textColor="@color/gray"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        tools:ignore="RelativeOverlap,RtlHardcoded" />
 
     <!--Actually need recycler view item decorator, but only 20 days left...-->
     <View

@@ -22,7 +22,7 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
 
     private static final long ANIMATION_DURATION = 200L;
     private AppCompatImageView infoIconImageView;
-    private TextView infoTextView;
+    private FontTextView infoTextView;
     private View rootView;
     private boolean whitTopMargin = false;
 
@@ -41,7 +41,7 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
         LayoutInflater inflater = LayoutInflater.from(getContext());
         rootView = inflater.inflate(R.layout.info_view, this, false);
         infoIconImageView = (AppCompatImageView) rootView.findViewById(R.id.info_icon);
-        infoTextView = (TextView) rootView.findViewById(R.id.info_text);
+        infoTextView = (FontTextView) rootView.findViewById(R.id.info_text);
         rootView.setVisibility(GONE);
         addView(rootView);
 

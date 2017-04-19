@@ -22,4 +22,5 @@ public class AppConstants {
     public static final String HELP_RU = "https://yandex.ru/support/translate-mobile-app/index.html";
     public static final String HELP = "https://yandex.com/support/translate-mobile-app/index.html";
     public static final String MOBILIZATION_LINK = "https://academy.yandex.ru/events/mobdev/msk-2017/";
+    public static final String SANS_LIGHT = "sans_light";
 }

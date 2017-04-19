@@ -17,12 +17,15 @@ import com.jakewharton.rxbinding.widget.RxTextView;
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.DimenUtils;
+import com.luseen.yandexsummerschool.utils.FontUtils;
 import com.luseen.yandexsummerschool.utils.KeyboardUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+
+import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 /**
  * Created by Chatikyan on 31.03.2017.
@@ -160,6 +163,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
         searchEditText.setOnClickListener(this);
         searchEditText.setHintTextColor(inActiveBorderColor);
         searchEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
+        searchEditText.setTypeface(FontUtils.get(context,SANS_LIGHT));
         ViewUtils.setEditTextDefaultCursorDrawable(searchEditText);
         //underline thickness
         searchEditText.setPadding(0, 2, 0, 0);

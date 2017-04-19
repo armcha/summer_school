@@ -8,7 +8,7 @@
     android:foreground="?selectableItemBackground"
     tools:context="com.luseen.yandexsummerschool.ui.activity.choose_language.ChooseLanguageActivity">
 
-    <TextView
+    <com.luseen.yandexsummerschool.ui.widget.FontTextView
         android:id="@+id/language_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -16,11 +16,13 @@
         android:layout_marginRight="30dp"
         android:ellipsize="end"
         android:maxLines="1"
+        app:font="sans_light"
         android:paddingBottom="15dp"
         android:paddingLeft="10dp"
         android:paddingTop="15dp"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        tools:ignore="RelativeOverlap,RtlHardcoded,RtlSymmetry" />
 
     <ImageView
         android:id="@+id/check_language_icon"
@@ -30,6 +32,7 @@
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
         android:visibility="visible"
-        app:srcCompat="@drawable/ic_check" />
+        app:srcCompat="@drawable/ic_check"
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
 </RelativeLayout>

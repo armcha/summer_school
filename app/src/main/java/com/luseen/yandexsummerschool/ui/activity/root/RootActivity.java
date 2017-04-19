@@ -3,7 +3,6 @@ package com.luseen.yandexsummerschool.ui.activity.root;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 
 import com.jakewharton.rxbinding.support.v4.view.RxViewPager;
@@ -15,12 +14,15 @@ import com.luseen.yandexsummerschool.model.event_bus_events.FromHistoryOrFavouri
 import com.luseen.yandexsummerschool.ui.adapter.MainPagerAdapter;
 import com.luseen.yandexsummerschool.ui.widget.CustomBottomNavigationView;
 import com.luseen.yandexsummerschool.ui.widget.NonSwappableViewPager;
+import com.luseen.yandexsummerschool.utils.FontUtils;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import butterknife.BindView;
 import rx.Subscription;
+
+import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 public class RootActivity extends DummyActivity implements OnBottomNavigationItemClickListener {
 
@@ -105,6 +107,7 @@ public class RootActivity extends DummyActivity implements OnBottomNavigationIte
         int activeColor = ContextCompat.getColor(this, R.color.colorPrimary);
         bottomNavigationView.setItemActiveColorWithoutColoredBackground(activeColor);
         bottomNavigationView.setOnBottomNavigationItemClickListener(this);
+        bottomNavigationView.setFont(FontUtils.get(this, SANS_LIGHT));
     }
 
     @Override

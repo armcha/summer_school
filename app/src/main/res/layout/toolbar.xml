@@ -33,8 +33,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="15dp"
                 android:hapticFeedbackEnabled="true"
+                android:padding="15dp"
                 app:srcCompat="@drawable/arrow_left"
                 tools:ignore="ContentDescription" />
 
@@ -47,7 +47,8 @@
                 android:layout_toRightOf="@+id/back_arrow"
                 android:gravity="center_vertical"
                 android:textColor="@color/black"
-                android:textSize="19sp" />
+                android:textSize="19sp"
+                app:font="sans_light" />
         </RelativeLayout>
 
     </android.support.v7.widget.Toolbar>

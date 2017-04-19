@@ -82,7 +82,7 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
                 holder.itemView.setBackgroundColor(Color.WHITE);
             }
 
-            viewHolder.bind(language, lastSelectedLanguage);
+            viewHolder.bind(language);
         } else if (holder instanceof ChooseLanguageTextSectionViewHolder) {
             ChooseLanguageTextSectionViewHolder sectionHolder = (ChooseLanguageTextSectionViewHolder) holder;
             String sectionText;

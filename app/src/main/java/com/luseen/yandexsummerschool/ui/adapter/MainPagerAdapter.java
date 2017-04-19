@@ -14,8 +14,8 @@ import com.luseen.yandexsummerschool.ui.fragment.translation.TranslationFragment
 
 public class MainPagerAdapter extends FragmentPagerAdapter {
 
-    public static final int TRANSLATION_POSITION = 0;
-    public static final int HISTORY_POSITION = 1;
+    private static final int TRANSLATION_POSITION = 0;
+    private static final int HISTORY_POSITION = 1;
     private static final int PAGE_COUNT = 3;
 
     public MainPagerAdapter(FragmentManager fm) {

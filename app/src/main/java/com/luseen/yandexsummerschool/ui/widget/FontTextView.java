@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.ui.widget;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.support.v7.widget.AppCompatTextView;
 import android.util.AttributeSet;
@@ -31,8 +32,7 @@ public class FontTextView extends AppCompatTextView {
 
         if (typedArray.hasValue(R.styleable.FontTextView_android_textAppearance)) {
             final int textAppearanceId = typedArray.getResourceId(R.styleable
-                            .FontTextView_android_textAppearance,
-                    android.R.style.TextAppearance);
+                            .FontTextView_android_textAppearance, android.R.style.TextAppearance);
             TypedArray atp = getContext().obtainStyledAttributes(textAppearanceId,
                     R.styleable.FontTextAppearance);
             if (atp.hasValue(R.styleable.FontTextAppearance_font)) {

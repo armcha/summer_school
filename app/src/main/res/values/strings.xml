@@ -44,5 +44,6 @@
     <string name="intro_next">Next</string>
     <string name="intro_done">Translate</string>
     <string name="intro_skip">Skip</string>
+    <string name="close_button">Close button</string>
 
 </resources>

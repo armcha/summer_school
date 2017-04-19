@@ -4,14 +4,12 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.dictionary.Definition;
@@ -21,6 +19,7 @@ import com.luseen.yandexsummerschool.model.dictionary.Example;
 import com.luseen.yandexsummerschool.model.dictionary.Synonym;
 import com.luseen.yandexsummerschool.model.dictionary.TranslatedString;
 import com.luseen.yandexsummerschool.utils.ExceptionTracker;
+import com.luseen.yandexsummerschool.utils.FontUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 import com.luseen.yandexsummerschool.utils.ViewUtils;
 
@@ -28,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static android.widget.LinearLayout.VERTICAL;
+import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 /**
  * Created by Chatikyan on 22.03.2017.
@@ -99,7 +99,7 @@ public class DictionaryView extends ScrollView implements Viewable {
                         brown, RELATIVE_SPAN_PROPORTION));
 
                 //Building Text view for each Definition
-                TextView definitionTextView = baseTextView(black);
+                FontTextView definitionTextView = baseTextView(black);
                 definitionTextView.setLineSpacing(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,
                         LINE_SPACING, getResources().getDisplayMetrics()), 1.0f);
                 definitionTextView.setText(definitionBuilder);
@@ -117,7 +117,7 @@ public class DictionaryView extends ScrollView implements Viewable {
                     boolean isIndexDoubleDigit = index > MAX_ON_DIGIT_NUMBER;
                     if (translationListSize > 1) {
                         String translationIndex = String.valueOf(index);
-                        TextView numberTextView = baseTextView(gray);
+                        FontTextView numberTextView = baseTextView(gray);
                         numberTextView.setText(StringUtils.changeSize(translationIndex, RELATIVE_SPAN_PROPORTION));
                         numberAndFlowContainer.addView(numberTextView);
                         //in dp, top margin to bring baseline to definitionTextView
@@ -165,7 +165,7 @@ public class DictionaryView extends ScrollView implements Viewable {
                     //Checking if has any meanings
                     boolean hasMeanings = meaningListSize > 0;
                     if (hasMeanings) {
-                        TextView meaningTextView = baseTextView(brown);
+                        FontTextView meaningTextView = baseTextView(brown);
                         StringBuilder meaningBuilder = new StringBuilder();
                         meaningBuilder.append("(");
 
@@ -204,7 +204,7 @@ public class DictionaryView extends ScrollView implements Viewable {
                                 exampleBuilder.append("\n");
                         }
                         //Checking if has example, and building text view
-                        TextView examplesTextView = baseTextView(blue);
+                        FontTextView examplesTextView = baseTextView(blue);
                         examplesTextView.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.ITALIC));
                         linearLayout.addView(examplesTextView);
                         //in dp, left margin from parent
@@ -218,11 +218,12 @@ public class DictionaryView extends ScrollView implements Viewable {
         }
     }
 
-    private TextView baseTextView(int textColor) {
+    private FontTextView baseTextView(int textColor) {
         Context context = getContext();
-        TextView baseTextView = new TextView(context);
+        FontTextView baseTextView = new FontTextView(context);
         baseTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE_IN_SP);
         baseTextView.setTextColor(ContextCompat.getColor(context, textColor));
+        baseTextView.setTypeface(FontUtils.get(context,SANS_LIGHT));
         return baseTextView;
     }
 

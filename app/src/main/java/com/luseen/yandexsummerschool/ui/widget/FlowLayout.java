@@ -2,6 +2,7 @@ package com.luseen.yandexsummerschool.ui.widget;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
@@ -10,8 +11,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
+import com.luseen.yandexsummerschool.utils.FontUtils;
 
 import java.util.List;
+
+import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 /**
  * Created by Chatikyan on 09.11.2016.
@@ -91,10 +95,11 @@ public class FlowLayout extends ViewGroup {
 
     public void addFlowItems(List<SpannableStringBuilder> spannableStringBuilderList) {
         for (SpannableStringBuilder spannableStringBuilder : spannableStringBuilderList) {
-            TextView textView = new TextView(context);
+            FontTextView textView = new FontTextView(context);
             textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
             textView.setText(spannableStringBuilder);
             textView.setIncludeFontPadding(false);
+            textView.setTypeface(FontUtils.get(context,SANS_LIGHT));
             addView(textView);
         }
     }

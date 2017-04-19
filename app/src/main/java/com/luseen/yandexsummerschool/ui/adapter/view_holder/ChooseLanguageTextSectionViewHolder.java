@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.luseen.yandexsummerschool.R;
+import com.luseen.yandexsummerschool.ui.widget.FontTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -17,7 +18,7 @@ import butterknife.ButterKnife;
 public class ChooseLanguageTextSectionViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.section_name)
-    TextView sectionTextView;
+    FontTextView sectionTextView;
 
     public ChooseLanguageTextSectionViewHolder(View itemView) {
         super(itemView);

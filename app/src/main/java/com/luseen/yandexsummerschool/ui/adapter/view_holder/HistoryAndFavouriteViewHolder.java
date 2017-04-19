@@ -12,6 +12,7 @@ import com.luseen.yandexsummerschool.R;
 import com.luseen.yandexsummerschool.model.History;
 import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.ui.widget.FontTextView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -23,13 +24,13 @@ import butterknife.ButterKnife;
 public class HistoryAndFavouriteViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.original_text)
-    TextView originalTextView;
+    FontTextView originalTextView;
 
     @BindView(R.id.translated_text)
-    TextView translatedTextView;
+    FontTextView translatedTextView;
 
     @BindView(R.id.translation_language_text)
-    TextView translationLanguageTextView;
+    FontTextView translationLanguageTextView;
 
     @BindView(R.id.favourite_icon)
     ImageView favouriteIcon;

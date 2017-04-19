@@ -25,6 +25,7 @@
                 app:tabGravity="center"
                 app:tabMode="fixed"
                 app:tabPadding="0dp"
+                app:font="sans_light"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextAppearance="@style/TabLayoutTextAppearance"
                 app:tabTextColor="@color/gray" />

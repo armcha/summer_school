@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:ignore="RtlHardcoded">
 
@@ -15,10 +16,11 @@
         android:tint="@color/gray"
         tools:ignore="ContentDescription" />
 
-    <TextView
+    <com.luseen.yandexsummerschool.ui.widget.FontTextView
         android:id="@+id/info_text"
         android:layout_width="120dp"
         android:layout_height="wrap_content"
+        app:font="sans_light"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:gravity="center"

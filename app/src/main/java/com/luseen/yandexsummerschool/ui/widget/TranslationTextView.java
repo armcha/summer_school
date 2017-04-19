@@ -10,7 +10,7 @@ import com.luseen.yandexsummerschool.R;
  * Created by Chatikyan on 24.03.2017.
  */
 
-public class TranslationTextView extends AppCompatTextView {
+public class TranslationTextView extends FontTextView {
 
     public TranslationTextView(Context context) {
         super(context);

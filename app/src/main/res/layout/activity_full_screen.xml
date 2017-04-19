@@ -16,7 +16,9 @@
         android:foreground="@drawable/ripple_bg_circle"
         android:padding="10dp"
         android:tint="@color/black"
-        app:srcCompat="@drawable/close_icon" />
+        app:srcCompat="@drawable/close_icon"
+        android:contentDescription="@string/close_button"
+        tools:ignore="RtlHardcoded" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -38,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="20dp"
-                app:font="yandex_sans"
+                app:font="sans_light"
                 android:paddingRight="20dp"
                 android:textColor="@color/black"
                 android:textSize="45sp" />
