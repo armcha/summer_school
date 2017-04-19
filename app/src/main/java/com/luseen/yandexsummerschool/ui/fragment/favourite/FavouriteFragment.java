@@ -19,7 +19,6 @@ import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouriteRecyclerAdapt
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.InfoShowerCoordinatorLayout;
 import com.luseen.yandexsummerschool.ui.widget.SearchView;
-import com.luseen.yandexsummerschool.utils.Logger;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -86,21 +85,6 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     }
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void showError() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
     public void onFavouriteResult(List<History> favouriteRealmResults) {
         setUpOrUpdateRecyclerView(favouriteRealmResults);
     }
@@ -139,8 +123,11 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
 
     @Subscribe
     public void onChange(FavouriteEvent favouriteEvent) {
-        searchView.reset();
-        presenter.fetchFavourite();
+        if (searchView.getSearchText().isEmpty()) {
+            presenter.fetchFavourite();
+        } else {
+            presenter.doSearch(searchView.getSearchText());
+        }
     }
 
     @Override

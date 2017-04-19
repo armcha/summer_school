@@ -38,6 +38,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:paddingLeft="20dp"
+                app:font="yandex_sans"
                 android:paddingRight="20dp"
                 android:textColor="@color/black"
                 android:textSize="45sp" />

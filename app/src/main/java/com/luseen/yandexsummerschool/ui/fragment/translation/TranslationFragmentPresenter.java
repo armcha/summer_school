@@ -135,6 +135,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     //Saving history and notifying history fragment to to reload data
     private void saveHistory(History history) {
+
         historySubscriptions.add(dataManager.saveHistory(history)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> EventBus.getDefault().post(new HistoryEvent())));
@@ -143,22 +144,23 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
     //handling user input
     @Override
     public void handleInputText(String inputText) {
+        if (!isViewAttached()) {
+            return;
+        }
+
         //Saving last typed text
         dataManager.saveLastTypedText(inputText);
 
-        if (isViewAttached()) {
-            getView().showLoading();
-        }
-
         String historyIdentifier = getIdentifier(inputText);
         historySubscriptions.add(dataManager.getHistoryByIdentifier(historyIdentifier)
+                .doOnSubscribe(() -> getView().showLoading())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(history -> {
                     boolean hasResultInDb = history != null && history.isValid();
                     if (hasResultInDb) {//If we had history in db, just showing from db, otherwise making request
                         dictionaryResultFromDb(history, false);
                     } else {
-                        //check if network is available, than onError or make request
+                        //check if network is available, than showing onError or making request
                         if (!NetworkUtils.isNetworkAvailable()) {
                             if (isViewAttached()) {
                                 getView().hideLoading();

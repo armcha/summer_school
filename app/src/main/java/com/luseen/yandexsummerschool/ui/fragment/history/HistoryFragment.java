@@ -106,21 +106,6 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
     }
 
     @Override
-    public void showLoading() {
-
-    }
-
-    @Override
-    public void hideLoading() {
-
-    }
-
-    @Override
-    public void onError() {
-
-    }
-
-    @Override
     public void onEmptyResult() {
         searchView.setVisibility(View.GONE);
         infoShowerCoordinatorLayout.whitTopMargin(false);

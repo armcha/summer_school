@@ -17,12 +17,6 @@ public interface HistoryContract {
 
         void onHistoryResult(List<History> historyList);
 
-        void showLoading();
-
-        void hideLoading();
-
-        void onError();
-
         void onEmptyResult();
 
         void onEmptySearchResult();

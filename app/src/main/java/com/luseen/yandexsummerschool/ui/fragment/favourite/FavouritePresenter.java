@@ -2,7 +2,7 @@ package com.luseen.yandexsummerschool.ui.fragment.favourite;
 
 import com.luseen.yandexsummerschool.base_mvp.api.ApiPresenter;
 import com.luseen.yandexsummerschool.data.api.RequestType;
-import com.luseen.yandexsummerschool.utils.Logger;
+import com.luseen.yandexsummerschool.utils.ExceptionTracker;
 import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import rx.android.schedulers.AndroidSchedulers;
@@ -36,18 +36,13 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
     public void fetchFavourite() {
         if (!isViewAttached()) return;
 
-        getView().showLoading();
         compositeSubscription.add(dataManager.getFavouriteList()
-                .doOnTerminate(getView()::hideLoading)
                 .subscribe(favouriteList -> {
                     getView().onFavouriteResult(favouriteList);
                     if (favouriteList.size() == 0) {
                         getView().onEmptyResult();
                     }
-                }, throwable -> {
-                    Logger.log(throwable.getMessage());
-                    getView().showError();
-                }));
+                }, ExceptionTracker::trackException));
     }
 
     @Override

@@ -39,21 +39,15 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
     public void fetchHistory() {
         if (!isViewAttached()) return;
 
-        getView().showLoading();
-
         compositeSubscription.add(getHistory()
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnTerminate(getView()::hideLoading)
                 .subscribe(histories -> {
                     if (histories.size() == 0) {
                         getView().onEmptyResult();
                     } else {
                         getView().onHistoryResult(histories);
                     }
-                }, throwable -> {
-                    ExceptionTracker.trackException(throwable);
-                    getView().onError();
-                }));
+                }, ExceptionTracker::trackException));
     }
 
     @Override

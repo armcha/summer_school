@@ -15,12 +15,6 @@ public interface FavouriteContract {
 
     interface View extends ApiContract.View {
 
-        void showLoading();
-
-        void showError();
-
-        void hideLoading();
-
         void onFavouriteResult(List<History> favouriteList);
 
         void onEmptyResult();

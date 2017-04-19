@@ -57,7 +57,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
 
     public static final int CHOOSE_LANGUAGE_REQUEST_CODE = 1 << 1;
     public static final int TRANSLATION_FRAGMENT_POSITION = 0;
-    public static final long DEBOUNCE_TIMEOUT = 500L;
+    public static final long DEBOUNCE_TIMEOUT = 700L;
 
     @BindView(R.id.source_language_text_view)
     AnimatedTextView sourceLanguageTextView;
