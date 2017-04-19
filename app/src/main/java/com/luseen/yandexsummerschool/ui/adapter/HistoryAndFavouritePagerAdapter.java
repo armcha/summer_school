@@ -22,8 +22,8 @@ public class HistoryAndFavouritePagerAdapter extends FragmentPagerAdapter {
     private static final int FAVOURITE_POSITION = 1;
     private static final int PAGE_COUNT = 2;
 
-    private SparseArrayCompat<Fragment> fragmentSparseArray = new SparseArrayCompat<>(2);
-    private String[] titles = new String[2];
+    private final SparseArrayCompat<Fragment> fragmentSparseArray = new SparseArrayCompat<>(2);
+    private final String[] titles = new String[2];
 
     public HistoryAndFavouritePagerAdapter(FragmentManager fm) {
         super(fm);

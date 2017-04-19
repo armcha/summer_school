@@ -43,7 +43,8 @@
         app:layout_constraintBottom_toTopOf="@+id/name_container"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/app_bar" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar"
+        tools:ignore="ContentDescription" />
 
     <LinearLayout
         android:id="@+id/name_container"

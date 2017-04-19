@@ -89,7 +89,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
     @BindView(R.id.error_view)
     LinearLayout errorView;
 
-    private CompositeSubscription subscriptions = new CompositeSubscription();
+    private final CompositeSubscription subscriptions = new CompositeSubscription();
     private String currentIdentifier;
     private DictionaryView dictView;
     private Unregistrar unregistrar;

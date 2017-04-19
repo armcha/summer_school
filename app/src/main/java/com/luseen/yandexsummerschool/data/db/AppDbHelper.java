@@ -16,9 +16,9 @@ import rx.Observable;
 
 public class AppDbHelper implements DbHelper {
 
-    private HistoryDao historyDao = HistoryDao.getInstance();
-    private LastUsedLanguageDao languageDao = LastUsedLanguageDao.getInstance();
-    private LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
+    private final HistoryDao historyDao = HistoryDao.getInstance();
+    private final LastUsedLanguageDao languageDao = LastUsedLanguageDao.getInstance();
+    private final LanguagePairDao languagePairDao = LanguagePairDao.getInstance();
 
     @Override
     public Completable saveHistory(History history) {

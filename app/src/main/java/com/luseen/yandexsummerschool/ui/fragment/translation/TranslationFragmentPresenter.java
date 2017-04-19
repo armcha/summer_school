@@ -35,7 +35,7 @@ import rx.subscriptions.CompositeSubscription;
 public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragmentContract.View>
         implements TranslationFragmentContract.Presenter {
 
-    private CompositeSubscription historySubscriptions = new CompositeSubscription();
+    private final CompositeSubscription historySubscriptions = new CompositeSubscription();
 
     @Override
     public void onCreate() {

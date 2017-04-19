@@ -15,7 +15,7 @@ public enum YaError {
     THE_TEXT_CANNOT_BE_TRANSLATED(422),
     UNKNOWN(-1);
 
-    int errorCode;
+    final int errorCode;
 
     YaError(int code) {
         this.errorCode = code;

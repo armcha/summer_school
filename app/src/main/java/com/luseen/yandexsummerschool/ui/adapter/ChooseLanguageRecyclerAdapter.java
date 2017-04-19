@@ -27,11 +27,11 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
     private final int VIEW_TYPE_LANGUAGE = 0;
 
     private ChooseLanguageItemSelectListener itemSelectListener;
-    private List<Language> languageList;
-    private List<Language> lastUsedLanguageList;
-    private String lastSelectedLanguage;
-    private boolean hasLastUsedLanguages;
-    private int textSectionSize;
+    private final List<Language> languageList;
+    private final List<Language> lastUsedLanguageList;
+    private final String lastSelectedLanguage;
+    private final boolean hasLastUsedLanguages;
+    private final int textSectionSize;
 
     public ChooseLanguageRecyclerAdapter(List<Language> languageList,
                                          List<Language> lastUsedLanguageList,

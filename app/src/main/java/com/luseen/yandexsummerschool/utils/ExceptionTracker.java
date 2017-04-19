@@ -16,7 +16,7 @@ public class ExceptionTracker {
     }
 
     public static void trackException(Throwable throwable) {
-        Logger.log("EXCEPTION TRACKER HAS BAD MESSAGE FOR YOU - " + throwable.getMessage());
+        Logger.e("EXCEPTION TRACKER HAS BAD MESSAGE FOR YOU - " + throwable.getMessage());
         if (BuildConfig.DEBUG)
             Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
     }

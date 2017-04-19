@@ -16,7 +16,7 @@ import java.lang.reflect.Field;
 
 public class CustomBottomNavigationView extends BottomNavigationView {
 
-    private Context context;
+    private final Context context;
 
     public CustomBottomNavigationView(Context context) {
         super(context);

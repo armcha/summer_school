@@ -14,7 +14,7 @@ import static com.luseen.yandexsummerschool.ui.activity.intro.IntroActivity.INTR
 public class SplashScreenPresenter extends BasePresenter<SplashScreenContract.View>
         implements SplashScreenContract.Presenter {
 
-    private SharedPreferences sharedPreferences = App.getInstance().getSharedPreferences();
+    private final SharedPreferences sharedPreferences = App.getInstance().getSharedPreferences();
 
     @Override
     public void decideOpening() {

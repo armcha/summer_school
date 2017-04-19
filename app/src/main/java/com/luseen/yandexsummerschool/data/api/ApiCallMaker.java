@@ -7,6 +7,7 @@ import com.luseen.yandexsummerschool.utils.RxUtils;
 import rx.Observable;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action0;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
@@ -16,7 +17,7 @@ import rx.subscriptions.CompositeSubscription;
 
 public class ApiCallMaker {
 
-    private CompositeSubscription subscriptions;
+    private final CompositeSubscription subscriptions;
 
     public ApiCallMaker() {
         subscriptions = new CompositeSubscription();
@@ -26,12 +27,13 @@ public class ApiCallMaker {
                                  final ResultListener resultListener,
                                  final RequestType requestType) {
 
-        resultListener.onStart(requestType);
+
         Subscription subscription = request
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnUnsubscribe(() -> Logger.log(requestType.toString().toUpperCase() +
-                        " request finished, Unsubscribing..."))
+                .doOnSubscribe(() -> resultListener.onStart(requestType))
+                .doOnUnsubscribe(() -> Logger.d(requestType.toString().toUpperCase() +
+                        " request finished, Unsubscribing"))
                 .subscribe(response -> resultListener.onSuccess(requestType, response),
                         throwable -> resultListener.onError(requestType, throwable));
         subscriptions.add(subscription);

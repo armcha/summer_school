@@ -13,8 +13,8 @@ import java.util.List;
 
 public class DiffCallback extends DiffUtil.Callback {
 
-    private List<History> oldHistory;
-    private List<History> newHistory;
+    private final List<History> oldHistory;
+    private final List<History> newHistory;
 
     public DiffCallback(List<History> oldHistory, List<History> newHistory) {
         this.newHistory = newHistory;
@@ -44,11 +44,5 @@ public class DiffCallback extends DiffUtil.Callback {
         final History oldItem = oldHistory.get(oldItemPosition);
         final History newItem = newHistory.get(newItemPosition);
         return true;
-    }
-
-    @Nullable
-    @Override
-    public Object getChangePayload(int oldItemPosition, int newItemPosition) {
-        return super.getChangePayload(oldItemPosition, newItemPosition);
     }
 }

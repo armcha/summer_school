@@ -8,7 +8,7 @@ import com.luseen.yandexsummerschool.model.History;
 
 public class FromHistoryOrFavouriteEvent {
 
-    private History history;
+    private final History history;
 
     public FromHistoryOrFavouriteEvent(History history) {
         this.history = history;

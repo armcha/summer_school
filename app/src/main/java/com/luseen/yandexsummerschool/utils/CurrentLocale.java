@@ -9,7 +9,7 @@ public enum CurrentLocale {
     RUSSIAN("ru"),
     ENGLISH("en");
 
-    private String languageCode;
+    private final String languageCode;
 
     CurrentLocale(String languageCode) {
         this.languageCode = languageCode;

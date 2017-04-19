@@ -23,7 +23,7 @@ import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 public class FlowLayout extends ViewGroup {
 
-    private Context context;
+    private final Context context;
     private int mHeight;
 
     public FlowLayout(Context context) {

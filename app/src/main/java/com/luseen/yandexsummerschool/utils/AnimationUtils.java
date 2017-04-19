@@ -35,10 +35,4 @@ public class AnimationUtils {
         rotate.setInterpolator(getFastOutSlowInInterpolator());
         view.startAnimation(rotate);
     }
-
-    public static AnimatedVectorDrawableCompat createAnimatedVector(int vectorId) {
-        AnimatedVectorDrawableCompat animatedVectorDrawableCompat =
-                AnimatedVectorDrawableCompat.create(App.getInstance(), vectorId);
-        return animatedVectorDrawableCompat;
-    }
 }

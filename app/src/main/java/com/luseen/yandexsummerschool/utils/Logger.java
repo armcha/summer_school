@@ -10,43 +10,35 @@ public class Logger {
         throw new RuntimeException("Private constructor cannot be accessed");
     }
 
-    public static final String TAG = "Logger";
-    private static boolean isLoggable = BuildConfig.DEBUG;
+    private static final String TAG = "Logger";
+    private static final boolean isLoggable = BuildConfig.DEBUG;
 
     public static void e(Object message) {
         if (isLoggable) {
-            Log.e(TAG, "| " + makeLog(message.toString()));
+            Log.e(TAG, "| " + makeLog(message.toString(), "e"));
         }
     }
 
     public static void d(Object message) {
         if (isLoggable)
-            Log.d(TAG, "| " + makeLog(message.toString()));
+            Log.d(TAG, "| " + makeLog(message.toString(), "d"));
     }
 
     public static void log(Object message) {
         if (isLoggable) {
             if (message != null) {
-                Log.e(TAG, "| " + makeLog(message.toString()));
+                Log.e(TAG, "| " + makeLog(message.toString(), "log"));
             } else {
                 Log.e(TAG, "| " + null + " |");
             }
         }
     }
 
-    static void releaseLog(Object message) {
-        if (message != null) {
-            Log.e(TAG, "| " + makeLog(message.toString()));
-        } else {
-            Log.e(TAG, "| " + null + " |");
-        }
-    }
-
-    private static String makeLog(String message) {
+    private static String makeLog(String message, String calledMethodName) {
         StackTraceElement[] stackTraceElement = Thread.currentThread().getStackTrace();
         int currentIndex = -1;
         for (int i = 0; i < stackTraceElement.length; i++) {
-            if (stackTraceElement[i].getMethodName().compareTo("log") == 0) {
+            if (stackTraceElement[i].getMethodName().compareTo(calledMethodName) == 0) {
                 currentIndex = i + 1;
                 break;
             }

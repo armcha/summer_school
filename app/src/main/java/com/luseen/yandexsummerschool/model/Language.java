@@ -56,7 +56,7 @@ public class Language extends RealmObject implements Serializable {
         return this.langCode.equals(language.langCode);
     }
 
-    public static Comparator<Language> languageComparator = (language1, language2) -> {
+    public static final Comparator<Language> languageComparator = (language1, language2) -> {
         String firstLanguage = language1.fullLanguageName;
         String secondLanguage = language2.fullLanguageName;
         return firstLanguage.compareToIgnoreCase(secondLanguage);

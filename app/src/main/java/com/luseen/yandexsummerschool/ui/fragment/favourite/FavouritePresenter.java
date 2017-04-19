@@ -15,7 +15,7 @@ import rx.subscriptions.CompositeSubscription;
 public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
         implements FavouriteContract.Presenter {
 
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onStart(RequestType requestType) {

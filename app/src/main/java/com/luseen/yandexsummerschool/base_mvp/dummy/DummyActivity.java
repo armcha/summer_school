@@ -9,7 +9,7 @@ import com.luseen.yandexsummerschool.base_mvp.base.BaseActivity;
  * Created by Chatikyan on 16.02.2017.
  */
 
-public class DummyActivity extends BaseActivity<DummyContract.View, DummyPresenter>
+public abstract class DummyActivity extends BaseActivity<DummyContract.View, DummyPresenter>
         implements DummyContract.View {
 
     @NonNull

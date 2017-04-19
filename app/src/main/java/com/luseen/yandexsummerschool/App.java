@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.crashlytics.android.Crashlytics;
 import com.luseen.yandexsummerschool.utils.AppConstants;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;

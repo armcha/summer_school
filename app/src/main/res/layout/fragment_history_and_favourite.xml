@@ -40,7 +40,9 @@
                 android:background="?selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:padding="12dp"
-                app:srcCompat="@drawable/delete" />
+                android:focusable="true"
+                app:srcCompat="@drawable/delete"
+                tools:ignore="ContentDescription" />
 
         </RelativeLayout>
     </android.support.design.widget.AppBarLayout>

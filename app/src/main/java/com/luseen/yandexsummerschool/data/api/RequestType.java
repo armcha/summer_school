@@ -12,7 +12,7 @@ public enum RequestType {
     LOOKUP("LookUp"),
     LOOKUP_AND_TRANSLATION("LookUp");
 
-    private String requestType;
+    private final String requestType;
 
     RequestType(String requestType) {
         this.requestType = requestType;

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:background="@drawable/ripple_bg"
+    android:focusable="true"
     android:clickable="true">
 
     <com.luseen.yandexsummerschool.ui.widget.FontTextView
@@ -24,7 +25,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="10dp"
-        app:srcCompat="@drawable/right_arrow" />
+        app:srcCompat="@drawable/right_arrow"
+        tools:ignore="ContentDescription,RtlHardcoded" />
 
     <View
         android:layout_width="match_parent"

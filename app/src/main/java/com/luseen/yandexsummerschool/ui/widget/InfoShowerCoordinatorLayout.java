@@ -24,7 +24,6 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
     private AppCompatImageView infoIconImageView;
     private FontTextView infoTextView;
     private View rootView;
-    private boolean whitTopMargin = false;
 
     public InfoShowerCoordinatorLayout(Context context) {
         super(context);
@@ -97,7 +96,6 @@ public class InfoShowerCoordinatorLayout extends CoordinatorLayout implements Vi
     }
 
     public void whitTopMargin(boolean enable) {
-        this.whitTopMargin = enable;
         if (enable) {
             ViewUtils.setViewMargins(rootView, new int[]{0, 70, 0, 0});
         } else {

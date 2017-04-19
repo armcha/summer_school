@@ -18,7 +18,7 @@ import rx.subscriptions.CompositeSubscription;
 public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
         implements HistoryContract.Presenter {
 
-    private CompositeSubscription compositeSubscription = new CompositeSubscription();
+    private final CompositeSubscription compositeSubscription = new CompositeSubscription();
 
     @Override
     public void onStart(RequestType requestType) {

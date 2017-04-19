@@ -17,17 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
 
-    public static final int TYPE_TRANSLATION = 0;
-    public static final int TYPE_DICTIONARY = 1;
+    private static final int TYPE_TRANSLATION = 0;
+    private static final int TYPE_DICTIONARY = 1;
 
-    private static Api instance = new Api();
+    private static final Api instance = new Api();
 
     public static Api getInstance() {
         return instance;
     }
 
-    private TranslationService translationService;
-    private DictionaryService dictionaryService;
+    private final TranslationService translationService;
+    private final DictionaryService dictionaryService;
 
     private Gson getGson() {
         return new GsonBuilder()

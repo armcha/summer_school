@@ -1,8 +1,5 @@
 package com.luseen.yandexsummerschool.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -13,6 +10,7 @@ import io.realm.annotations.PrimaryKey;
 
 public class LastUsedLanguages extends RealmObject {
 
+    @SuppressWarnings("FieldCanBeLocal")
     @PrimaryKey
     private int id = 1;
 

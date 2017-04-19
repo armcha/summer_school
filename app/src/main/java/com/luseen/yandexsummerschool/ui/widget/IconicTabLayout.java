@@ -16,9 +16,9 @@ import com.luseen.yandexsummerschool.R;
 
 public class IconicTabLayout extends TabLayout implements TabLayout.OnTabSelectedListener {
 
-    int icons[] = {R.drawable.ic_tab_translate, R.drawable.ic_tab_fav, R.drawable.ic_tab_settings};
-    private int selectedIconColor = Color.RED;
-    private int unSelectedIconColor = Color.BLUE;
+    final int[] icons = {R.drawable.ic_tab_translate, R.drawable.ic_tab_fav, R.drawable.ic_tab_settings};
+    private final int selectedIconColor = Color.RED;
+    private final int unSelectedIconColor = Color.BLUE;
 
     public IconicTabLayout(Context context) {
         super(context);

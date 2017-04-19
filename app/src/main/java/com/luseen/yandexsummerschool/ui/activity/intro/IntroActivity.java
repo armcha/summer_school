@@ -15,10 +15,10 @@ public class IntroActivity extends VerticalIntro {
 
     public static final String INTRO_STATE_KEY = "intro_state_key";
 
-    private int[] titles = {R.string.intro_first_title, R.string.intro_second_title, R.string.intro_third_title};
-    private int[] texts = {R.string.intro_first_text, R.string.intro_second_text, R.string.intro_third_text};
-    private int[] colors = {R.color.intro_first, R.color.intro_second, R.color.intro_third};
-    private int[] images = {R.drawable.intro_first, R.drawable.intro_second, R.drawable.intro_third};
+    private final int[] titles = {R.string.intro_first_title, R.string.intro_second_title, R.string.intro_third_title};
+    private final int[] texts = {R.string.intro_first_text, R.string.intro_second_text, R.string.intro_third_text};
+    private final int[] colors = {R.color.intro_first, R.color.intro_second, R.color.intro_third};
+    private final int[] images = {R.drawable.intro_first, R.drawable.intro_second, R.drawable.intro_third};
 
     public static void start(Context context) {
         Intent starter = new Intent(context, IntroActivity.class);
