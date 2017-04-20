@@ -19,7 +19,6 @@ import com.luseen.yandexsummerschool.utils.Logger;
 public class HistoryAndFavouritePagerAdapter extends FragmentPagerAdapter {
 
     private static final int HISTORY_POSITION = 0;
-    private static final int FAVOURITE_POSITION = 1;
     private static final int PAGE_COUNT = 2;
 
     private final SparseArrayCompat<Fragment> fragmentSparseArray = new SparseArrayCompat<>(2);

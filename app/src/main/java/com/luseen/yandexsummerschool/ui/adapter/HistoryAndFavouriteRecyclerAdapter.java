@@ -20,6 +20,7 @@ import io.realm.Realm;
 public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
 
     public interface AdapterItemClickListener {
+
         void onAdapterItemClick(History history);
 
         void onFavouriteClicked(boolean isFavourite, String identifier);
@@ -38,7 +39,7 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
                 R.layout.history_and_favourite_item, parent, false);
         HistoryAndFavouriteViewHolder holder = new HistoryAndFavouriteViewHolder(inflatedView);
 
-        holder.itemView.setOnClickListener(v -> {
+        holder.itemView.setOnClickListener(__ -> {
             int position = holder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
                 History history = historyList.get(position);
@@ -51,6 +52,7 @@ public class HistoryAndFavouriteRecyclerAdapter extends RecyclerView.Adapter {
         holder.getFavouriteIcon().setOnClickListener(v -> {
             int position = holder.getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
+                //Saving favourite state
                 History history = historyList.get(position);
                 Realm realm = Realm.getDefaultInstance();
                 realm.beginTransaction();

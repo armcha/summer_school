@@ -61,6 +61,10 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        setUpViewPager();
+    }
+
+    private void setUpViewPager() {
         adapter = new HistoryAndFavouritePagerAdapter(getChildFragmentManager());
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -100,11 +104,13 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
         EventBus.getDefault().unregister(this);
     }
 
+    //Counting history in case of any change
     @Subscribe
     public void onHistoryChange(HistoryEvent historyEvent) {
         presenter.countHistory();
     }
 
+    //Notifying history and favourite fragment history clear event
     @Override
     public void onHistoryAndFavouriteCleared() {
         for (int i = 0; i < adapter.getCount(); i++) {

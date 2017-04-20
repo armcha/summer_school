@@ -27,9 +27,10 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
     private final int VIEW_TYPE_LANGUAGE = 0;
 
     private ChooseLanguageItemSelectListener itemSelectListener;
-    private final List<Language> languageList;
     private final List<Language> lastUsedLanguageList;
+    private final List<Language> languageList;
     private final String lastSelectedLanguage;
+
     private final boolean hasLastUsedLanguages;
     private final int textSectionSize;
 
@@ -45,6 +46,7 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
+        //??
         int secondSectionPosition = hasLastUsedLanguages ? lastUsedLanguageList.size() + 1 : 0;
         if (position == 0 || position == secondSectionPosition) {
             return VIEW_TYPE_TEXT_SECTION;
@@ -56,6 +58,7 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder holder;
+        //Returning holder, depend on viewType
         if (viewType == VIEW_TYPE_LANGUAGE) {
             holder = createChooseLanguageViewHolder(parent);
         } else {

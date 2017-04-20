@@ -18,17 +18,17 @@ public class HistoryAndFavouritePresenter extends ApiPresenter<HistoryAndFavouri
 
     @Override
     public void onStart(RequestType requestType) {
-
+        //no-op
     }
 
     @Override
     public <T> void onSuccess(RequestType requestType, T response) {
-
+        //no-op
     }
 
     @Override
     public void onError(RequestType requestType, Throwable throwable) {
-
+        //no-op
     }
 
     @Override
@@ -40,6 +40,9 @@ public class HistoryAndFavouritePresenter extends ApiPresenter<HistoryAndFavouri
         }
     }
 
+    /**
+     * Showing or hiding depend on history size
+     */
     @Override
     public void countHistory() {
         if (isViewAttached()) {

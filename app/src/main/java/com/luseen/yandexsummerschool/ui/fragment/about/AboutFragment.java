@@ -63,6 +63,7 @@ public class AboutFragment extends BaseFragment<AboutContract.View, AboutContrac
             ViewGroup aboutItem = (ViewGroup) itemsContainer.getChildAt(i);
             boolean isLastItem = i == itemsContainer.getChildCount() - 1;
             if (isLastItem) {
+                //Hiding last divider, actually we need recycler view, and item decorator
                 aboutItem.getChildAt(aboutItem.getChildCount() - 1).setVisibility(View.GONE);
             }
             aboutItem.setTag(i);

@@ -40,11 +40,16 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
                 .subscribe(favouriteList -> {
                     getView().onFavouriteResult(favouriteList);
                     if (favouriteList.size() == 0) {
-                        getView().onEmptyResult();
+                        getView().onEmptyResult();//Giving empty result to fragment
                     }
                 }, ExceptionTracker::trackException));
     }
 
+    /**
+     * Searching history by user input
+     *
+     * @param input text
+     */
     @Override
     public void doSearch(String input) {
         if (!isViewAttached())
@@ -64,6 +69,11 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
         fetchFavourite();
     }
 
+    /**
+     * On screen change it is possible to have search input, so checking it
+     *
+     * @param searchText input text
+     */
     @Override
     public void decideFavouriteFetching(String searchText) {
         if (searchText.length() > 0) {

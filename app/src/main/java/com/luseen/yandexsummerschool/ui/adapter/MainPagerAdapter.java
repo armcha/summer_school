@@ -4,8 +4,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_root.HistoryAndFavouriteRootFragment;
 import com.luseen.yandexsummerschool.ui.fragment.about.AboutFragment;
+import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_root.HistoryAndFavouriteRootFragment;
 import com.luseen.yandexsummerschool.ui.fragment.translation.TranslationFragment;
 
 /**

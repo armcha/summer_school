@@ -9,6 +9,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.utils.LanguageUtils;
 import com.luseen.yandexsummerschool.utils.NetworkUtils;
+import com.luseen.yandexsummerschool.utils.RxUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -36,6 +37,10 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
+    /**
+     * Starting request
+     * @param requestType
+     */
     @Override
     public void onStart(RequestType requestType) {
         if (isViewAttached()) {
@@ -49,8 +54,9 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
             return;
         getView().hideLoading();
 
-        AvailableLanguages availableLanguages = (AvailableLanguages) response;
+        //Getting AVAILABLE_LANGUAGES result from request
         if (requestType == RequestType.AVAILABLE_LANGUAGES) {
+            AvailableLanguages availableLanguages = (AvailableLanguages) response;
             Observable<LastUsedLanguages> lastUsedLanguagesObservable = dataManager.getLastUsedLanguages();
             lastUsedLanguageSubscription = lastUsedLanguagesObservable
                     .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +64,12 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
+    /**
+     * Sending AVAILABLE_LANGUAGES, target and source languages result to activity
+     *
+     * @param lastUsedLanguages  Last chosen language
+     * @param availableLanguages AVAILABLE_LANGUAGES request result
+     */
     private void doOnResult(LastUsedLanguages lastUsedLanguages, AvailableLanguages availableLanguages) {
         LinkedTreeMap<String, String> languageMap = availableLanguages.getLanguageLinkedMap();
         availableLanguages.setLanguageList(convertLinkedTreeMapToLanguageList(languageMap));
@@ -87,6 +99,12 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
+    /**
+     * Converting linkedTreeMap to language list
+     *
+     * @param linkedTreeMap from request
+     * @return the language list
+     */
     private List<Language> convertLinkedTreeMapToLanguageList(LinkedTreeMap<String, String> linkedTreeMap) {
         List<Language> languageList = new ArrayList<>();
         for (String key : linkedTreeMap.keySet()) {
@@ -98,6 +116,9 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         return languageList;
     }
 
+    /**
+     * Starting AVAILABLE_LANGUAGES request
+     */
     @Override
     public void startAvailableLanguagesRequest() {
         if (isViewAttached()) {
@@ -112,6 +133,11 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
+    /**
+     * Handling language which user is selected
+     *
+     * @param language selected language
+     */
     @Override
     public void handleLanguageSelection(Language language) {
         LanguagePair dbLanguagePair = dataManager.getLanguagePair();
@@ -148,16 +174,20 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         }
     }
 
+    /**
+     * Retrying to make AVAILABLE_LANGUAGES request
+     */
     @Override
     public void retry() {
         startAvailableLanguagesRequest();
     }
 
+    /**
+     * Just unsubscribing
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (lastUsedLanguageSubscription != null) {
-            lastUsedLanguageSubscription.unsubscribe();
-        }
+        RxUtils.unsubscribe(lastUsedLanguageSubscription);
     }
 }

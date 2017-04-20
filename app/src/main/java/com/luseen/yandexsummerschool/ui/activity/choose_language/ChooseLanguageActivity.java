@@ -47,8 +47,7 @@ public class ChooseLanguageActivity extends ApiActivity<ChooseLanguageContract.V
 
     private String languageChooseType;
 
-    public static Intent getStartIntent(Context context,
-                                        String languageChooseType) {
+    public static Intent getStartIntent(Context context, String languageChooseType) {
         Intent intent = new Intent(context, ChooseLanguageActivity.class);
         intent.putExtra(LANGUAGE_CHOOSE_TYPE_INTENT_KEY, languageChooseType);
         return intent;

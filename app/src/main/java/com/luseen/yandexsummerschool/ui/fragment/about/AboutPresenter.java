@@ -14,7 +14,11 @@ public class AboutPresenter extends BasePresenter<AboutContract.View>
     private static final int PRIVACY_POLICY = 3;
     private static final int MOBILIZATION = 4;
 
-
+    /**
+     * Handling clicks, depend on tag
+     *
+     * @param id view tag
+     */
     @Override
     public void handleItemClicks(Object id) {
         if (!isViewAttached()) return;

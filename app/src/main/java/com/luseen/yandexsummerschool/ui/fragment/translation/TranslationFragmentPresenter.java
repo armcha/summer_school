@@ -67,6 +67,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
                 dataManager.saveLastTranslatedWord(translation.getTranslatedText());
                 createHistoryFromTranslationAndSave(translation);
+                //Giving result to view
                 getView().onTranslationResult(translation, historyIdentifier);
             } else if (requestType == RequestType.LOOKUP) {
                 Dictionary dictionary = ((Dictionary) response);
@@ -76,6 +77,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
                 dataManager.saveLastTranslatedWord(dictionary.getTranslatedText());
                 createHistoryFromDictionaryAndSave(dictionary);
+                //Giving result to view
                 getView().onDictionaryResult(dictionary, historyIdentifier, false);
             }
         }
@@ -178,8 +180,16 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
                 }));
     }
 
+    /**
+     * Getting dictionary from history,
+     * and checking if history from received from history or favourite fragment
+     *
+     * @param history                History from db
+     * @param fromHistoryOrFavourite
+     */
     private void dictionaryResultFromDb(History history, boolean fromHistoryOrFavourite) {
         Dictionary dictionary = history.getDictionary();
+        //Saving favourite
         Realm realm = Realm.getDefaultInstance();
         realm.beginTransaction();
         dictionary.setFavourite(history.isFavourite());
@@ -192,6 +202,11 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    /**
+     * Making both lookUp and translate request, based on input text
+     *
+     * @param inputText input text
+     */
     private void makeLookUpAndTranslateRequest(String inputText) {
         LanguagePair pair = dataManager.getLanguagePair();
         String translationLanguage = pair.getTargetLanguage().getLangCode();
@@ -233,6 +248,12 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         }
     }
 
+    /**
+     * Handling language choose, from choose language activity
+     *
+     * @param requestCode code, that activity started
+     * @param resultCode  activity result
+     */
     @Override
     public void handleActivityResult(int requestCode, int resultCode) {
         if (requestCode == TranslationFragment.CHOOSE_LANGUAGE_REQUEST_CODE &&
@@ -248,16 +269,24 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         dataManager.saveLastTranslatedWord(StringUtils.EMPTY);
     }
 
+    /**
+     * Finding and setting favourite, by history identifier
+     *
+     * @param identifier given identifier
+     */
     @Override
     public void setFavourite(String identifier) {
         boolean isFavourite = isResponseFavourite(identifier);
         historySubscriptions.add(dataManager.getHistoryByIdentifier(identifier)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(history -> {
+                    //Saving...
                     Realm realm = Realm.getDefaultInstance();
                     realm.beginTransaction();
                     history.setFavourite(!history.isFavourite());
                     realm.commitTransaction();
+
+                    //Notifying history and favourite fragments favourite changing
                     EventBus.getDefault().post(new HistoryEvent());
                     EventBus.getDefault().post(new FavouriteEvent(isFavourite, identifier));
                     if (isViewAttached()) {
@@ -271,15 +300,23 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
         handleInputText(inputText);
     }
 
+    /**
+     * //Handling history receiving from history or favourite fragment
+     *
+     * @param history received history
+     */
     @Override
     public void handleHistoryReceiving(History history) {
+        //Saving new language pair
         dataManager.saveLastTypedText(history.getDictionary().getOriginalText());
         LanguagePair historyLangPair = history.getLanguagePair();
         LanguagePair languagePair = new LanguagePair();
         languagePair.setSourceLanguage(historyLangPair.getSourceLanguage());
         languagePair.setTargetLanguage(historyLangPair.getTargetLanguage());
         dataManager.saveLanguagePair(languagePair);
-        getView().updateToolbarLanguages(history.getLanguagePair());
+
+        if (isViewAttached())
+            getView().updateToolbarLanguages(history.getLanguagePair());
         dictionaryResultFromDb(history, true);
     }
 

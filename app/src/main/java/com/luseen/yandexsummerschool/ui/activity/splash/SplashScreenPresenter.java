@@ -16,6 +16,9 @@ public class SplashScreenPresenter extends BasePresenter<SplashScreenContract.Vi
 
     private final SharedPreferences sharedPreferences = App.getInstance().getSharedPreferences();
 
+    /**
+     * Deciding to open intro or root, depend on is intro already shown
+     */
     @Override
     public void decideOpening() {
         if (isViewAttached()) {

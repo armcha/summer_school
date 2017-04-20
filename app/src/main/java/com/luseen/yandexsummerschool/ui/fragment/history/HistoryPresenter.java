@@ -50,6 +50,11 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
                 }, ExceptionTracker::trackException));
     }
 
+    /**
+     * Searching history by user input
+     *
+     * @param input text
+     */
     @Override
     public void doSearch(String input) {
         if (!isViewAttached())
@@ -69,6 +74,11 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
         fetchHistory();
     }
 
+    /**
+     * On screen change it is possible to have search input, so checking it
+     *
+     * @param searchText input text
+     */
     @Override
     public void decideHistoryFetching(String searchText) {
         if (searchText.length() > 0) {
@@ -77,7 +87,6 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
             fetchHistory();
         }
     }
-
 
     @Override
     public void onDestroy() {

@@ -121,13 +121,14 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         infoShowerCoordinatorLayout.show();
     }
 
+    /**
+     * Handling favourite change event
+     *
+     * @param favouriteEvent EventBus event
+     */
     @Subscribe
     public void onChange(FavouriteEvent favouriteEvent) {
-        if (searchView.getSearchText().isEmpty()) {
-            presenter.fetchFavourite();
-        } else {
-            presenter.doSearch(searchView.getSearchText());
-        }
+        presenter.decideFavouriteFetching(searchView.getSearchText());
     }
 
     @Override
@@ -135,6 +136,12 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         EventBus.getDefault().post(new FromHistoryOrFavouriteEvent(history));
     }
 
+    /**
+     * Sending events to history and favourite fragments
+     *
+     * @param isFavourite if item is favourite
+     * @param identifier
+     */
     @Override
     public void onFavouriteClicked(boolean isFavourite, String identifier) {
         EventBus.getDefault().post(new HistoryEvent());

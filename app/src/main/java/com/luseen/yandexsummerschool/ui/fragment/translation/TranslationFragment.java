@@ -206,6 +206,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         }
     }
 
+    //Handling history receiving from history or favourite fragment
     @Subscribe
     public void onHistoryReceive(FromHistoryOrFavouriteEvent fromHistoryOrFavouriteEvent) {
         presenter.handleHistoryReceiving(fromHistoryOrFavouriteEvent.getHistory());
@@ -236,17 +237,19 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
             dictView.reset();
             currentIdentifier = identifier;
             setUpFavouriteIcon(translation.isFavourite(), identifier);
+            fullScreenButton.setVisibility(View.VISIBLE);
         }
-        fullScreenButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onDictionaryResult(Dictionary dictionary, String identifier, boolean fromHistoryOrFavourite) {
         errorView.setVisibility(View.GONE);
         if (fromHistoryOrFavourite) {
+            //Checking if current history already set and returning
             if (CommonUtils.nonNull(currentIdentifier) && currentIdentifier.equals(identifier))
                 return;
 
+            //Disabling text change event, otherwise we will have request, which do not need
             this.fromHistoryOrFavourite = true;
             translationView.getTranslationEditText().setText(dictionary.getOriginalText());
             this.fromHistoryOrFavourite = false;
@@ -276,6 +279,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         setUpFavouriteIcon(favouriteEvent.isFavourite(), favouriteEvent.getIdentifier());
     }
 
+    /**
+     * Updating toolbar languages depend on language pair
+     *
+     * @param languagePair given language pair
+     */
     @Override
     public void updateToolbarLanguages(LanguagePair languagePair) {
         String sourceLanguage = languagePair.getSourceLanguage().getFullLanguageName();
@@ -295,6 +303,11 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         translationView.getTranslationEditText().setSelection(text.length());
     }
 
+    /**
+     * Animate swap depend on languagePair
+     *
+     * @param languagePair given language pair
+     */
     @Override
     public void animateLanguageSwap(LanguagePair languagePair) {
         String sourceLanguage = languagePair.getSourceLanguage().getFullLanguageName();
