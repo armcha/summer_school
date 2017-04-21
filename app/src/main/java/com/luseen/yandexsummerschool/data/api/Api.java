@@ -17,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
 
+    private static final int TIME_OUT = 15;
     private static final int TYPE_TRANSLATION = 0;
     private static final int TYPE_DICTIONARY = 1;
 
@@ -61,8 +62,8 @@ public class Api {
                     .build();
             return chain.proceed(request);
         });
-        builder.readTimeout(15, TimeUnit.SECONDS)
-                .connectTimeout(15, TimeUnit.SECONDS);
+        builder.readTimeout(TIME_OUT, TimeUnit.SECONDS)
+                .connectTimeout(TIME_OUT, TimeUnit.SECONDS);
 
         return builder.build();
     }

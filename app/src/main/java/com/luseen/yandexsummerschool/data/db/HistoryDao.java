@@ -33,6 +33,12 @@ public class HistoryDao {
         return instance;
     }
 
+    /**
+     * Saving given history
+     *
+     * @param history given history
+     * @return return result ok, or error result
+     */
     public Completable saveHistory(History history) {
         return Completable.fromEmitter(emitter -> {
             Realm realm = Realm.getDefaultInstance();
@@ -58,6 +64,12 @@ public class HistoryDao {
         });
     }
 
+    /**
+     * Setting favourite to given history
+     *
+     * @param history given history
+     * @return history or error
+     */
     public Observable<History> setFavourite(History history) {
         return Observable.fromEmitter(historyEmitter -> {
             Realm realm = Realm.getDefaultInstance();
@@ -74,6 +86,12 @@ public class HistoryDao {
         }, Emitter.BackpressureMode.BUFFER);
     }
 
+    /**
+     * Create new language pair, from given pair, for making it mutable
+     *
+     * @param languagePair given pair
+     * @return mutable pair
+     */
     private LanguagePair createLanguagePair(LanguagePair languagePair) {
         String pairId = languagePair.getSourceLanguage().getLangCode()
                 + languagePair.getTargetLanguage().getLangCode();
@@ -84,6 +102,12 @@ public class HistoryDao {
         return historyLanguagePair;
     }
 
+    /**
+     * This method give us matched key word result from favourite
+     *
+     * @param keyWord given key word
+     * @return Found results
+     */
     public RealmResults<History> getFavouritesByKeyWord(String keyWord) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<History> realmQuery = getBaseQuery(keyWord)
@@ -93,6 +117,12 @@ public class HistoryDao {
         return favourites;
     }
 
+    /**
+     * This method give us matched key word result from history
+     *
+     * @param keyWord given key word
+     * @return Found results
+     */
     public RealmResults<History> getHistoriesByKeyWord(String keyWord) {
         Realm realm = Realm.getDefaultInstance();
         RealmQuery<History> realmQuery = getBaseQuery(keyWord);
@@ -101,6 +131,12 @@ public class HistoryDao {
         return histories;
     }
 
+    /**
+     * This method give us history result by given id
+     *
+     * @param identifier given id
+     * @return found history
+     */
     public Observable<History> getHistoryByIdentifier(String identifier) {
         Realm realm = Realm.getDefaultInstance();
         Observable<History> history = realm
@@ -115,7 +151,10 @@ public class HistoryDao {
         return history;
     }
 
-
+    /**
+     * Getting all history list
+     * @return history list
+     */
     public Observable<RealmResults<History>> getHistoryList() {
         Realm realm = Realm.getDefaultInstance();
         Observable<RealmResults<History>> histories = realm
@@ -128,6 +167,10 @@ public class HistoryDao {
         return histories;
     }
 
+    /**
+     * Getting all favourite list
+     * @return favourite list
+     */
     public Observable<RealmResults<History>> getFavouriteList() {
         Realm realm = Realm.getDefaultInstance();
         Observable<RealmResults<History>> favourites = realm
@@ -141,6 +184,10 @@ public class HistoryDao {
         return favourites;
     }
 
+    /**
+     * Getting saved history list size
+     * @return integer count
+     */
     public int getHistoryListSize() {
         Realm realm = Realm.getDefaultInstance();
         long count = realm
@@ -150,6 +197,9 @@ public class HistoryDao {
         return (int) count;
     }
 
+    /**
+     * Delete all saved objects from DB
+     */
     public void clearHistoryAndFavouriteData() {
         try {
             Realm realm = Realm.getDefaultInstance();

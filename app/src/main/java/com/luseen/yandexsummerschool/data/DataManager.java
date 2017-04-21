@@ -24,6 +24,7 @@ import rx.Observable;
  * Created by Chatikyan on 19.03.2017.
  */
 
+//My love... Data manager
 public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
 
     private TranslationService translationService = Api.getInstance().getTranslationService();

@@ -22,17 +22,17 @@ public class HistoryPresenter extends ApiPresenter<HistoryContract.View>
 
     @Override
     public void onStart(RequestType requestType) {
-
+        //no-op
     }
 
     @Override
     public <T> void onSuccess(RequestType requestType, T response) {
-
+        //no-op
     }
 
     @Override
     public void onError(RequestType requestType, Throwable throwable) {
-
+        //no-op
     }
 
     @Override

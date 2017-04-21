@@ -26,6 +26,11 @@ public class LastUsedLanguageDao {
         return instance;
     }
 
+    /**
+     * Saving the very last language
+     * @param language given language
+     * @param languageChooseType source or target type
+     */
     public void saveLastLanguage(Language language, String languageChooseType) {
         try {
             Realm realm = Realm.getDefaultInstance();
@@ -60,6 +65,10 @@ public class LastUsedLanguageDao {
         }
     }
 
+    /**
+     * Get the last saved language
+     * @return Found result
+     */
     public LastUsedLanguages getLastUsedLanguages() {
         Realm realm = Realm.getDefaultInstance();
         LastUsedLanguages lastUsedLanguages = realm.where(LastUsedLanguages.class).findFirst();

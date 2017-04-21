@@ -10,7 +10,7 @@ import java.io.ObjectOutputStream;
  * Created by Chatikyan on 30.03.2017.
  */
 
-public class SerializationUtil {
+public class SerializationUtils {
 
     // deserialize to Object from given file
     public static <T> Object deserialize(Class<T> clazz) throws IOException, ClassNotFoundException {

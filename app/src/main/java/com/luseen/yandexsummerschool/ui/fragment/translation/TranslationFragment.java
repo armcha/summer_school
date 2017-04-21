@@ -123,7 +123,8 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         fullScreenButton.setVisibility(View.GONE);
 
         //Some hack to open keyboard on fragment start,
-        //whit stateVisible mode it opens keyboard on history and setting screen on screen orientation change
+        //whit stateVisible mode it also opens keyboard on history and setting screen,
+        //on screen orientation change
         int keyboardOpenDelay = CommonUtils.isLollipopOrHigher() ? 500 : 800;
         subscriptions.add(Observable.timer(keyboardOpenDelay, TimeUnit.MILLISECONDS)
                 .map(__ -> ((RootActivity) getActivity()).getCurrentFragmentPosition())
@@ -145,6 +146,9 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
         });
     }
 
+    /**
+     * Translation editText text watcher, which filter , transform and give text to presenter
+     */
     private void setUpTextWatcher() {
         subscriptions.add(RxTextView.textChanges(translationView.getTranslationEditText())
                 .filter(__ -> !fromHistoryOrFavourite)
@@ -161,6 +165,7 @@ public class TranslationFragment extends ApiFragment<TranslationFragmentContract
                 .subscribe(input -> presenter.handleInputText(input)));
     }
 
+    //Reset all views state
     private void reset() {
         presenter.clearLastInputAndTranslate();
         translationTextView.reset();

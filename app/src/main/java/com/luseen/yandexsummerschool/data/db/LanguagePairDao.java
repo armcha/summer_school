@@ -30,6 +30,10 @@ public class LanguagePairDao {
         return instance;
     }
 
+    /**
+     * Saving given language pair
+     * @param languagePair given pair
+     */
     public void saveLanguagePair(LanguagePair languagePair) {
         try {
             Realm realm = Realm.getDefaultInstance();
@@ -40,6 +44,10 @@ public class LanguagePairDao {
         }
     }
 
+    /**
+     * Get saved pair from DB
+     * @return Found pair or default pair
+     */
     public LanguagePair getLanguagePair() {
         Realm realm = Realm.getDefaultInstance();
         try {

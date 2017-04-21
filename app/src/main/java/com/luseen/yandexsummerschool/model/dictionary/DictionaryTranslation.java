@@ -49,26 +49,6 @@ public class DictionaryTranslation extends RealmObject {
         return partOfSpeech;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
-    public void setGen(String gen) {
-        this.gen = gen;
-    }
-
-    public void setSynonyms(RealmList<Synonym> synonyms) {
-        this.synonyms = synonyms;
-    }
-
-    public void setMeanings(RealmList<TranslatedString> meanings) {
-        this.meanings = meanings;
-    }
-
-    public void setExamples(RealmList<Example> examples) {
-        this.examples = examples;
-    }
-
     public String getGen() {
         return gen == null ? StringUtils.EMPTY : gen;
     }

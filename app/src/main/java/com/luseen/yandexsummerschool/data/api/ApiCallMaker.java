@@ -23,10 +23,16 @@ public class ApiCallMaker {
         subscriptions = new CompositeSubscription();
     }
 
+    /**
+     * Call maker, that make all api request and return result or error
+     * @param request api request
+     * @param resultListener listener to send results
+     * @param requestType current request type
+     * @param <T> request Object type
+     */
     public <T> void startRequest(final Observable<T> request,
                                  final ResultListener resultListener,
                                  final RequestType requestType) {
-
 
         Subscription subscription = request
                 .subscribeOn(Schedulers.io())

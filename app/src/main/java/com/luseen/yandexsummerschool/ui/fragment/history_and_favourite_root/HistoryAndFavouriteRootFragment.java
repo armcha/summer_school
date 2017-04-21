@@ -86,8 +86,8 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
                 R.color.red, 0.8f);
         builder.setTitle(title);
         builder.setMessage(getString(R.string.delete_history_and_fav_text))
-                .setPositiveButton(R.string.yes, (dialog, id) -> presenter.clearHistoryAndFavouriteData())
-                .setNegativeButton(R.string.cancel, (dialog, id) -> dialog.cancel());
+                .setPositiveButton(R.string.yes, (dialog, __) -> presenter.clearHistoryAndFavouriteData())
+                .setNegativeButton(R.string.cancel, (dialog, __) -> dialog.cancel());
         alertDialog = builder.create();
         alertDialog.show();
     }

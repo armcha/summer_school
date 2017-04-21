@@ -34,15 +34,7 @@ public class Synonym extends RealmObject{
         return partOfSpeech;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
     public String getGen() {
         return gen == null ? StringUtils.EMPTY : gen;
-    }
-
-    public void setGen(String gen) {
-        this.gen = gen;
     }
 }

@@ -19,17 +19,17 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
 
     @Override
     public void onStart(RequestType requestType) {
-
+        //no-op
     }
 
     @Override
     public <T> void onSuccess(RequestType requestType, T response) {
-
+        //no-op
     }
 
     @Override
     public void onError(RequestType requestType, Throwable throwable) {
-
+        //no-op
     }
 
     @Override
@@ -40,7 +40,7 @@ public class FavouritePresenter extends ApiPresenter<FavouriteContract.View>
                 .subscribe(favouriteList -> {
                     getView().onFavouriteResult(favouriteList);
                     if (favouriteList.size() == 0) {
-                        getView().onEmptyResult();//Giving empty result to fragment
+                        getView().onEmptyResult();//Giving empty result to fragment, to show empty view
                     }
                 }, ExceptionTracker::trackException));
     }

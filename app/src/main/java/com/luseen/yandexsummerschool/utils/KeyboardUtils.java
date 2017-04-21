@@ -28,6 +28,7 @@ public final class KeyboardUtils {
             showSoftInputUnchecked.invoke(imm, 0, null);
         } catch (Exception e) {
             // ho hum
+            ExceptionTracker.trackException(e);
         }
     }
 

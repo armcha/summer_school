@@ -80,8 +80,8 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
                 .observeOn(AndroidSchedulers.mainThread())
                 .map(CharSequence::toString)
                 .map(String::trim)
-                .doOnNext(s -> {
-                    if (s.length() > 0) {
+                .doOnNext(input -> {
+                    if (input.length() > 0) {
                         resetIcon.show();
                     } else {
                         resetIcon.hide();
@@ -143,7 +143,7 @@ public class SearchView extends RelativeLayout implements Viewable, View.OnClick
     }
 
     private void addSearchIcon(Context context) {
-        // FIXME: 11.04.2017 Magnify not showing in pre lollipop
+        // FIXME: 11.04.2017 Magnify not showing in pre lollipop devices
         searchIcon = new ImageView(context);
         searchIcon.setImageResource(R.drawable.magnify);
         searchIcon.setId(SEARCH_ICON_ID);

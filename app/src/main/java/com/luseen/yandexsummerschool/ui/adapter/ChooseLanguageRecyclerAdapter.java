@@ -46,7 +46,7 @@ public class ChooseLanguageRecyclerAdapter extends RecyclerView.Adapter {
 
     @Override
     public int getItemViewType(int position) {
-        //??
+        //Returning text section type or language type, based on position and last used language size
         int secondSectionPosition = hasLastUsedLanguages ? lastUsedLanguageList.size() + 1 : 0;
         if (position == 0 || position == secondSectionPosition) {
             return VIEW_TYPE_TEXT_SECTION;

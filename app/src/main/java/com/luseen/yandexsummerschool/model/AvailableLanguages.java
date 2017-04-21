@@ -27,10 +27,6 @@ public class AvailableLanguages {
         return directions;
     }
 
-    public void setDirs(List<String> directions) {
-        this.directions = directions;
-    }
-
     public List<Language> getLanguageList() {
         return languageList;
     }

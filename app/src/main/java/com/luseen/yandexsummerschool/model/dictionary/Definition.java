@@ -40,24 +40,12 @@ public class Definition extends RealmObject {
         return partOfSpeech;
     }
 
-    public void setPartOfSpeech(String partOfSpeech) {
-        this.partOfSpeech = partOfSpeech;
-    }
-
     public String getTranscription() {
         return transcription != null ? transcription : StringUtils.EMPTY;
     }
 
-    public void setTranscription(String transcription) {
-        this.transcription = transcription;
-    }
-
     public RealmList<DictionaryTranslation> getTranslations() {
         return translations;
-    }
-
-    public void setTranslations(RealmList<DictionaryTranslation> translations) {
-        this.translations = translations;
     }
 
     public int getId() {

@@ -71,6 +71,7 @@ public class DictionaryView extends ScrollView implements Viewable {
         addView(linearLayout);
     }
 
+    //Let the magic to be...
     private void buildDictionary(Dictionary dictionary) {
         //Removing all views before adding any new view
         linearLayout.removeAllViews();

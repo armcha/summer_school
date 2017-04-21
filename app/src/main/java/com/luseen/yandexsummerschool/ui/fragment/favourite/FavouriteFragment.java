@@ -29,9 +29,10 @@ import butterknife.BindView;
 
 public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<FavouriteContract.View,
         FavouriteContract.Presenter>
-        implements FavouriteContract.View,
-        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener,
-        SearchView.SearchListener {
+        implements
+        FavouriteContract.View,
+        SearchView.SearchListener,
+        HistoryAndFavouriteRecyclerAdapter.AdapterItemClickListener {
 
     @BindView(R.id.info_shower_coordinator_layout)
     InfoShowerCoordinatorLayout infoShowerCoordinatorLayout;
@@ -140,7 +141,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
      * Sending events to history and favourite fragments
      *
      * @param isFavourite if item is favourite
-     * @param identifier
+     * @param identifier current item identifier
      */
     @Override
     public void onFavouriteClicked(boolean isFavourite, String identifier) {

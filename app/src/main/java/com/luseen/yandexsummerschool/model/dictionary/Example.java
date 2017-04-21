@@ -30,10 +30,6 @@ public class Example extends RealmObject {
         this.word = word;
     }
 
-    public void setExampleTranslations(RealmList<TranslatedString> exampleTranslations) {
-        this.exampleTranslations = exampleTranslations;
-    }
-
     public List<TranslatedString> getExampleTranslations() {
         return exampleTranslations == null ? Collections.emptyList() : exampleTranslations;
     }
