@@ -17,5 +17,5 @@ public interface ApiHelper extends DictionaryService, TranslationService {
     int SHORT_POS = 0x0002;
 
     Observable<Dictionary> translateAndLookUp(String text, String translationLanguage,
-                                              String lookUpLanguage, String uiLang, int flag);
+                                              String uiLang, int flag);
 }

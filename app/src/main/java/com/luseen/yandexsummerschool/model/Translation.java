@@ -67,4 +67,15 @@ public class Translation {
     public void setFavourite(boolean favourite) {
         isFavourite = favourite;
     }
+
+    @Override
+    public String toString() {
+        return "Translation{" +
+                "code=" + code +
+                ", lang='" + lang + '\'' +
+                ", text=" + text +
+                ", originalText='" + originalText + '\'' +
+                ", isFavourite=" + isFavourite +
+                '}';
+    }
 }

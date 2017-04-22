@@ -15,6 +15,7 @@ import com.luseen.yandexsummerschool.model.LanguagePair;
 import com.luseen.yandexsummerschool.model.LastUsedLanguages;
 import com.luseen.yandexsummerschool.model.Translation;
 import com.luseen.yandexsummerschool.model.dictionary.Dictionary;
+import com.luseen.yandexsummerschool.utils.Logger;
 
 import io.realm.RealmResults;
 import rx.Completable;
@@ -60,9 +61,9 @@ public class DataManager implements ApiHelper, DbHelper, PreferencesHelper {
 
     @Override
     public Observable<Dictionary> translateAndLookUp(String text, String translationLanguage,
-                                                     String lookUpLanguage, String uiLang, int flag) {
+                                                     String uiLang, int flag) {
         return Observable.zip(translate(text, translationLanguage),
-                lookup(lookUpLanguage, text, uiLang, flag), (translation, dictionary) -> {
+                lookup(translationLanguage, text, uiLang, flag), (translation, dictionary) -> {
                     dictionary.setOriginalText(text);
                     dictionary.setTranslatedText(translation.getTranslatedText());
                     return dictionary;

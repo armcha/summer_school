@@ -90,7 +90,7 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
             if (HttpUtils.getYaError(throwable) == YaError.LANGUAGE_IS_NOT_SUPPORTED) {
                 //Making translation request, if dictionary request returns LANGUAGE_IS_NOT_SUPPORTED
                 LanguagePair pair = dataManager.getLanguagePair();
-                String translationLanguage = pair.getTargetLanguage().getLangCode();
+                String translationLanguage = pair.getLookupLanguage();
                 String inputText = dataManager.getLastTypedText();
                 makeRequest(dataManager.translate(inputText, translationLanguage), RequestType.TRANSLATION);
             } else {
@@ -209,12 +209,10 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
      */
     private void makeLookUpAndTranslateRequest(String inputText) {
         LanguagePair pair = dataManager.getLanguagePair();
-        String translationLanguage = pair.getTargetLanguage().getLangCode();
         String lookUpLanguage = pair.getLookupLanguage();
         String uiLang = LanguageUtils.getCurrentLocal().toString();
         Observable<Dictionary> dictionaryObservable = dataManager.translateAndLookUp(
                 inputText,
-                translationLanguage,
                 lookUpLanguage,
                 uiLang,
                 ApiHelper.SHORT_POS);

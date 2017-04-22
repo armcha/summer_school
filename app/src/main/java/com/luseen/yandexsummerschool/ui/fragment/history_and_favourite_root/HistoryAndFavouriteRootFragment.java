@@ -3,6 +3,7 @@ package com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_root;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.graphics.drawable.AnimatedVectorDrawableCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
@@ -18,6 +19,7 @@ import com.luseen.yandexsummerschool.model.event_bus_events.ResetEvent;
 import com.luseen.yandexsummerschool.ui.adapter.HistoryAndFavouritePagerAdapter;
 import com.luseen.yandexsummerschool.ui.fragment.history_and_favourite_base.HistoryAndFavouriteBaseFragment;
 import com.luseen.yandexsummerschool.ui.widget.FontTabLayout;
+import com.luseen.yandexsummerschool.utils.CommonUtils;
 import com.luseen.yandexsummerschool.utils.StringUtils;
 
 import org.greenrobot.eventbus.EventBus;
@@ -76,7 +78,13 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
     }
 
     @OnClick(R.id.delete_history_icon)
-    public void onViewClicked() {
+    public void onViewClicked(ImageView imageView) {
+        if (CommonUtils.isLollipopOrHigher()) {
+            AnimatedVectorDrawableCompat addFavAnimation =
+                    AnimatedVectorDrawableCompat.create(getActivity(), R.drawable.delete);
+            imageView.setImageDrawable(addFavAnimation);
+            addFavAnimation.start();
+        }
         showDeleteDialog();
     }
 
@@ -86,8 +94,8 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
                 R.color.red, 0.8f);
         builder.setTitle(title);
         builder.setMessage(getString(R.string.delete_history_and_fav_text))
-                .setPositiveButton(R.string.yes, (dialog, __) -> presenter.clearHistoryAndFavouriteData())
-                .setNegativeButton(R.string.cancel, (dialog, __) -> dialog.cancel());
+                .setPositiveButton(R.string.yes, (___, __) -> presenter.clearHistoryAndFavouriteData())
+                .setNegativeButton(R.string.cancel, (___, __) -> ___.cancel()); // ¯\_(ツ)_/¯
         alertDialog = builder.create();
         alertDialog.show();
     }
