@@ -1,1 +1,3 @@
-# summer_school
+# Yandex Summer School
+
+
