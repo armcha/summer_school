@@ -93,6 +93,7 @@ public class HistoryAndFavouriteRootFragment extends ApiFragment<HistoryAndFavou
         CharSequence title = StringUtils.makeColorSpanWithSize(getString(R.string.delete_history_and_fav_title),
                 R.color.red, 0.8f);
         builder.setTitle(title);
+
         builder.setMessage(getString(R.string.delete_history_and_fav_text))
                 .setPositiveButton(R.string.yes, (___, __) -> presenter.clearHistoryAndFavouriteData())
                 .setNegativeButton(R.string.cancel, (___, __) -> ___.cancel()); // ¯\_(ツ)_/¯

@@ -96,7 +96,7 @@ public class FlowLayout extends ViewGroup {
     public void addFlowItems(List<SpannableStringBuilder> spannableStringBuilderList) {
         for (SpannableStringBuilder spannableStringBuilder : spannableStringBuilderList) {
             FontTextView textView = new FontTextView(context);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 18);
+            textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, DictionaryView.DEFAULT_TEXT_SIZE_IN_SP);
             textView.setText(spannableStringBuilder);
             textView.setIncludeFontPadding(false);
             textView.setTypeface(FontUtils.get(context,SANS_LIGHT));

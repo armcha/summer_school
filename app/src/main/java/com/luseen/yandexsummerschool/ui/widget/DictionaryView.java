@@ -35,8 +35,8 @@ import static com.luseen.yandexsummerschool.utils.AppConstants.SANS_LIGHT;
 
 public class DictionaryView extends ScrollView implements Viewable {
 
+    public static final float DEFAULT_TEXT_SIZE_IN_SP = 17f;
     private static final float RELATIVE_SPAN_PROPORTION = 0.7f;
-    private static final float DEFAULT_TEXT_SIZE_IN_SP = 18f;
     private static final int MAX_ON_DIGIT_NUMBER = 9;
     private static final float LINE_SPACING = 5f;
     private int blue = R.color.blue;
@@ -224,7 +224,7 @@ public class DictionaryView extends ScrollView implements Viewable {
         FontTextView baseTextView = new FontTextView(context);
         baseTextView.setTextSize(TypedValue.COMPLEX_UNIT_SP, DEFAULT_TEXT_SIZE_IN_SP);
         baseTextView.setTextColor(ContextCompat.getColor(context, textColor));
-        baseTextView.setTypeface(FontUtils.get(context,SANS_LIGHT));
+        baseTextView.setTypeface(FontUtils.get(context, SANS_LIGHT));
         return baseTextView;
     }
 

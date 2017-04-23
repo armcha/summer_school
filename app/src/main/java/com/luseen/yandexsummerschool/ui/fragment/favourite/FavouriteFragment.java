@@ -117,7 +117,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
     @Override
     public void onEmptySearchResult() {
         infoShowerCoordinatorLayout.whitTopMargin(true);
-        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.ic_no_history);
+        infoShowerCoordinatorLayout.setInfoIcon(R.drawable.bookmark_check);
         infoShowerCoordinatorLayout.setInfoText(getString(R.string.no_matches_found));
         infoShowerCoordinatorLayout.show();
     }
@@ -141,7 +141,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
      * Sending events to history and favourite fragments
      *
      * @param isFavourite if item is favourite
-     * @param identifier current item identifier
+     * @param identifier  current item identifier
      */
     @Override
     public void onFavouriteClicked(boolean isFavourite, String identifier) {
@@ -164,6 +164,11 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
         presenter.resetFavourite();
     }
 
+    /**
+     * Keyboard visibility state
+     *
+     * @param isOpen boolean state
+     */
     @Override
     public void onVisibilityChanged(boolean isOpen) {
         if (!isOpen) {
