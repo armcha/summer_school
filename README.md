@@ -8,8 +8,8 @@
 
 ## Contact
 
-Pull requests are more than welcome.
-Please fell free to contact me if there is any problem when using the library.
+
+
 
 - **Email**: armcha01@gmail.com
 - **Facebook**: https://web.facebook.com/chatikyana
