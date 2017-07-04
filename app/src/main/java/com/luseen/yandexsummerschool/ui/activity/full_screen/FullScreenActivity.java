@@ -16,9 +16,6 @@ public class FullScreenActivity extends DummyActivity {
 
     public static final String TRANSLATED_TEXT_INTENT_KEY = "translated_text_intent_key";
 
-    @BindView(R.id.close_button)
-    ImageView closeButton;
-
     @BindView(R.id.translated_text)
     FontTextView translatedTextView;
 

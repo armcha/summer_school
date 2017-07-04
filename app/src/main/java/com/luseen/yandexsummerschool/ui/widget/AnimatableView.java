@@ -9,4 +9,8 @@ public interface AnimatableView {
     void show();
 
     void hide();
+
+    default void remove() {
+        throw new UnsupportedOperationException("remove");
+    }
 }

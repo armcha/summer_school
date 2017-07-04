@@ -86,9 +86,7 @@ public class ChooseLanguagePresenter extends ApiPresenter<ChooseLanguageContract
         } else {
             lastUsedLanguageList = lastUsedLanguages.getLastUsedTargetLanguages();
         }
-        getView().onResult(availableLanguages,
-                lastSelectedLanguage,
-                lastUsedLanguageList);
+        getView().onResult(availableLanguages, lastSelectedLanguage, lastUsedLanguageList);
     }
 
     @Override

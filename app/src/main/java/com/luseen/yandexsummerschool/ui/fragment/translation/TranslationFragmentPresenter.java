@@ -137,7 +137,6 @@ public class TranslationFragmentPresenter extends ApiPresenter<TranslationFragme
 
     //Saving history and notifying history fragment to to reload data
     private void saveHistory(History history) {
-
         historySubscriptions.add(dataManager.saveHistory(history)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(() -> EventBus.getDefault().post(new HistoryEvent())));

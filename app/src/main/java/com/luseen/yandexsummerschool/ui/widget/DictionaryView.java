@@ -197,7 +197,7 @@ public class DictionaryView extends ScrollView implements Viewable {
                             exampleBuilder.append(example.getWord());
                             exampleBuilder.append(" - ");
                             for (TranslatedString translatedString : example.getExampleTranslations()) {
-                                exampleBuilder.append(translatedString.getText());
+                                exampleBuilder.append(translatedString.getText()); //O(n^5) this is awfully
                             }
                             //If it is't the last one, than adding new line
                             boolean isLastItem = translation.getExamples().size() - 1 == i1;

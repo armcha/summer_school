@@ -100,6 +100,7 @@ public class FavouriteFragment extends HistoryAndFavouriteBaseFragment<Favourite
             favouriteRecyclerView.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             favouriteRecyclerView.setLayoutManager(manager);
+            favouriteRecyclerView.setHasFixedSize(true);
         } else {
             adapter.updateAdapterList(favouriteList);
         }

@@ -20,6 +20,6 @@ public class ExceptionTracker {
         Logger.e("EXCEPTION TRACKER HAS BAD MESSAGE FOR YOU - " + throwable.getMessage());
         Crashlytics.logException(throwable);
         if (BuildConfig.DEBUG)
-            Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(App.getInstance(), throwable.getMessage(), Toast.LENGTH_LONG).show();
     }
 }

@@ -100,6 +100,7 @@ public class HistoryFragment extends HistoryAndFavouriteBaseFragment<HistoryCont
             historyRecyclerView.setAdapter(adapter);
             LinearLayoutManager manager = new LinearLayoutManager(getActivity());
             historyRecyclerView.setLayoutManager(manager);
+            historyRecyclerView.setHasFixedSize(true);
         } else {
            adapter.updateAdapterList(historyList);
         }

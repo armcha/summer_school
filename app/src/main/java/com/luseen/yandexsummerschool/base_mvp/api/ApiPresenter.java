@@ -16,7 +16,7 @@ import rx.Observable;
 public abstract class ApiPresenter<V extends ApiContract.View> extends BasePresenter<V>
         implements ResultListener {
 
-    protected ApiCallMaker apiCallMaker;
+    private ApiCallMaker apiCallMaker;
     protected DataManager dataManager;
 
     @CallSuper

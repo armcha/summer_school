@@ -71,7 +71,6 @@ public class History extends RealmObject{
         this.orderId = orderId;
     }
 
-
     @Override
     public String toString() {
         return "History{" +
